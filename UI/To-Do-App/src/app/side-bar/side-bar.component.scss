@@ -1,0 +1,16 @@
+
+.menu-items{
+    display: flex;
+    flex-direction: column;
+    height:150px;
+    text-align: center;
+}
+.menu-items p{
+    padding: 5px;
+    cursor: pointer;
+    color:#251814;
+}
+.selectedPage{
+    background-color: 
+    #EDB046;
+}

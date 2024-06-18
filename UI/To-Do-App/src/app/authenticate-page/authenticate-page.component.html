@@ -1,0 +1,42 @@
+<div class="authenticate-body">
+    <div class="info-container"  [ngStyle]="isSignUp? { 'background-color': '#EDB046' }: { 'background-color': 'white' }">
+            <h2 class="heading" [ngStyle]="isSignUp?{'color':'white'}:{'color':'#BA5112'}">To-Do App</h2>
+            <pre class="description" [ngStyle]="isSignUp?{'color':'white'}:{'color':'#251814'}">Start organizing your life day by day</pre>
+            <form class="form" [formGroup]="userForm">
+                <input formControlName="userName" #userName type="text" class="form-input" placeholder="username">
+                @if(userForm.controls['userName'].invalid &&
+                    (isSubmitted||userForm.controls['userName'].touched ||
+                    userForm.controls['userName'].dirty)) 
+                {
+                    <div
+                    class="text-danger"
+                    *ngIf="userForm.controls['userName'].errors?.['required']"
+                    >
+                    <img src="../../assets/invalid.png" class="invalid" />
+                    <p class="danger-msg">This field is required</p>
+                    </div>
+                }
+                <div class="form-input password">
+                    <input formControlName="password" #password type="password" class="password-text" placeholder="password">
+                    <i [ngClass]="isPasswordVisible?'bi bi-eye eye-icon':'bi bi-eye-slash eye-icon'" (click)="makePasswordVisible()"></i>
+                </div>
+                @if(userForm.controls['password'].invalid &&
+                    (isSubmitted||userForm.controls['password'].touched ||
+                    userForm.controls['password'].dirty)) 
+                {
+                    <div
+                    class="text-danger"
+                    *ngIf="userForm.controls['password'].errors?.['required']"
+                    >
+                    <img src="../../assets/invalid.png" class="invalid" />
+                    <p class="danger-msg">This field is required</p>
+                    </div>
+                }
+                <button type="submit" class="submit" (click)="OnSubmit()">{{pageName}}</button>
+            </form>
+            <div class="footer">
+                <p [ngStyle]="isSignUp?{'color':'white'}:{'color':'#251814'}">{{footerMsg}}</p>
+                <p class="navigate-link-text" (click)="navigate()"> here.</p>
+            </div>
+    </div>
+</div>

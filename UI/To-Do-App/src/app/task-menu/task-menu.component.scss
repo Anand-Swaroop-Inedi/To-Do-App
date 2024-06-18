@@ -1,0 +1,64 @@
+.items-list{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+}
+.task-item{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 6px 0px #0000001A;
+    padding: 10px;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+.task-item h3{
+    margin-left: 10px;
+    font-family: Lexend;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 25px;
+    color:#251814;
+}
+.task-item img{
+    width: 28px;
+    height: 28px;
+}
+.task-item-info{
+    position: absolute;
+    top: 5vw;
+    left: 37.5vw;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 0px #0000001A;
+    display: none;
+    width: 300px;
+    z-index: 100;
+    font-size: 10px;
+    flex-direction: column;
+    padding:15px;
+}
+.operation-icons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.edit-delete-icons{
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.task-name{
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0px;
+}
+.duration{
+    font-size: 14px;
+    font-weight: 400;
+    color: #B5B5B5;
+}
+.description{
+    font-size: 16px;
+}

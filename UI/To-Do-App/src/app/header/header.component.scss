@@ -1,0 +1,83 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.header-items{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 81%;
+    margin:20px 40px 10px 0px;
+}
+@media only screen and (max-width: 900px) {
+    .header-items{
+        margin: 0px 10px;
+    }
+}
+.logo-text{
+    font-family: 'Lexend';
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    color: #BA5112;
+    margin-top: 20px;
+    width:19%;
+}
+@media only screen and (max-width: 900px) {
+    .logo-text{
+        font-size: 20px;
+        width:50%;
+    }
+}
+.h2{
+    font-family: 'Lexend';
+    font-size: 28px;
+    font-weight: 400;
+    text-align: left;
+    color: #251814;
+}
+@media only screen and (max-width: 900px) {
+    .header-name{
+        display: none;  
+    }
+}
+.add-task-button{
+    display: none;
+}
+@media only screen and (max-width: 900px) {
+    .add-task-button{
+        display: block;
+    }  
+}
+.sign-out-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 10px 10px 10px;
+    gap: 10px;
+    border-radius: 8px;
+    opacity: 0px;
+    background: #BA5112;
+    cursor: pointer;
+}
+@media only screen and (max-width: 900px) {
+    .sign-out-button{
+        margin:13px 0px;
+    }
+}
+.sign-out-text{
+    color:white;
+    font-size: 16px;
+    margin: auto;
+}
+@media only screen and (max-width: 900px) {
+    .sign-out-text{
+        font-size: 13px;
+    }
+}
+.sign-out-image{
+    width: 20px;
+    height: 20px;
+    margin: auto;    
+}
