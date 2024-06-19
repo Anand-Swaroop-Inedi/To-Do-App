@@ -19,12 +19,13 @@ namespace Models
 
         public int Itemid { get; set; }
 
-        public DateTime Createdon { get; set; }
+        public string ?Createdon { get; set; }
 
-        public DateTime Completedon { get; set; }
+        public string? Completedon { get; set; }
 
         public int Statusid { get; set; }
         public String?  StatusName { get; set; }
+        public int? Isdeleted { get; set; }
 
     }
 }

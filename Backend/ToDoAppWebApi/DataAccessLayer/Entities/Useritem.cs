@@ -11,11 +11,13 @@ public partial class Useritem
 
     public int Itemid { get; set; }
 
-    public DateTime Createdon { get; set; }
+    public string Createdon { get; set; } = null!;
 
-    public DateTime Completedon { get; set; }
+    public string? Completedon { get; set; }
 
     public int Statusid { get; set; }
+
+    public int? Isdeleted { get; set; }
 
     public virtual Item Item { get; set; } = null!;
 

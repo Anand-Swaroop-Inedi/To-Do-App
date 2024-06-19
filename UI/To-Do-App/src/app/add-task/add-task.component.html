@@ -1,4 +1,33 @@
-<div class="add-button">
-    <p>Add Task</p>
-    <img src="../../assets/Add button.png" class="button-image">
-</div>
+<form [formGroup]="taskForm" class="add-task-form">
+    <input formControlName="name" type="text" placeholder="Add title">
+    @if(taskForm.controls['name'].invalid &&
+        (isSubmitted||taskForm.controls['name'].touched ||
+        taskForm.controls['name'].dirty)) 
+    {
+        <div
+        *ngIf="taskForm.controls['name'].errors?.['required']"
+        >
+        <app-required-error></app-required-error>
+        </div>
+    }
+    <textarea formControlName="description" rows="4" cols="7" placeholder="Add description"></textarea>
+    @if(taskForm.controls['description'].invalid &&
+    (isSubmitted||taskForm.controls['description'].touched ||
+    taskForm.controls['description'].dirty)) 
+    {
+        <div
+        *ngIf="taskForm.controls['description'].errors?.['required']"
+        >
+            <app-required-error></app-required-error>
+        </div>
+    }
+    <div class="form-buttons">
+        <div></div>
+        <div class="operations">
+            <button (click)="onCancel()" class="cancel-button">Cancel</button>
+            <button class="save-button" type="submit" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+    <div class="success">{{successMessage}}</div>
+    <div class="danger">{{dangerMessage}}</div>
+</form>

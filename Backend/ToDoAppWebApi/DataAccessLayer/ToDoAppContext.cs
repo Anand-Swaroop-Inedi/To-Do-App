@@ -86,17 +86,22 @@ public partial class ToDoAppContext : DbContext
 
         modelBuilder.Entity<Useritem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__USERITEM__3214EC271287FDE7");
+            entity.HasKey(e => e.Id).HasName("PK__USERITEM__3214EC27FC879CB4");
 
             entity.ToTable("USERITEMS");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Completedon)
-                .HasColumnType("datetime")
+                .HasMaxLength(100)
+                .IsUnicode(false)
                 .HasColumnName("COMPLETEDON");
             entity.Property(e => e.Createdon)
-                .HasColumnType("datetime")
+                .HasMaxLength(100)
+                .IsUnicode(false)
                 .HasColumnName("CREATEDON");
+            entity.Property(e => e.Isdeleted)
+                .HasDefaultValue(0)
+                .HasColumnName("ISDELETED");
             entity.Property(e => e.Itemid).HasColumnName("ITEMID");
             entity.Property(e => e.Statusid).HasColumnName("STATUSID");
             entity.Property(e => e.Userid).HasColumnName("USERID");
@@ -104,17 +109,17 @@ public partial class ToDoAppContext : DbContext
             entity.HasOne(d => d.Item).WithMany(p => p.Useritems)
                 .HasForeignKey(d => d.Itemid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__USERITEMS__ITEMI__6D0D32F4");
+                .HasConstraintName("FK__USERITEMS__ITEMI__7A672E12");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Useritems)
                 .HasForeignKey(d => d.Statusid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__USERITEMS__STATU__6B24EA82");
+                .HasConstraintName("FK__USERITEMS__STATU__7D439ABD");
 
             entity.HasOne(d => d.User).WithMany(p => p.Useritems)
                 .HasForeignKey(d => d.Userid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__USERITEMS__USERI__6EF57B66");
+                .HasConstraintName("FK__USERITEMS__USERI__00200768");
         });
 
         OnModelCreatingPartial(modelBuilder);

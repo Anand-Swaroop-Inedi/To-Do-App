@@ -9,15 +9,5 @@
     </div>
 </div>
 <div #addTask class="add-task">
-    <form class="add-task-form">
-        <input type="text" placeholder="Add title">
-        <textarea rows="4" cols="7" placeholder="Add description"></textarea>
-        <div class="form-buttons">
-            <div></div>
-            <div class="operations">
-                <button (click)="onCancel()" class="cancel-button">Cancel</button>
-                <button class="save-button">Save</button>
-            </div>
-        </div>
-    </form>
+    <app-add-task (close)="closeAddTaskContainer()"></app-add-task>
 </div>

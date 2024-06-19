@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TasksHeaderComponent } from "../tasks-header/tasks-header.component";
 import { TaskMenuComponent } from "../task-menu/task-menu.component";
+import { TaskService } from '../Services/Task/task.service';
 
 @Component({
     selector: 'app-completed-page',
@@ -9,6 +10,23 @@ import { TaskMenuComponent } from "../task-menu/task-menu.component";
     styleUrl: './completed-page.component.scss',
     imports: [TasksHeaderComponent, TaskMenuComponent]
 })
-export class CompletedPageComponent {
-  name:string="Completed";
+export class CompletedPageComponent implements OnInit {
+  name:string="completed";
+  constructor(private taskService:TaskService)
+  {
+
+  }
+  ngOnInit(){
+    this.taskService.getCompletedTasks().subscribe((response)=>{
+      if(response.statusCode==200)
+      {
+          this.taskService.taskData$.next(response.result);
+      }
+      else
+      {
+          console.log(response.message)
+      }
+      
+  })
+  }
 }

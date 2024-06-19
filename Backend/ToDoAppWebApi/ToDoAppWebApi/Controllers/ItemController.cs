@@ -20,7 +20,7 @@ namespace ToDoAppWebApi.Controllers
             return await _itemManager.AddItem(item);
         }
         [HttpGet("all")]
-        public async Task<ApiResponse> GetAllItem()
+        public async Task<ApiResponse> GetAllItems()
         {
             return await _itemManager.GetAll();
         }
@@ -33,6 +33,31 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> UpdateItem(ItemDto item)
         {
             return await _itemManager.UpdateItem(item);
+        }
+        [HttpGet("active-items")]
+        public async Task<ApiResponse> GetActiveItems()
+        {
+            return await _itemManager.GetActiveItems();
+        }
+        [HttpGet("completed-items")]
+        public async Task<ApiResponse> GetCompletedItems()
+        {
+            return await _itemManager.GetCompletedItems();
+        }
+        [HttpDelete("delete-all")]
+        public async Task<ApiResponse> DeleteAllItems()
+        {
+            return await _itemManager.DeleteItems();
+        }
+        [HttpGet("completion-percentage")]
+        public async Task<ApiResponse> CompletionPercentage()
+        {
+            return await _itemManager.CompletionPercentage();
+        }
+        [HttpPost("completed")]
+        public async Task<ApiResponse> makeItemCompleted([FromBody]int id)
+        {
+            return await _itemManager.makeItemCompleted(id);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace BusinessLogicLayer.Services
             if(response!=null && response.StatusCode == 200)
             {
                 item.Itemid =(int) response.result;
-                return await _userItemsRepository.AddTask(_mapper.Map<Useritem>(item));
+                return await _userItemsRepository.AddItem(_mapper.Map<Useritem>(item));
             }
             else
             {
@@ -40,7 +40,7 @@ namespace BusinessLogicLayer.Services
         }   
         public async Task<ApiResponse> GetAll()
         {
-            ApiResponse apiResponse = await _userItemsRepository.GetAllTasks();
+            ApiResponse apiResponse = await _userItemsRepository.GetAllItems();
             apiResponse.result= _mapper.Map<List<ItemDto>>(apiResponse.result);
             return apiResponse;
         }
@@ -50,7 +50,7 @@ namespace BusinessLogicLayer.Services
             if(response.StatusCode == 200)
             {
                 item.Itemid=(int) response.result;
-                return await _userItemsRepository.UpdateTask(_mapper.Map<Useritem>(item));
+                return await _userItemsRepository.UpdateItem(_mapper.Map<Useritem>(item));
             }
             else
             {
@@ -60,8 +60,31 @@ namespace BusinessLogicLayer.Services
         }
         public async Task<ApiResponse> DeleteItem(int id)
         {
-            return await _userItemsRepository.DeleteTask(id);
+            return await _userItemsRepository.DeleteItem(id);
         }
-
+        public async Task<ApiResponse> DeleteItems()
+        {
+            return await _userItemsRepository.DeleteItems();
+        }
+        public async Task<ApiResponse> GetActiveItems()
+        {
+            ApiResponse apiResponse = await _userItemsRepository.GetActiveItems();
+            apiResponse.result = _mapper.Map<List<ItemDto>>(apiResponse.result);
+            return apiResponse;
+        }
+        public async Task<ApiResponse> GetCompletedItems()
+        {
+            ApiResponse apiResponse = await _userItemsRepository.GetCompletedItems();
+            apiResponse.result = _mapper.Map<List<ItemDto>>(apiResponse.result);
+            return apiResponse;
+        }
+        public async Task<ApiResponse> CompletionPercentage()
+        {
+            return await _userItemsRepository.CompletionPercentage();
+        }
+        public async Task<ApiResponse> makeItemCompleted(int id)
+        {
+            return await _userItemsRepository.makeItemCompleted(id);
+        }
     }
 }

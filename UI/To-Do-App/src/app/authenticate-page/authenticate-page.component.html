@@ -9,11 +9,9 @@
                     userForm.controls['userName'].dirty)) 
                 {
                     <div
-                    class="text-danger"
                     *ngIf="userForm.controls['userName'].errors?.['required']"
                     >
-                    <img src="../../assets/invalid.png" class="invalid" />
-                    <p class="danger-msg">This field is required</p>
+                    <app-required-error></app-required-error>
                     </div>
                 }
                 <div class="form-input password">
@@ -25,11 +23,9 @@
                     userForm.controls['password'].dirty)) 
                 {
                     <div
-                    class="text-danger"
                     *ngIf="userForm.controls['password'].errors?.['required']"
                     >
-                    <img src="../../assets/invalid.png" class="invalid" />
-                    <p class="danger-msg">This field is required</p>
+                    <app-required-error></app-required-error>
                     </div>
                 }
                 <button type="submit" class="submit" (click)="OnSubmit()">{{pageName}}</button>

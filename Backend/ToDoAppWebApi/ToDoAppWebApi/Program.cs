@@ -6,6 +6,14 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
+});
 builder.Services.AddScoped<ToDoAppContext, ToDoAppContext>();
 builder.Services.AddTransient<IUserItemsRepository,UserItemsRepository>();
 builder.Services.AddTransient<IUserRepository,UserRepository>();
@@ -30,7 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 app.MapControllers();

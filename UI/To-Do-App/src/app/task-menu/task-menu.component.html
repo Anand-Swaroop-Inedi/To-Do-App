@@ -1,28 +1,23 @@
 
 <div class="items-list">
-    <div #taskItem class="task-item" (click)='makeCheck(0)'>
-        <img class="check-box" src="../../assets/unchecked-box.png" alt="check-box">
-        <h3>Buy monthly groceries</h3>
-        <div class="task-item-info">
-            <p class="task-name">Buy monthly groceries</p>
-            <p class="duration">Added 22 hours ago</p>
-            <h6><b>Description</b></h6>
-            <P class="description">Need to get vegetables, fruits, milk, soap, shampoo, and snacks</P>
-            <div class="operation-icons">
-                <img src="../../assets/task-completed.png" alt="complete">
-                <div class="edit-delete-icons">
-                    <img src="../../assets/edit.png" alt="edit">
-                    <img src="../../assets/delete.png" alt="delete">
+    @for(task of tasks;track task;)
+    {
+        <div #taskItem class="task-item" (click)='makeCheck($index)' [ngStyle]="task.statusName=='COMPLETED'?{'background-color':'#EDB046'}:{'background-color':'white'}">
+            <img class="check-box" [src]="task.statusName=='COMPLETED'?'../../../assets/checked-box.png':'../../../assets/unchecked-box.png'" alt="check-box">
+            <h3>{{task.name}}</h3>
+            <div class="task-item-info" *ngIf="name!='dashboard'" [ngStyle]="task.statusName=='COMPLETED'?{'background-color':'#EDB046'}:{'background-color':'white'}">
+                <p class="task-name">{{task.name}}</p>
+                <p class="duration" [ngStyle]="name=='completed'?{'color':'#BA5112'}:{'color':'#B5B5B5'}">Added 22 hours ago</p>
+                <h6><b>Description</b></h6>
+                <P class="description">{{task.description}}</P>
+                <div class="operation-icons">
+                    <img [src]="task.statusName=='COMPLETED'?'assets/checked-box.png':'assets/unchecked-box.png'" alt="complete" (click)="makeCompleted(task.id)">
+                    <div class="edit-delete-icons">
+                        <img src="assets/edit.png" *ngIf="name=='active'" alt="edit">
+                        <img [src]="task.statusName=='COMPLETED'?'assets/delete-outlined.png':'assets/delete.png'"alt="delete" (click)="delete(task.id)">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div #taskItem class="task-item" (click)='makeCheck(1)'>
-        <img class="check-box" src="../../assets/unchecked-box.png" alt="check-box">
-        <h3>BPick up the kids</h3>
-    </div>
-    <div #taskItem class="task-item" (click)='makeCheck(2)'>
-        <img class="check-box" src="../../assets/unchecked-box.png" alt="check-box">
-        <h3>Get nails and hair done</h3>
-    </div>
+    }
 </div>

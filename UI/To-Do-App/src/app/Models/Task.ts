@@ -1,0 +1,21 @@
+export class Task{
+    id:number;
+    name:string;
+    description:string;
+    userId:number;
+    statusId:number;
+    createdOn:Date;
+    completedOn:Date;
+    statusName:string;
+    constructor(response:any)
+    {
+        this.id=response.id;
+        this.name=response.name;
+        this.description=response.description;
+        this.userId=1;
+        this.completedOn=response.CompletedOn;
+        this.createdOn=response.CreatedOn;
+        this.statusId=response.statusId;
+        this.statusName=response.statusName;
+    }
+}

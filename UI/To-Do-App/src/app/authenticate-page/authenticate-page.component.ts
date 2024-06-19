@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RequiredErrorComponent } from "../required-error/required-error.component";
 
 @Component({
-  selector: 'app-authenticate-page',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
-  templateUrl: './authenticate-page.component.html',
-  styleUrl: './authenticate-page.component.scss'
+    selector: 'app-authenticate-page',
+    standalone: true,
+    templateUrl: './authenticate-page.component.html',
+    styleUrl: './authenticate-page.component.scss',
+    imports: [CommonModule, ReactiveFormsModule, RequiredErrorComponent]
 })
 export class AuthenticatePageComponent implements OnInit {
   @ViewChild('password') passwordRef!:ElementRef<HTMLInputElement>;

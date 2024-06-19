@@ -1,11 +1,11 @@
 <div class="task-menu">
     <div class="task-menu-heading">
-        <h1>Today's <span class="task-name">{{name}} </span> Tasks</h1>
+        <h1>Today's <span class="task-name" *ngIf="pageName!='dashboard'">{{pageName}} </span> Tasks</h1>
     </div>
     <div class="operations">
-        @if(name=='dashboard')
+        @if(pageName=="dashboard")
         {
-            <button class="delete-button" >Delete All</button>
+            <button class="delete-button" (click)="deleteAll()" >Delete All</button>
             <app-today-date class="date"></app-today-date>
         }
         @else {

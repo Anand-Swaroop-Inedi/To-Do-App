@@ -4,12 +4,13 @@ import { HeaderComponent } from "../header/header.component";
 import { DashboardComponent } from "../dashboard/dashboard.component";
 import { SideBarMobileComponent } from "../side-bar-mobile/side-bar-mobile.component";
 import { RouterModule } from '@angular/router';
+import { AddTaskComponent } from "../add-task/add-task.component";
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
-    imports: [SideBarComponent, HeaderComponent, DashboardComponent, SideBarMobileComponent,RouterModule]
+    imports: [SideBarComponent, HeaderComponent, DashboardComponent, SideBarMobileComponent, RouterModule, AddTaskComponent]
 })
 export class HomeComponent {
     pageName:string='Dashboard';
@@ -25,7 +26,7 @@ export class HomeComponent {
         this.addTaskRef.nativeElement.style.display='block';
         this.homeDivRef.nativeElement.classList.add('blur');
     }
-    onCancel()
+    closeAddTaskContainer()
     {
         this.addTaskRef.nativeElement.style.display='none';
         this.homeDivRef.nativeElement.classList.remove('blur');

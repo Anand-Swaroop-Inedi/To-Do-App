@@ -13,5 +13,11 @@ namespace BusinessLogicLayer.Interfaces
         public  Task<ApiResponse> GetAll();
         public Task<ApiResponse> UpdateItem(ItemDto task);
         public Task<ApiResponse> DeleteItem(int id);
+        public Task<ApiResponse> GetActiveItems();
+        public Task<ApiResponse> GetCompletedItems();
+        public Task<ApiResponse> DeleteItems();
+        public Task<ApiResponse> CompletionPercentage();
+        public Task<ApiResponse> makeItemCompleted(int id);
+
     }
 }

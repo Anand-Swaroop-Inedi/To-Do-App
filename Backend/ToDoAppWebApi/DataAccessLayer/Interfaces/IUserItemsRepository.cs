@@ -10,9 +10,15 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IUserItemsRepository
     {
-        public Task<ApiResponse> AddTask(Useritem item);
-        public Task<ApiResponse> DeleteTask(int id);
-        public Task<ApiResponse> GetAllTasks();
-        public Task<ApiResponse> UpdateTask(Useritem item);
+        public Task<ApiResponse> AddItem(Useritem item);
+        public Task<ApiResponse> DeleteItem(int id);
+        public Task<ApiResponse> GetAllItems();
+        public Task<ApiResponse> UpdateItem(Useritem item);
+        public Task<ApiResponse> GetActiveItems();
+        public Task<ApiResponse> GetCompletedItems();
+        public Task<ApiResponse> DeleteItems();
+        public Task<ApiResponse> CompletionPercentage();
+        public  Task<ApiResponse> makeItemCompleted(int id);
+
     }
 }
