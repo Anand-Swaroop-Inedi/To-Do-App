@@ -17,11 +17,22 @@ export class TaskStatusComponent implements OnInit {
   {}
   ngOnInit()
   {
+    this.taskService.isDashboardManipulted$.subscribe((response)=>{
+      if(response)
+      {
+        console.log(response);
+        this.getCompletionpercentage();
+      }
+    });
+    this.getCompletionpercentage();
+  }
+  getCompletionpercentage()
+  {
     this.taskService.getCompletionpercentage().subscribe((response:ApiResponse)=>{
       if(response.statusCode==200)
       {
-        this.completionPercentage=response.result;
-        this.activePercentage=100-this.completionPercentage;
+          this.completionPercentage=response.result[0];
+          this.activePercentage=response.result[1];
       }
     });
   }

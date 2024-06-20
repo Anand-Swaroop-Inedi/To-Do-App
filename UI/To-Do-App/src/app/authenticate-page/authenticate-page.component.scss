@@ -77,30 +77,20 @@
 .form-input:focus{
     outline: none;
 }
-// .text-danger {
-//     display: flex;
-//     margin: 0% 0% 0% 3%;
-//     flex-direction: row;
-//   }
-//   .danger-msg {
-//     color: red;
-//     font-size: 13px;
-//     margin: 0%;
-//   }
-//   .invalid {
-//     width: 10px;
-//     height: 12px;
-//     margin: 1.5% 3% 0% 0%;
-//   }
+.password-text:focus{
+    outline: none;
+}
 .password{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     background-color: white;
     margin-top: 20px;
+    border: none;
 }
 .password-text{
     border: none;
+    border-style: none;
 }
 .eye-icon{
     font-size: 20px;
@@ -142,4 +132,20 @@
         color:#BA5112;
         cursor: pointer;
     }
+}
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+}
+.success{
+    margin-top: 5px;
+    color:green;
+    text-align: center;
+}
+.danger{
+    color:red;
+    text-align: center;
 }

@@ -2,6 +2,11 @@
     display: flex;
     flex-direction: column;
 }
+@media only screen and (max-width: 900px) {
+    .home{
+        margin-left: 15px;
+    }
+}
 .blur{
     filter: blur(3px);
 }
@@ -66,4 +71,10 @@
     width: 30vw;
     border-radius:5px;
     box-shadow: 4px 4px 8px 0px #00000026;
+}
+@media only screen and (max-width: 900px) {
+    .add-task{
+        width:90%;
+        left: 10%;
+    }
 }

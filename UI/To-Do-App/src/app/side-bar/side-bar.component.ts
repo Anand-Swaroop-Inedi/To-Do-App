@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AddTaskButtonComponent } from "../add-task-button/add-task-button.component";
 
 @Component({
     selector: 'app-side-bar',
     standalone: true,
     templateUrl: './side-bar.component.html',
     styleUrl: './side-bar.component.scss',
-    imports: [RouterLink, RouterLinkActive, AddTaskButtonComponent]
+    imports: [RouterLink, RouterLinkActive]
 })
 export class SideBarComponent {
     @Output() name:EventEmitter<string>=new EventEmitter<string>()

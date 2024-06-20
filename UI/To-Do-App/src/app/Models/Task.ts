@@ -2,20 +2,20 @@ export class Task{
     id:number;
     name:string;
     description:string;
-    userId:number;
-    statusId:number;
-    createdOn:Date;
-    completedOn:Date;
+    userid:number;
+    statusid:number;
+    createdon:Date;
+    completedon:Date;
     statusName:string;
     constructor(response:any)
     {
         this.id=response.id;
         this.name=response.name;
         this.description=response.description;
-        this.userId=1;
-        this.completedOn=response.CompletedOn;
-        this.createdOn=response.CreatedOn;
-        this.statusId=response.statusId;
+        this.userid=response.userid;
+        this.completedon=response.completedon;
+        this.createdon=response.createdon;
+        this.statusid=response.statusid;
         this.statusName=response.statusName;
     }
 }

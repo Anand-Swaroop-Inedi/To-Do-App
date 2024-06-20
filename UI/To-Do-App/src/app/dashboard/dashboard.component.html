@@ -6,18 +6,18 @@
     <img src="../../assets/woman.png" alt="women working" class="women-image">
 </div>
 <div class="desktop-task-menu">
-    <app-tasks-header (name)="name"></app-tasks-header>
+    <app-tasks-header (dataManipulated)="sendUpdatedData()"></app-tasks-header>
     <div class="menu-items">
-        <app-task-menu class="task-menu"></app-task-menu>
+        <app-task-menu  class="task-menu"></app-task-menu>
         <div class="statuses">
-            <app-task-status></app-task-status>
+            <app-task-status #taskStatus></app-task-status>
         </div>
     </div>
 </div>
 <div class="menu-items-mobile">
     <div class="statuses">
-        <app-task-status></app-task-status>
+        <app-task-status ></app-task-status>
     </div>
-    <app-tasks-header [pageName]="name"></app-tasks-header>
-    <app-task-menu [name]="name" class="task-menu"></app-task-menu>
+    <app-tasks-header (dataManipulated)="sendUpdatedData()"></app-tasks-header>
+    <app-task-menu  class="task-menu"></app-task-menu>
 </div>

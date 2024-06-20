@@ -19,15 +19,54 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                string result = _context.Users.Where(u => u.Username == user.Username).Select(u => u.Password).FirstOrDefault();
+                User result = _context.Users.Where(u => u.Username == user.Username).FirstOrDefault();
                 if (result != null)
                 {
-                    if (PasswordHashing.VerifyPassword(result, user.Password))
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "UserName Already Exists so choose other",
+                        result = -1
+                    };
+                }
+                else
+                {
+                    user.Password = PasswordHashing.HashPassword(user.Password);
+                    Console.WriteLine(user.Password + " " + user.Username);
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
+                    return new ApiResponse
+                    {
+                        StatusCode = 200,
+                        Message = "Successfully registered",
+                        result = 0
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+
+        }
+        public async Task<ApiResponse> AuthenticateUser(User user)
+        {
+            try
+            {
+                User result = _context.Users.Where(u => u.Username == user.Username).FirstOrDefault();
+                if (result != null)
+                {
+                    if (PasswordHashing.VerifyPassword(result.Password, user.Password))
                     {
                         return new ApiResponse
                         {
                             StatusCode = 200,
-                            Message = "successfully logged in"
+                            Message = "successfully logged in",
+                            result=result.Id
                         };
 
                     }
@@ -35,21 +74,19 @@ namespace DataAccessLayer.Repositories
                     {
                         return new ApiResponse
                         {
-                            StatusCode = 200,
-                            Message = "Password is Incorrect"
+                            StatusCode = 500,
+                            Message = "Password is Incorrect",
+                            result = -1
                         };
                     }
                 }
                 else
                 {
-                    user.Password = PasswordHashing.HashPassword(user.Password);   
-                    Console.WriteLine(user.Password + " " + user.Username);
-                    _context.Users.Add(user);
-                    _context.SaveChanges();
                     return new ApiResponse
                     {
-                        StatusCode = 200,
-                        Message = "Successfully registered"
+                        StatusCode = 500,
+                        Message = "UserName incorrect check the username",
+                        result = -1
                     };
                 }
             }

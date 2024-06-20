@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using Models;
 using System.Globalization;
+using System.Net.Http;
+using System.Security.Claims;
 
 namespace DataAccessLayer.Repositories
 {
@@ -18,7 +20,7 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                int result = _context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "ACTIVE").Select(r => r.Id).FirstOrDefault();
+                int result = _context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "ACTIVE" && r.Userid==item.Userid).Select(r => r.Id).FirstOrDefault();
                 if (result > 0)
                 {
                     return new ApiResponse
@@ -29,17 +31,19 @@ namespace DataAccessLayer.Repositories
                 }
                 else
                 {
-                    Useritem t=_context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "COMPLETED").FirstOrDefault();
+                    Useritem t=_context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "COMPLETED" && r.Userid==item.Userid).FirstOrDefault();
+                    string time= DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    int statusId = _context.Statuses.Where(s => s.Name.ToUpper() == "ACTIVE").Select(s => s.Id).First();
                     if (t != null)
                     {
-                        t.Statusid = _context.Statuses.Where(s => s.Name.ToUpper() == "ACTIVE").Select(s => s.Id).First();
-                        t.Createdon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt"); 
+                        t.Statusid = statusId;
+                        t.Createdon = time;
                         _context.Useritems.Update(t);
                     }
                     else
                     {
-                        item.Statusid = _context.Statuses.Where(s => s.Name.ToUpper() == "ACTIVE").Select(s => s.Id).First();
-                        item.Createdon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                        item.Statusid = statusId;
+                        item.Createdon = time;
                         _context.Useritems.Add(item);
                     }
                     _context.SaveChanges();
@@ -59,18 +63,20 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> CompletionPercentage()
+        public async Task<ApiResponse> CompletionPercentage(int UserId)
         {
             try
             {
-                int count = _context.Useritems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.Isdeleted == 0).Count();
-                int totalCount = _context.Useritems.Where(u => u.Isdeleted == 0).Count();
-                int percentage = 0;
+                int count = _context.Useritems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.Isdeleted == 0 && u.Userid == UserId).Count();
+                int totalCount = _context.Useritems.Where(u => u.Isdeleted == 0 && u.Userid == UserId).Count();
+                int completedPercentage = 0;
+                int activePercentage = 0;
                 if (totalCount > 0)
                 {
-                    percentage = (int)Math.Round((double)count*100 / totalCount);
+                     completedPercentage = (int)Math.Round((double)count*100 / totalCount);
+                     activePercentage = (int)Math.Round((double)(totalCount-count) * 100 / totalCount);
                 }
-                return new ApiResponse { StatusCode = 200, Message = "Successful", result = percentage };
+                return new ApiResponse { StatusCode = 200, Message = "Successful", result = new int[] { completedPercentage, activePercentage } };
             }
             catch(Exception ex)
             {
@@ -81,14 +87,15 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> makeItemCompleted(int id)
+        public async Task<ApiResponse> makeItemCompleted(int id, int UserId)
         {
             try
             {
-                Useritem result = _context.Useritems.Where(r => r.Id == id).First();
+                Useritem result = _context.Useritems.Where(r => r.Id == id && r.Userid == UserId).First();
                 if (result != null)
                 {
-                    result.Statusid = _context.Statuses.Where(s => s.Name.ToUpper() == "COMPLETED").Select(s => s.Id).First();
+                    result.Statusid = _context.Statuses.Where(s => s.Name.ToUpper() == "COMPLETED" && s.Isdeleted==0).Select(s => s.Id).First();
+                    result.Completedon= DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
                     _context.Useritems.Update(result);
                     _context.SaveChanges();
                     return new ApiResponse
@@ -116,11 +123,11 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> DeleteItem(int id)
+        public async Task<ApiResponse> DeleteItem(int id,int UserId)
         {
             try
             {
-                Useritem result = _context.Useritems.Where(r => r.Id == id).First();
+                Useritem result = _context.Useritems.Where(r => r.Id == id && r.Userid== UserId).First();
                 if (result != null)
                 {
                     result.Isdeleted = 1;
@@ -151,9 +158,9 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> GetAllItems()
+        public async Task<ApiResponse> GetAllItems(int UserId)
         {
-             List<Useritem> Useritems= _context.Useritems.Where(x=>x.Isdeleted == 0).Include(u=>u.Item).Include(u=>u.User).Include(u=>u.Status).ToList();
+            List<Useritem> Useritems= _context.Useritems.Where(x=>x.Isdeleted == 0 && x.Userid == UserId).Include(u=>u.Item).Include(u=>u.User).Include(u=>u.Status).ToList();
             return new ApiResponse
             {
                 StatusCode = 200,
@@ -165,9 +172,11 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                int id = _context.Useritems.Where(u => u.Id == useritem.Id).Select(u=>u.Id).FirstOrDefault();
+                int id = _context.Useritems.Where(u => u.Id == useritem.Id && u.Userid == useritem.Userid).Select(u=>u.Id).FirstOrDefault();
                 if (id != 0)
                 {
+                    useritem.Createdon=DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    useritem.Isdeleted = 0;
                     _context.Useritems.Update(useritem);
                     _context.SaveChanges();
                     return new ApiResponse
@@ -194,7 +203,7 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> GetActiveItems()
+        public async Task<ApiResponse> GetActiveItems(int UserId)
         {
             try
             {
@@ -202,7 +211,7 @@ namespace DataAccessLayer.Repositories
                         {
                             StatusCode=200,
                             Message="Successful",
-                            result = _context.Useritems.Where(x=>x.Status.Name.ToUpper()=="ACTIVE" && x.Isdeleted == 0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
+                            result = _context.Useritems.Where(x=>x.Status.Name.ToUpper()=="ACTIVE" && x.Isdeleted == 0 && x.Userid == UserId).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
                         };
 
             }
@@ -215,7 +224,7 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> GetCompletedItems()
+        public async Task<ApiResponse> GetCompletedItems(int UserId)
         {
             try
             {
@@ -223,7 +232,7 @@ namespace DataAccessLayer.Repositories
                 {
                     StatusCode = 200,
                     Message = "Successful",
-                    result = _context.Useritems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.Isdeleted==0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
+                    result = _context.Useritems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.Isdeleted==0 && x.Userid==UserId).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
                 };
 
             }
@@ -236,11 +245,11 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }
-        public async Task<ApiResponse> DeleteItems()
+        public async Task<ApiResponse> DeleteItems(int UserId)
         {
             try
             {
-                _context.Useritems.ToList().ForEach(x => { x.Isdeleted=1; });
+                _context.Useritems.Where(x=>x.Userid==UserId).ToList().ForEach(x => { x.Isdeleted=1; });
                 _context.SaveChanges();
                 return new ApiResponse { StatusCode = 200, Message = "Successfully Deleted" };
             }

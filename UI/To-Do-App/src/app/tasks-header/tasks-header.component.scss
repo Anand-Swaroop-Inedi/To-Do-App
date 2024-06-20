@@ -29,7 +29,7 @@
     flex-direction: row;
     justify-content: space-between;
     width: 30%;
-    align-items: center;
+    align-items: right;
 }
 @media only screen and (max-width: 900px) {
     .operations{
@@ -44,6 +44,14 @@
     background-color: white;
     cursor: pointer;
 }
+.date{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #251814;
+    margin :Auto 0px;
+    align-items: right;
+}
 @media only screen and (max-width: 900px) {
     .delete-button{
         font-size: 13px;
@@ -52,6 +60,8 @@
     .date{
         width: 60%;
         text-align: center;
+        font-size: 12px;
+        margin: 0px;
     }
     .task-name{
         display: none;

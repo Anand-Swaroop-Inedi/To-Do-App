@@ -1,24 +1,48 @@
-import { Component, Input } from '@angular/core';
-import { AddTaskButtonComponent } from '../add-task-button/add-task-button.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Router, NavigationEnd, Event as NavigationEvent, NavigationStart } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { debug } from 'console';
 
 @Component({
     selector: 'app-header',
     standalone: true,
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    imports: [AddTaskButtonComponent]
+    imports: []
 })
 export class HeaderComponent {
-  @Input() pageName:string='dashboard';
+  @Output() flag:EventEmitter<null>=new EventEmitter<null>();
+  pageName:string='';
+  subscription!: Subscription;
   constructor(private router:Router)
   {
 
   }
   ngOnInit()
   {
-      let pgName:string|undefined=this.router.url.split('/').pop();
-      if(pgName)
-      this.pageName=pgName[0].toUpperCase()+pgName.slice(1);
+    let name = this.router.url.split('/').pop();;
+    if(name)
+    this.pageName=name[0].toUpperCase()+name.slice(1);
+    this.subscription = this.router.events.subscribe((event: NavigationEvent) => {
+      if (event instanceof NavigationEnd) {
+        // NavigationEnd event occurs when the URL changes
+        let name = event.urlAfterRedirects.split('/').pop();;
+        if(name)
+        this.pageName=name[0].toUpperCase()+name.slice(1);
+      }
+    });
+  }
+  onSignOut()
+  {
+    sessionStorage.removeItem('Token');
+    this.router.navigate(['/']);
+  }
+  sendAddTaskRequest()
+    {
+        this.flag.emit();
+    }
+  OnDestroy()
+  {
+    this.subscription.unsubscribe();
   }
 }

@@ -2,8 +2,11 @@
     <h2 class="logo-text">To-Do App</h2>
     <div class="header-items">
         <h2 class="header-name">{{pageName}}</h2>
-        <app-add-task-button class="add-task-button"></app-add-task-button>
-        <div class="sign-out-button">
+        <div class="add-button" (click)="sendAddTaskRequest()">
+            <p>Add Task</p>
+            <img src="../../assets/Add button.png" class="button-image">
+        </div>
+        <div class="sign-out-button" (click)="onSignOut()">
             <h3 class="sign-out-text">Sign out</h3>
             <img class="sign-out-image" src="../../assets/sign-out.png" alt="sign-out">
         </div>

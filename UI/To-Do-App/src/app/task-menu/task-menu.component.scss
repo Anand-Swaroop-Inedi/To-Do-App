@@ -3,6 +3,11 @@
     flex-direction: column;
     width:100%;
 }
+@media only screen and (max-width: 900px) {
+    .items-list{
+        width:95%;
+    }
+}
 .task-item{
     display: flex;
     flex-direction: row;

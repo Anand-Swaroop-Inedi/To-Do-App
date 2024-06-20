@@ -13,17 +13,28 @@ import { Route, Router } from '@angular/router';
     imports: [ReactiveFormsModule, CommonModule, RequiredErrorComponent]
 })
 export class AddTaskComponent {
-  @Output() close:EventEmitter<null>=new EventEmitter<null>();
+  @Output() close:EventEmitter<number>=new EventEmitter<number>();
+  addedTasksCount:number=0;
   successMessage:string='';
   dangerMessage:string='';
   taskForm!:FormGroup;
   isSubmitted:boolean=false;
+  isEdit:boolean=false;
+  editableTask!:Task;
   constructor(private taskService:TaskService,private router:Router)
   {
 
   }
   ngOnInit()
   {
+    this.taskService.editTask$.subscribe((value)=>{
+      this.taskForm.patchValue({
+        name:value.name,
+        description:value.description
+      });
+      this.editableTask=value;
+      this.isEdit=true;
+    })
     this.taskForm=new FormGroup({
         name:new FormControl('',[Validators.required]),
         description:new FormControl('',[Validators.required])
@@ -32,27 +43,54 @@ export class AddTaskComponent {
   onCancel()
   {
     this.taskForm.reset();
-    this.successMessage=""
-    this.dangerMessage=""
-      this.close.emit();
+    this.successMessage="";
+    this.dangerMessage="";
+    this.close.emit(this.addedTasksCount);
   }
   onSubmit()
   {
     this.isSubmitted=true;
     if(this.taskForm.valid)
     {
+      if(!this.isEdit)
+      {
       this.taskService.createTask(new Task(this.taskForm.value)).subscribe((response)=>{
         if(response.statusCode==200)
         {
+          this.addedTasksCount+=1;
            this.successMessage=response.message;
-           this.dangerMessage=""
+           this.dangerMessage="";
+           setTimeout(()=>{
+            this.onCancel();
+           },2000); 
         }
         else{
           this.dangerMessage=response.message;
           this.successMessage="";
         }
-        this.taskForm.reset();
-      })
+      });
+    }
+    else{
+      var t:Task=new Task(this.taskForm.value);
+      t.id=this.editableTask.id;
+      t.statusid=this.editableTask.statusid;
+      debugger
+      this.taskService.updateTask(t).subscribe((response)=>{
+        if(response.statusCode==200)
+        {
+          this.addedTasksCount+=1;
+           this.successMessage=response.message;
+           this.dangerMessage="";
+           setTimeout(()=>{
+            this.onCancel();
+           },2000); 
+        }
+        else{
+          this.dangerMessage=response.message;
+          this.successMessage="";
+        }
+      });
+    }
     }
 
   }

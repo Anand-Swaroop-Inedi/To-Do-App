@@ -6,11 +6,11 @@
         @if(pageName=="dashboard")
         {
             <button class="delete-button" (click)="deleteAll()" >Delete All</button>
-            <app-today-date class="date"></app-today-date>
+            <h4 class="date">{{today|date:'EEEE, dd MMMM yyyy'}}</h4>
         }
         @else {
             <div></div>
-            <app-today-date class="date"></app-today-date>
+            <h4 class="date">{{today|date:'EEEE, dd MMMM yyyy'}}</h4>
         }
     </div>
 </div>

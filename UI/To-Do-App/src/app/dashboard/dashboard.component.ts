@@ -1,6 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { TodayDateComponent } from "../today-date/today-date.component";
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { TasksHeaderComponent } from "../tasks-header/tasks-header.component";
 import { TaskMenuComponent } from "../task-menu/task-menu.component";
 import { TaskStatusComponent } from "../task-status/task-status.component";
@@ -13,27 +12,42 @@ import { TaskService } from '../Services/Task/task.service';
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
-    imports: [CommonModule, TodayDateComponent, TasksHeaderComponent, TaskMenuComponent, TaskStatusComponent]
+    imports: [CommonModule, TasksHeaderComponent, TaskMenuComponent, TaskStatusComponent]
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit,OnChanges {
     name:string="dashboard";
     tasks:Task[]=[];
+    @Input() changeMenu:boolean=false;
+    @ViewChild('taskStatus') taskStatus!:TaskStatusComponent;
     constructor(private taskService:TaskService)
     {
 
     }
     ngOnInit()
     {
+        this.getAllTasksData();
+    }
+    ngOnChanges(): void {
+        if(this.changeMenu==true)
+        {
+            this.getAllTasksData();
+        }
+    }
+    sendUpdatedData()
+    {
+        this.getAllTasksData();
+        this.taskStatus.getCompletionpercentage();
+    }
+    getAllTasksData()
+    {
         this.taskService.getAllTasks().subscribe((response)=>{
             if(response.statusCode==200)
             {
                 this.taskService.taskData$.next(response.result);
             }
-            else
-            {
-                console.log(response.message)
+            else{
+                console.log(response.message);
             }
-            
-        })
+    });
     }
 }

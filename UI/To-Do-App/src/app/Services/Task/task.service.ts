@@ -10,9 +10,13 @@ import { Observable, Subject } from 'rxjs';
 })
 export class TaskService {
   taskData$:Subject<Task[]>;
+  isDashboardManipulted$:Subject<boolean>;
+  editTask$:Subject<Task>;
   constructor(private apiUrls:WebApiUrls,private http:HttpClient) 
   {
-    this.taskData$=new Subject<Task[]>()
+    this.taskData$=new Subject<Task[]>();
+    this.isDashboardManipulted$=new Subject<boolean>();
+    this.editTask$=new Subject<Task>();
   }
   createTask(t:Task):Observable<ApiResponse>
   {
@@ -48,7 +52,6 @@ export class TaskService {
   }
   makeAsCompleted(id:number):Observable<ApiResponse>
   {
-    debugger;
     return this.http.post<ApiResponse>(this.apiUrls.makeCompleted,id);
   }
 }

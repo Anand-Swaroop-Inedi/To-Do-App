@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TasksHeaderComponent } from "../tasks-header/tasks-header.component";
 import { TaskMenuComponent } from "../task-menu/task-menu.component";
 import { TaskService } from '../Services/Task/task.service';
@@ -12,11 +12,26 @@ import { TaskService } from '../Services/Task/task.service';
 })
 export class ActivePageComponent implements OnInit {
   name:string="Active";
+  @Input() changeMenu:boolean=false;
   constructor(private taskService:TaskService)
   {
 
   }
   ngOnInit()
+  {
+    this.getAllTasksData();
+  }
+  ngOnChanges(): void {
+    if(this.changeMenu==true)
+    {
+      this.getAllTasksData();
+    }
+}
+sendUpdatedData()
+    {
+      this.getAllTasksData();
+  }
+  getAllTasksData()
   {
     this.taskService.getActiveTasks().subscribe((response)=>{
       if(response.statusCode==200)
@@ -27,7 +42,6 @@ export class ActivePageComponent implements OnInit {
       {
           console.log(response.message)
       }
-      
-  })
+    });
   }
 }

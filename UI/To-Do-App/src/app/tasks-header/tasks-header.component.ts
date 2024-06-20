@@ -1,27 +1,35 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { TodayDateComponent } from "../today-date/today-date.component";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../Services/Task/task.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-tasks-header',
     standalone: true,
     templateUrl: './tasks-header.component.html',
     styleUrl: './tasks-header.component.scss',
-    imports: [TodayDateComponent,CommonModule]
+    imports: [CommonModule]
 })
-export class TasksHeaderComponent {
-    @Input() pageName:string='dashboard'
-    constructor(private taskService:TaskService)
-    {}
-    ngOnChanges()
+export class TasksHeaderComponent implements OnInit{
+    pageName:string=''
+    @Output() dataManipulated:EventEmitter<boolean>=new EventEmitter<boolean>();
+    today:Date;
+    constructor(private taskService:TaskService,private router:Router)
     {
-        console.log(this.pageName);
+        this.today = new Date();
+    }
+    ngOnInit(): void {
+    {
+        let name:string|undefined=this.router.url.split('/').pop();
+        if(name)
+        this.pageName=name[0].toUpperCase()+name.slice(1);
+    }
     }
     deleteAll()
     {
         this.taskService.deleteAllTasks().subscribe((response)=>{
-                console.log(response.message);
-        })
+                this.dataManipulated.emit(true);
+                this.taskService.isDashboardManipulted$.next(true);
+        });
     }
 }

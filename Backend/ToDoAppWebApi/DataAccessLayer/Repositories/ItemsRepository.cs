@@ -78,7 +78,7 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                int id = _toDoAppContext.Items.Where(x => x.Name == item.Name).Select(x => x.Id).FirstOrDefault();
+                int id = _toDoAppContext.Items.Where(x => x.Name == item.Name && x.Description.ToLower()==item.Description.ToLower()).Select(x => x.Id).FirstOrDefault();
                 if (id == 0)
                 {
                     item.Id = 0;

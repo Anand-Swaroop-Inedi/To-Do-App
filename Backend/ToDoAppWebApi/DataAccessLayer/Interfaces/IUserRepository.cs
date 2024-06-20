@@ -11,6 +11,7 @@ namespace DataAccessLayer.Interfaces
     public interface IUserRepository
     {
         public Task<ApiResponse> AddUser(User user);
+        public Task<ApiResponse> AuthenticateUser(User user);
         public Task<ApiResponse> GetAllUsers();
     }
 }

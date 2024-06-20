@@ -38,9 +38,9 @@ namespace BusinessLogicLayer.Services
                 }
             }
         }   
-        public async Task<ApiResponse> GetAll()
+        public async Task<ApiResponse> GetAll(int userId)
         {
-            ApiResponse apiResponse = await _userItemsRepository.GetAllItems();
+            ApiResponse apiResponse = await _userItemsRepository.GetAllItems(userId);
             apiResponse.result= _mapper.Map<List<ItemDto>>(apiResponse.result);
             return apiResponse;
         }
@@ -58,33 +58,33 @@ namespace BusinessLogicLayer.Services
             }
             
         }
-        public async Task<ApiResponse> DeleteItem(int id)
+        public async Task<ApiResponse> DeleteItem(int id, int userId)
         {
-            return await _userItemsRepository.DeleteItem(id);
+            return await _userItemsRepository.DeleteItem(id, userId);
         }
-        public async Task<ApiResponse> DeleteItems()
+        public async Task<ApiResponse> DeleteItems(int userId)
         {
-            return await _userItemsRepository.DeleteItems();
+            return await _userItemsRepository.DeleteItems(userId);
         }
-        public async Task<ApiResponse> GetActiveItems()
+        public async Task<ApiResponse> GetActiveItems(int userId)
         {
-            ApiResponse apiResponse = await _userItemsRepository.GetActiveItems();
+            ApiResponse apiResponse = await _userItemsRepository.GetActiveItems(userId);
             apiResponse.result = _mapper.Map<List<ItemDto>>(apiResponse.result);
             return apiResponse;
         }
-        public async Task<ApiResponse> GetCompletedItems()
+        public async Task<ApiResponse> GetCompletedItems(int userId)
         {
-            ApiResponse apiResponse = await _userItemsRepository.GetCompletedItems();
+            ApiResponse apiResponse = await _userItemsRepository.GetCompletedItems(userId);
             apiResponse.result = _mapper.Map<List<ItemDto>>(apiResponse.result);
             return apiResponse;
         }
-        public async Task<ApiResponse> CompletionPercentage()
+        public async Task<ApiResponse> CompletionPercentage(int userId)
         {
-            return await _userItemsRepository.CompletionPercentage();
+            return await _userItemsRepository.CompletionPercentage(userId);
         }
-        public async Task<ApiResponse> makeItemCompleted(int id)
+        public async Task<ApiResponse> makeItemCompleted(int id, int userId)
         {
-            return await _userItemsRepository.makeItemCompleted(id);
+            return await _userItemsRepository.makeItemCompleted(id, userId);
         }
     }
 }

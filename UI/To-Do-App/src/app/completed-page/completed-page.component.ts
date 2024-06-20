@@ -11,22 +11,25 @@ import { TaskService } from '../Services/Task/task.service';
     imports: [TasksHeaderComponent, TaskMenuComponent]
 })
 export class CompletedPageComponent implements OnInit {
-  name:string="completed";
   constructor(private taskService:TaskService)
   {
 
   }
   ngOnInit(){
-    this.taskService.getCompletedTasks().subscribe((response)=>{
-      if(response.statusCode==200)
-      {
-          this.taskService.taskData$.next(response.result);
-      }
-      else
-      {
-          console.log(response.message)
-      }
-      
-  })
+    this.getCompletedTasksData();
   }
+  sendUpdatedData()
+    {
+      this.getCompletedTasksData();
+    }
+        
+    getCompletedTasksData()
+    {
+      this.taskService.getCompletedTasks().subscribe((response)=>{
+        if(response.statusCode==200)
+        {
+            this.taskService.taskData$.next(response.result);
+        }
+      });
+    }
 }

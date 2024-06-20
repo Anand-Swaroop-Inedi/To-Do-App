@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using DataAccessLayer.Entities;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace BusinessLogicLayer.Interfaces
     public interface IUserManager
     {
         public Task<ApiResponse> GetAllUsers();
-        public  Task<ApiResponse> AddUser(UserDto user);
+        public  Task<ApiResponse> AuthenticateUser(UserDto user);
+        public Task<ApiResponse> AddUser(UserDto user);
     }
 }
