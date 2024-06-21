@@ -1,0 +1,23 @@
+<div class="hero-section">
+  <div class="description">
+    <h1>Hello, Beautiful Human!</h1>
+    <p>What do you want to do today?</p>
+  </div>
+  <img src="../../assets/woman.png" alt="women working" class="women-image" />
+</div>
+<div class="desktop-task-menu">
+  <app-task-header (dataManipulated)="sendUpdatedData()"></app-task-header>
+  <div class="menu-items">
+    <app-task-menu class="task-menu"></app-task-menu>
+    <div class="statuses">
+      <app-task-status #taskStatus></app-task-status>
+    </div>
+  </div>
+</div>
+<div class="menu-items-mobile">
+  <div class="statuses">
+    <app-task-status></app-task-status>
+  </div>
+  <app-task-header (dataManipulated)="sendUpdatedData()"></app-task-header>
+  <app-task-menu class="task-menu"></app-task-menu>
+</div>

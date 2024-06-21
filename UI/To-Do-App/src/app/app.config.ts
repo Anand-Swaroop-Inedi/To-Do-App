@@ -4,9 +4,14 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { customInterceptor } from './Interceptor/custom.interceptor';
+import { customInterceptor } from './Shared Scripts/Interceptor/custom.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),provideHttpClient(withInterceptors([customInterceptor])),provideAnimations(),
-  provideToastr()]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([customInterceptor])),
+    provideAnimations(),
+    provideToastr(),
+  ],
 };

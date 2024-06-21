@@ -20,12 +20,12 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                int result = _context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "ACTIVE" && r.Userid==item.Userid).Select(r => r.Id).FirstOrDefault();
+                int result = _context.Useritems.Where(r => r.Userid == item.Userid && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "ACTIVE").Select(r => r.Id).FirstOrDefault();
                 if (result > 0)
                 {
                     return new ApiResponse
                     {
-                        StatusCode = 200,
+                        StatusCode = 400,
                         Message = "Task is already added in the ToDo List"
                     };
                 }
@@ -108,8 +108,45 @@ namespace DataAccessLayer.Repositories
                 {
                     return new ApiResponse
                     {
+                        StatusCode = 500,
+                        Message = "Task not found"
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+        public async Task<ApiResponse> makeItemActive(int id, int UserId)
+        {
+            try
+            {
+                Useritem result = _context.Useritems.Where(r => r.Id == id && r.Userid == UserId).First();
+                if (result != null)
+                {
+                    result.Statusid = _context.Statuses.Where(s => s.Name.ToUpper() == "ACTIVE" && s.Isdeleted == 0).Select(s => s.Id).First();
+                    result.Createdon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    result.Completedon = null;
+                    _context.Useritems.Update(result);
+                    _context.SaveChanges();
+                    return new ApiResponse
+                    {
                         StatusCode = 200,
-                        Message = "Task Updation unsuccessful"
+                        Message = "Task Updated as active"
+                    };
+                }
+                else
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "Task not found"
                     };
                 }
 
@@ -143,8 +180,8 @@ namespace DataAccessLayer.Repositories
                 {
                     return new ApiResponse
                     {
-                        StatusCode = 200,
-                        Message = "Task Deletion unsuccessful"
+                        StatusCode = 500,
+                        Message = "Id not found"
                     };
                 }
 
@@ -189,7 +226,7 @@ namespace DataAccessLayer.Repositories
                 {
                     return new ApiResponse
                     {
-                        StatusCode = 200,
+                        StatusCode = 500,
                         Message = "Updation unsuccessful because Usertask doesn't exist in database"
                     };
                 }

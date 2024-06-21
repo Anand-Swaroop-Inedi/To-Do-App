@@ -86,5 +86,9 @@ namespace BusinessLogicLayer.Services
         {
             return await _userItemsRepository.makeItemCompleted(id, userId);
         }
+        public async Task<ApiResponse> makeItemActive(int id, int UserId)
+        {
+            return await _userItemsRepository.makeItemActive(id, UserId);
+        }
     }
 }

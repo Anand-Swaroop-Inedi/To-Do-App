@@ -19,6 +19,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task<ApiResponse> DeleteItems(int userId);
         public Task<ApiResponse> CompletionPercentage(int userId);
         public Task<ApiResponse> makeItemCompleted(int id, int userId);
+        public Task<ApiResponse> makeItemActive(int id, int UserId);
 
     }
 }

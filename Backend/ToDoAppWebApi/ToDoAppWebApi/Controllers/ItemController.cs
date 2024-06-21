@@ -71,5 +71,11 @@ namespace ToDoAppWebApi.Controllers
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             return await _itemManager.makeItemCompleted(id, userId);
         }
+        [HttpPost("active")]
+        public async Task<ApiResponse> makeItemActive([FromBody] int id)
+        {
+            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
+            return await _itemManager.makeItemActive(id, userId);
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace DataAccessLayer.Interfaces
         public Task<ApiResponse> DeleteItems(int UserId);
         public Task<ApiResponse> CompletionPercentage(int UserId);
         public  Task<ApiResponse> makeItemCompleted(int id, int UserId);
+        public Task<ApiResponse> makeItemActive(int id, int UserId);
 
     }
 }
