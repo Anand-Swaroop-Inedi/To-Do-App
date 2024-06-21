@@ -1,5 +1,8 @@
 
 @media only screen and (max-width: 900px) {
+    form{
+        margin-left: 18vw;
+    }
     .menu{
         width:80%;
         padding: 10px 10px;
@@ -9,5 +12,11 @@
         border: none;
         border-radius: 10px;
         margin-bottom: 10px;
+    }
+    option{
+        background-color: white;
+    }
+    option::selection{
+        background-color:#EDB046;
     }
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../Services/Task/task.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-tasks-header',
@@ -14,7 +15,7 @@ export class TasksHeaderComponent implements OnInit{
     pageName:string=''
     @Output() dataManipulated:EventEmitter<boolean>=new EventEmitter<boolean>();
     today:Date;
-    constructor(private taskService:TaskService,private router:Router)
+    constructor(private taskService:TaskService,private router:Router,private toaster: ToastrService)
     {
         this.today = new Date();
     }
@@ -28,8 +29,16 @@ export class TasksHeaderComponent implements OnInit{
     deleteAll()
     {
         this.taskService.deleteAllTasks().subscribe((response)=>{
-                this.dataManipulated.emit(true);
-                this.taskService.isDashboardManipulted$.next(true);
+            if(response.statusCode==200)
+                {
+                    this.dataManipulated.emit(true);
+                    this.taskService.isDashboardManipulted$.next(true);
+                    this.toaster.success(response.message);
+                }
+                else{
+                    this.toaster.error(response.message);
+                }
+                
         });
     }
 }

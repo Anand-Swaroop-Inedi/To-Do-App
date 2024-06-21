@@ -13,6 +13,6 @@ export class IndexPageComponent implements OnInit {
   {}
   ngOnInit()
   {
-    setTimeout(()=>{ this.router.navigate(['/signup']);},3000);
+    setTimeout(()=>{ this.router.navigate(['/login']);},3000);
   }
 }

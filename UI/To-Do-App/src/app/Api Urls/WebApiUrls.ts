@@ -16,6 +16,7 @@ export class WebApiUrls
     makeCompleted:string;
     authenticateUser:string;
     addUser:string;
+    makeActive:string;
     constructor()
     {
         this.getAllTasks="https://localhost:7064/api/Item/all";
@@ -27,6 +28,7 @@ export class WebApiUrls
         this.deleteAllTasks="https://localhost:7064/api/Item/delete-all";
         this.getCompletionPercentage="https://localhost:7064/api/Item/completion-percentage";
         this.makeCompleted="https://localhost:7064/api/Item/completed";
+        this.makeActive="https://localhost:7064/api/Item/active";
         this.authenticateUser="https://localhost:7064/api/User/authenticate";
         this.addUser="https://localhost:7064/api/User/add";
     }

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RequiredErrorComponent } from "../required-error/required-error.component";
 import { UserService } from '../Services/User/user.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-authenticate-page',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
     styleUrl: './authenticate-page.component.scss',
     imports: [CommonModule, ReactiveFormsModule, RequiredErrorComponent]
 })
-export class AuthenticatePageComponent implements OnInit {
+export class AuthenticatePageComponent implements OnInit,AfterViewInit {
   @ViewChild('password') passwordRef!:ElementRef<HTMLInputElement>;
   @ViewChild('userName') userNameRef!:ElementRef<HTMLInputElement>;
   pageName:string="Sign Up";
@@ -21,16 +22,29 @@ export class AuthenticatePageComponent implements OnInit {
   userForm!:FormGroup;
   isPasswordVisible:boolean=false;
   isSubmitted:boolean=false;
-  successMessage:string='';
-  dangerMessage:string='';
-  constructor(private userService:UserService,private router:Router)
+  constructor(private userService:UserService,private router:Router,private toaster: ToastrService)
   {}
   ngOnInit()
   {
+    
+    var pageName=this.router.url.split('/').pop();
+    if(pageName && pageName=='signup')
+    {
+      this.isSignUp=true;
+    }
+    else{
+      this.isSignUp=false;
+    }
+    this.pageName=this.isSignUp?"Sign Up":"Sign In";
+    this.footerMsg=this.isSignUp?"Already have an account? sign in":"Don't have an account? Create"
     this.userForm=new FormGroup({
       userName:new FormControl('',[Validators.required]),
       password:new FormControl('',[Validators.required])
     });
+  }
+  ngAfterViewInit(): void {
+    this.passwordRef.nativeElement.placeholder=this.isSignUp?"Password":"Enter Your Password"
+    this.userNameRef.nativeElement.placeholder=this.isSignUp?"Username":"Enter your username"
   }
   OnSubmit()
   {
@@ -44,14 +58,13 @@ export class AuthenticatePageComponent implements OnInit {
           {
             setTimeout(() => {
               this.userForm.reset();
-              this.successMessage=""
-              this.dangerMessage="Sign in Now to view dashboard"
+              this.toaster.error("Sign in Now to view dashboard");
               this.navigate();
             }, 1000);
-            this.successMessage=response.message;
+            this.toaster.success(response.message);
           }
           else{
-            this.dangerMessage=response.message;
+            this.toaster.error(response.message);
           }
         })
       }
@@ -67,11 +80,10 @@ export class AuthenticatePageComponent implements OnInit {
             setTimeout(() => {
               this.router.navigate(['home/dashboard']);
             }, 3000);
-            this.successMessage=response.message;
-            
+            this.toaster.success(response.message);
           }
           else{
-            this.dangerMessage=response.message;
+            this.toaster.error(response.message);
           }
         })
       }
@@ -82,14 +94,12 @@ export class AuthenticatePageComponent implements OnInit {
     this.userForm.reset();
     Object.keys(this.userForm.controls).forEach((field) => {
       this.userForm.get(field)!.setErrors(null);
-    });
-    this.dangerMessage="";
-    this.successMessage="";
-    this.isSignUp=!this.isSignUp;
-    this.pageName=this.isSignUp?"Sign Up":"Sign In";
-    this.footerMsg=this.isSignUp?"Already have an account? sign in":"Don't have an account? Create"
-    this.passwordRef.nativeElement.placeholder=this.isSignUp?"Password":"Enter Your Password"
-    this.userNameRef.nativeElement.placeholder=this.isSignUp?"Username":"Enter your username"
+    })
+    if(this.isSignUp)
+    this.router.navigate(['/login']);
+    else{
+      this.router.navigate(['/signup']);
+    }
   }
   makePasswordVisible()
   {

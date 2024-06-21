@@ -5,6 +5,7 @@ import { RequiredErrorComponent } from "../required-error/required-error.compone
 import { TaskService } from '../Services/Task/task.service';
 import { Task } from '../Models/Task';
 import { Route, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-add-task',
     standalone: true,
@@ -15,13 +16,11 @@ import { Route, Router } from '@angular/router';
 export class AddTaskComponent {
   @Output() close:EventEmitter<number>=new EventEmitter<number>();
   addedTasksCount:number=0;
-  successMessage:string='';
-  dangerMessage:string='';
   taskForm!:FormGroup;
   isSubmitted:boolean=false;
   isEdit:boolean=false;
   editableTask!:Task;
-  constructor(private taskService:TaskService,private router:Router)
+  constructor(private taskService:TaskService,private router:Router,private toaster: ToastrService)
   {
 
   }
@@ -43,8 +42,6 @@ export class AddTaskComponent {
   onCancel()
   {
     this.taskForm.reset();
-    this.successMessage="";
-    this.dangerMessage="";
     this.close.emit(this.addedTasksCount);
   }
   onSubmit()
@@ -58,15 +55,21 @@ export class AddTaskComponent {
         if(response.statusCode==200)
         {
           this.addedTasksCount+=1;
-           this.successMessage=response.message;
-           this.dangerMessage="";
+          this.toaster.success(response.message)
+           setTimeout(()=>{
+            this.onCancel();
+           },2000); 
+        }
+        else if(response.statusCode==400)
+        {
+          this.addedTasksCount+=1;
+          this.toaster.warning(response.message)
            setTimeout(()=>{
             this.onCancel();
            },2000); 
         }
         else{
-          this.dangerMessage=response.message;
-          this.successMessage="";
+          this.toaster.error(response.message)
         }
       });
     }
@@ -79,15 +82,13 @@ export class AddTaskComponent {
         if(response.statusCode==200)
         {
           this.addedTasksCount+=1;
-           this.successMessage=response.message;
-           this.dangerMessage="";
+          this.toaster.success(response.message);
            setTimeout(()=>{
             this.onCancel();
            },2000); 
         }
         else{
-          this.dangerMessage=response.message;
-          this.successMessage="";
+          this.toaster.error(response.message);
         }
       });
     }

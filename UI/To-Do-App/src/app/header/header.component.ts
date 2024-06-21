@@ -20,12 +20,11 @@ export class HeaderComponent {
   }
   ngOnInit()
   {
-    let name = this.router.url.split('/').pop();;
+    let name = this.router.url.split('/').pop();
     if(name)
     this.pageName=name[0].toUpperCase()+name.slice(1);
     this.subscription = this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationEnd) {
-        // NavigationEnd event occurs when the URL changes
         let name = event.urlAfterRedirects.split('/').pop();;
         if(name)
         this.pageName=name[0].toUpperCase()+name.slice(1);

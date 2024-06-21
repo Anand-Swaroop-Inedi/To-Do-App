@@ -17,6 +17,10 @@ export const routes: Routes = [
         ,component:AuthenticatePageComponent
     }
     ,{
+        path:'login'
+        ,component:AuthenticatePageComponent
+    }
+    ,{
         path:'home'
         ,component:HomeComponent
         ,canActivate:[authGuard]

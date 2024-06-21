@@ -54,4 +54,8 @@ export class TaskService {
   {
     return this.http.post<ApiResponse>(this.apiUrls.makeCompleted,id);
   }
+  makeAsActive(id:number):Observable<ApiResponse>
+  {
+    return this.http.post<ApiResponse>(this.apiUrls.makeActive,id);
+  }
 }

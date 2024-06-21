@@ -3,6 +3,7 @@ import { Task } from '../Models/Task';
 import { TaskService } from '../Services/Task/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-task-menu',
@@ -15,7 +16,7 @@ export class TaskMenuComponent {
     pageName:string='';
     tasks:Task[]=[];
     @Output() dataManipulated:EventEmitter<boolean>=new EventEmitter<boolean>();
-    constructor(private taskService:TaskService,private router:Router)
+    constructor(private taskService:TaskService,private router:Router,private toaster: ToastrService)
     {
 
     }
@@ -47,17 +48,45 @@ export class TaskMenuComponent {
     delete(id:number)
     {
         this.taskService.deleteTask(id).subscribe((response)=>{
-            console.log(response.message)
-            this.dataManipulated.emit(true);
+            if(response.statusCode==200)
+                {
+                    this.dataManipulated.emit(true);
+                    this.toaster.success(response.message);
+                }
+                else{
+                    this.toaster.error(response.message);
+
+                }
         })
     }
-    makeCompleted(id:number)
+    ToggleActiveComplete(id:number)
     {
         if(this.pageName.toLowerCase()=='active')
         {
             this.taskService.makeAsCompleted(id).subscribe((response)=>{
-                console.log(response.message);
-                this.dataManipulated.emit(true);
+                if(response.statusCode==200)
+                {
+                    this.dataManipulated.emit(true);
+                    this.toaster.success(response.message);
+                }
+                else{
+                    this.toaster.error(response.message);
+
+                }
+            });
+        }
+        else if(this.pageName.toLowerCase()=='completed')
+        {
+            this.taskService.makeAsActive(id).subscribe((response)=>{
+                if(response.statusCode==200)
+                {
+                    this.dataManipulated.emit(true);
+                    this.toaster.success(response.message);
+                }
+                else{
+                    this.toaster.error(response.message);
+
+                }
             });
         }
     }
