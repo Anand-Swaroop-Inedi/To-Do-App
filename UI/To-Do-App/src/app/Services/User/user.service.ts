@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../../Models/User';
-import { ApiResponse } from '../../Models/ApiResponse';
-import { WebApiUrls } from '../../Shared Scripts/Api Urls/WebApiUrls';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '../../models/ApiResponse';
+import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
+import { User } from '../../models/User';
 
 @Injectable({
   providedIn: 'root',

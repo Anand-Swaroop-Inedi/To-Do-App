@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { WebApiUrls } from '../../Shared Scripts/Api Urls/WebApiUrls';
+import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { HttpClient } from '@angular/common/http';
-import { Task } from '../../Models/Task';
-import { ApiResponse } from '../../Models/ApiResponse';
+import { ApiResponse } from '../../models/ApiResponse';
 import { Observable, Subject } from 'rxjs';
+import { Task } from '../../models/Task';
 
 @Injectable({
   providedIn: 'root',

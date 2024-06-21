@@ -1,24 +1,24 @@
 import { Routes } from '@angular/router';
-import { IndexPageComponent } from './Components/index-page/index-page.component';
-import { AuthenticatePageComponent } from './Components/authenticate-page/authenticate-page.component';
-import { DashboardComponent } from './Components/dashboard/dashboard.component';
-import { HomeComponent } from './Components/home/home.component';
-import { ActivePageComponent } from './Components/active-page/active-page.component';
-import { CompletedPageComponent } from './Components/completed-page/completed-page.component';
-import { authGuard } from './Shared Scripts/Guard/auth.guard';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { HomeComponent } from './components/home/home.component';
+import { authGuard } from './shared/guard/auth.guard';
+import { ActiveComponent } from './components/active/active.component';
+import { AuthenticateComponent } from './components/authenticate/authenticate.component';
+import { CompletedComponent } from './components/completed/completed.component';
+import { IndexComponent } from './components/index/index.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: IndexPageComponent,
+    component: IndexComponent,
   },
   {
     path: 'signup',
-    component: AuthenticatePageComponent,
+    component: AuthenticateComponent,
   },
   {
     path: 'login',
-    component: AuthenticatePageComponent,
+    component: AuthenticateComponent,
   },
   {
     path: 'home',
@@ -36,11 +36,11 @@ export const routes: Routes = [
       },
       {
         path: 'active',
-        component: ActivePageComponent,
+        component: ActiveComponent,
       },
       {
         path: 'completed',
-        component: CompletedPageComponent,
+        component: CompletedComponent,
       },
       {
         path: 'home/**',

@@ -1,11 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { TaskMenuComponent } from '../../Shared Scripts/Components/task-menu/task-menu.component';
-import { TaskStatusComponent } from '../../Shared Scripts/Components/task-status/task-status.component';
-import { Task } from '../../Models/Task';
-import { TaskService } from '../../Services/Task/task.service';
-import { TaskHeaderComponent } from '../../Shared Scripts/Components/task-header/task-header.component';
 import { ToastrService } from 'ngx-toastr';
+import { TaskMenuComponent } from '../../shared/Components/task-menu/task-menu.component';
+import { TaskStatusComponent } from '../../shared/Components/task-status/task-status.component';
+import { TaskHeaderComponent } from '../../shared/Components/task-header/task-header.component';
+import { TaskService } from '../../services/task/task.service';
+import { Task } from '../../models/Task';
 
 @Component({
   selector: 'app-dashboard',

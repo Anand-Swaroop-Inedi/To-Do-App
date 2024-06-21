@@ -18,7 +18,7 @@
   width: 80%;
 }
 .description h1 {
-  font-size: 44px;
+  font-size: 35px;
   font-weight: 700;
   text-align: left;
 }
@@ -46,11 +46,11 @@
   justify-content: space-between;
   margin: 0px 20px;
 }
-@media only screen and (max-width: 900px) {
-  .desktop-task-menu {
-    display: none;
-  }
-}
+// @media only screen and (max-width: 900px) {
+//   .desktop-task-menu {
+//     display: none;
+//   }
+// }
 .task-menu {
   width: 77%;
 }
@@ -62,10 +62,19 @@
 .menu-items-mobile {
   display: none;
 }
+.mobile-header{
+  display: none;
+}
 @media only screen and (max-width: 900px) {
-  .menu-items-mobile {
+  .mobile-header{
+    display: block;
+  }
+  .desktop-header{
+    display: none;
+  }
+  .menu-items {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .task-menu {
     width: 100%;
@@ -73,5 +82,6 @@
   .statuses {
     width: 100%;
     height: 100%;
+    margin: 0px;
   }
 }

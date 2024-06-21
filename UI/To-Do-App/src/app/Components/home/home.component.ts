@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SideBarComponent } from '../Layout/side-bar/side-bar.component';
-import { HeaderComponent } from '../Layout/header/header.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
-import { SideBarMobileComponent } from '../Layout/side-bar-mobile/side-bar-mobile.component';
-import { Router, RouterModule } from '@angular/router';
-import { AddTaskComponent } from '../../Shared Scripts/Components/add-task/add-task.component';
-import { TaskService } from '../../Services/Task/task.service';
+import { TaskService } from '../../services/task/task.service';
 import { ToastrService } from 'ngx-toastr';
+import { SideBarComponent } from '../layout/side-bar/side-bar.component';
+import { HeaderComponent } from '../layout/header/header.component';
+import { SideBarMobileComponent } from '../layout/side-bar-mobile/side-bar-mobile.component';
+import { Router, RouterModule } from '@angular/router';
+import { AddTaskComponent } from '../../shared/Components/add-task/add-task.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 @Component({
   selector: 'app-home',
   standalone: true,
