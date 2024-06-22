@@ -1,19 +1,18 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { WebApiUrls } from '../../end-points/WebApiUrls';
+import { GenericService } from '../../../services/generic/generic.service';
+import { ApiResponse } from '../../../models/ApiResponse';
 
 @Component({
   selector: 'app-task-header',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './task-header.component.html',
-  styleUrl: './task-header.component.scss'
+  styleUrl: './task-header.component.scss',
 })
 export class TaskHeaderComponent {
   pageName: string = '';
@@ -23,7 +22,9 @@ export class TaskHeaderComponent {
   constructor(
     private taskService: TaskService,
     private router: Router,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private apiUrls: WebApiUrls,
+    private genericService: GenericService
   ) {
     this.today = new Date();
   }
@@ -34,7 +35,7 @@ export class TaskHeaderComponent {
     }
   }
   deleteAll() {
-    this.taskService.deleteAllTasks().subscribe((response) => {
+    this.genericService.delete<ApiResponse>(this.apiUrls.deleteAllTasks).subscribe((response) => {
       if (response.statusCode == 200) {
         this.dataManipulated.emit(true);
         this.taskService.isDashboardManipulted$.next(true);
@@ -45,4 +46,3 @@ export class TaskHeaderComponent {
     });
   }
 }
-

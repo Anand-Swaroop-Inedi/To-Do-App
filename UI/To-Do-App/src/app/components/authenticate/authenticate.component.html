@@ -31,10 +31,10 @@
         (isSubmitted||userForm.controls['userName'].touched ||
         userForm.controls['userName'].dirty)) {
         <div *ngIf="userForm.controls['userName'].errors?.['required']">
-          <app-required-error [errorMessage]="requiredMessage"></app-required-error>
+          <app-error [errorMessage]="requiredMessage"></app-error>
         </div>
         <div *ngIf="userForm.controls['userName'].errors?.['pattern']">
-          <app-required-error [errorMessage]="usernameErrorMessage"></app-required-error>
+          <app-error [errorMessage]="usernameErrorMessage"></app-error>
         </div>
         }
         <div class="form-input password">
@@ -58,10 +58,10 @@
         (isSubmitted||userForm.controls['password'].touched ||
         userForm.controls['password'].dirty)) {
         <div *ngIf="userForm.controls['password'].errors?.['required']">
-          <app-required-error [errorMessage]="requiredMessage"></app-required-error>
+          <app-error [errorMessage]="requiredMessage"></app-error>
         </div>
         <div *ngIf="userForm.controls['password'].errors?.['pattern']">
-          <app-required-error class="error-message" [errorMessage]="passwordErrorMessaage" ></app-required-error>
+          <app-error class="error-message" [errorMessage]="passwordErrorMessaage" ></app-error>
         </div>
         }
         <button type="submit" class="submit" (click)="OnSubmit()">

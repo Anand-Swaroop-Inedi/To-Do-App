@@ -10,6 +10,9 @@ import { TaskService } from '../../../services/task/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { WebApiUrls } from '../../end-points/WebApiUrls';
+import { GenericService } from '../../../services/generic/generic.service';
+import { ApiResponse } from '../../../models/ApiResponse';
 
 @Component({
   selector: 'app-task-menu',
@@ -26,7 +29,9 @@ export class TaskMenuComponent {
   constructor(
     private taskService: TaskService,
     private router: Router,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private apiUrls: WebApiUrls,
+    private genericService: GenericService
   ) {}
   ngOnInit() {
     let name: string | undefined = this.router.url.split('/').pop();
@@ -55,7 +60,7 @@ export class TaskMenuComponent {
     }
   }
   delete(id: number) {
-    this.taskService.deleteTask(id).subscribe((response) => {
+    this.genericService.delete<ApiResponse>(this.apiUrls.deleteTask,id).subscribe((response) => {
       if (response.statusCode == 200) {
         this.dataManipulated.emit(true);
         this.toaster.success(response.message);
@@ -66,7 +71,7 @@ export class TaskMenuComponent {
   }
   ToggleActiveComplete(id: number) {
     if (this.pageName.toLowerCase() == 'active') {
-      this.taskService.makeAsCompleted(id).subscribe((response) => {
+      this.genericService.post<ApiResponse>(this.apiUrls.makeCompleted,id).subscribe((response) => {
         if (response.statusCode == 200) {
           this.dataManipulated.emit(true);
           this.toaster.success(response.message);
@@ -75,7 +80,7 @@ export class TaskMenuComponent {
         }
       });
     } else if (this.pageName.toLowerCase() == 'completed') {
-      this.taskService.makeAsActive(id).subscribe((response) => {
+      this.genericService.post<ApiResponse>(this.apiUrls.makeCompleted,id).subscribe((response) => {
         if (response.statusCode == 200) {
           this.dataManipulated.emit(true);
           this.toaster.success(response.message);

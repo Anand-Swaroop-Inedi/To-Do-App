@@ -1,37 +1,47 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task/task.service';
 import { ToastrService } from 'ngx-toastr';
-import { TaskHeaderComponent } from '../../shared/Components/task-header/task-header.component';
-import { TaskMenuComponent } from '../../shared/Components/task-menu/task-menu.component';
+import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
+import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
+import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
+import { GenericService } from '../../services/generic/generic.service';
+import { ApiResponse } from '../../models/ApiResponse';
 @Component({
-    selector: 'app-active',
-    standalone: true,
-    templateUrl: './active.component.html',
-    styleUrl: './active.component.scss',
-    imports: [TaskHeaderComponent, TaskMenuComponent]
+  selector: 'app-active',
+  standalone: true,
+  templateUrl: './active.component.html',
+  styleUrl: './active.component.scss',
+  imports: [TaskHeaderComponent, TaskMenuComponent],
 })
-export class ActiveComponent  implements OnInit {
+export class ActiveComponent implements OnInit {
   name: string = 'Active';
   @Input() changeMenu: boolean = false;
-  constructor(private taskService: TaskService,private toaster:ToastrService) {}
+  constructor(
+    private taskService: TaskService,
+    private toaster: ToastrService,
+    private apiUrls: WebApiUrls,
+    private genericService: GenericService
+  ) {}
   ngOnInit() {
-    this.getAllTasksData();
+    this.getActiveTasksData();
   }
   ngOnChanges(): void {
     if (this.changeMenu == true) {
-      this.getAllTasksData();
+      this.getActiveTasksData();
     }
   }
   sendUpdatedData() {
-    this.getAllTasksData();
+    this.getActiveTasksData();
   }
-  getAllTasksData() {
-    this.taskService.getActiveTasks().subscribe((response) => {
-      if (response.statusCode == 200) {
-        this.taskService.taskData$.next(response.result);
-      } else {
-        this.toaster.error(response.message);
-      }
-    });
+  getActiveTasksData() {
+    this.genericService
+      .get<ApiResponse>(this.apiUrls.getActiveTasks)
+      .subscribe((response) => {
+        if (response.statusCode == 200) {
+          this.taskService.taskData$.next(response.result);
+        } else {
+          this.toaster.error(response.message);
+        }
+      });
   }
 }

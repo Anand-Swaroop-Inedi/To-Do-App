@@ -1,11 +1,14 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { TaskMenuComponent } from '../../shared/Components/task-menu/task-menu.component';
-import { TaskStatusComponent } from '../../shared/Components/task-status/task-status.component';
-import { TaskHeaderComponent } from '../../shared/Components/task-header/task-header.component';
+import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
+import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
+import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
 import { TaskService } from '../../services/task/task.service';
 import { Task } from '../../models/Task';
+import { GenericService } from '../../services/generic/generic.service';
+import { ApiResponse } from '../../models/ApiResponse';
+import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +29,9 @@ export class DashboardComponent implements OnInit, OnChanges {
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private genericService:GenericService,
+    private apiUrls:WebApiUrls
   ) {}
   ngOnInit() {
     this.getAllTasksData();
@@ -41,7 +46,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     this.taskStatus.getCompletionpercentage();
   }
   getAllTasksData() {
-    this.taskService.getAllTasks().subscribe((response) => {
+    this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
       } else {

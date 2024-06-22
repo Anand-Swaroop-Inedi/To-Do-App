@@ -6,17 +6,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RequiredErrorComponent } from '../required-error/required-error.component';
 import { TaskService } from '../../../services/task/task.service';
 import { Task } from '../../../models/Task';
 import { Route, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
+import { WebApiUrls } from '../../end-points/WebApiUrls';
+import { GenericService } from '../../../services/generic/generic.service';
+import { ApiResponse } from '../../../models/ApiResponse';
 @Component({
   selector: 'app-add-task',
   standalone: true,
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
-  imports: [ReactiveFormsModule, CommonModule, RequiredErrorComponent],
+  imports: [ReactiveFormsModule, CommonModule, ErrorComponent],
 })
 export class AddTaskComponent {
   @Output() close: EventEmitter<number> = new EventEmitter<number>();
@@ -25,11 +28,13 @@ export class AddTaskComponent {
   isSubmitted: boolean = false;
   isEdit: boolean = false;
   editableTask!: Task;
-  requiredMessage:string="This Field is Required";
+  requiredMessage: string = 'This Field is Required';
   constructor(
     private taskService: TaskService,
     private router: Router,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private apiUrls: WebApiUrls,
+    private genericService: GenericService
   ) {}
   ngOnInit() {
     this.taskService.editTask$.subscribe((value) => {
@@ -53,30 +58,28 @@ export class AddTaskComponent {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
       if (!this.isEdit) {
-        this.taskService
-          .createTask(new Task(this.taskForm.value))
-          .subscribe((response) => {
-            if (response.statusCode == 200) {
-              this.addedTasksCount += 1;
-              this.toaster.success(response.message);
-              setTimeout(() => {
-                this.onCancel();
-              }, 2000);
-            } else if (response.statusCode == 400) {
-              this.addedTasksCount += 1;
-              this.toaster.warning(response.message);
-              setTimeout(() => {
-                this.onCancel();
-              }, 2000);
-            } else {
-              this.toaster.error(response.message);
-            }
-          });
+        this.genericService.post<ApiResponse>(this.apiUrls.createTask,new Task(this.taskForm.value)).subscribe((response) => {
+          if (response.statusCode == 200) {
+            this.addedTasksCount += 1;
+            this.toaster.success(response.message);
+            setTimeout(() => {
+              this.onCancel();
+            }, 2000);
+          } else if (response.statusCode == 400) {
+            this.addedTasksCount += 1;
+            this.toaster.warning(response.message);
+            setTimeout(() => {
+              this.onCancel();
+            }, 2000);
+          } else {
+            this.toaster.error(response.message);
+          }
+        });
       } else {
         var t: Task = new Task(this.taskForm.value);
         t.id = this.editableTask.id;
         t.statusid = this.editableTask.statusid;
-        this.taskService.updateTask(t).subscribe((response) => {
+        this.genericService.put<ApiResponse>(this.apiUrls.updateTask,t).subscribe((response) => {
           if (response.statusCode == 200) {
             this.addedTasksCount += 1;
             this.toaster.success(response.message);

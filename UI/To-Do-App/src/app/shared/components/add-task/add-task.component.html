@@ -4,7 +4,7 @@
   (isSubmitted||taskForm.controls['name'].touched ||
   taskForm.controls['name'].dirty)) {
   <div *ngIf="taskForm.controls['name'].errors?.['required']">
-    <app-required-error [errorMessage]="requiredMessage"></app-required-error>
+    <app-error [errorMessage]="requiredMessage"></app-error>
   </div>
   }
   <textarea
@@ -17,7 +17,7 @@
   (isSubmitted||taskForm.controls['description'].touched ||
   taskForm.controls['description'].dirty)) {
   <div *ngIf="taskForm.controls['description'].errors?.['required']">
-    <app-required-error [errorMessage]="requiredMessage"></app-required-error>
+    <app-error [errorMessage]="requiredMessage"></app-error>
   </div>
   }
   <div class="form-buttons">

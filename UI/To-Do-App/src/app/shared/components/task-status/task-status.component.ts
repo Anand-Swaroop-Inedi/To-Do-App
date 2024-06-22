@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { response } from 'express';
 import { ApiResponse } from '../../../models/ApiResponse';
+import { WebApiUrls } from '../../end-points/WebApiUrls';
+import { GenericService } from '../../../services/generic/generic.service';
 
 @Component({
   selector: 'app-task-status',
@@ -13,7 +15,7 @@ import { ApiResponse } from '../../../models/ApiResponse';
 export class TaskStatusComponent implements OnInit {
   completionPercentage: number = 0;
   activePercentage: number = 0;
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService,private apiUrls:WebApiUrls,private genericService:GenericService) {}
   ngOnInit() {
     this.taskService.isDashboardManipulted$.subscribe((response) => {
       if (response) {
@@ -23,8 +25,8 @@ export class TaskStatusComponent implements OnInit {
     this.getCompletionpercentage();
   }
   getCompletionpercentage() {
-    this.taskService
-      .getCompletionpercentage()
+    this.genericService
+      .get<ApiResponse>(this.apiUrls.getCompletionPercentage)
       .subscribe((response: ApiResponse) => {
         if (response.statusCode == 200) {
           this.completionPercentage = response.result[0];
