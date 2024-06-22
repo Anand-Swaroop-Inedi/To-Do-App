@@ -36,6 +36,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
   isSubmitted: boolean = false;
   requiredMessage:string="This Field is Required";
   passwordErrorMessaage:string="Please ensure your password has at least 8 characters, including a capital letter, a lowercase letter, a digit, and a special symbol";
+  usernameErrorMessage:string="Username must start with an alphanumeric character and can only contain letters, numbers, underscores, and dots. Length must be between 3 and 20 characters."
   constructor(
     private userService: UserService,
     private router: Router,
@@ -53,7 +54,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       ? 'Already have an account? sign in'
       : "Don't have an account? Create";
     this.userForm = new FormGroup({
-      userName: new FormControl('', [Validators.required]),
+      userName: new FormControl('', [Validators.required,Validators.pattern(/^(?=[a-zA-Z0-9._]{3,20}$)[a-zA-Z0-9][a-zA-Z0-9._]*$/)]),
       password: new FormControl('', [Validators.required,Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/)]),
     });
   }

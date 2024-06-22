@@ -33,10 +33,11 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod()
                           .AllowCredentials());
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ToDoAppContext, ToDoAppContext>();
-builder.Services.AddTransient<IUserItemsRepository,UserItemsRepository>();
-builder.Services.AddTransient<IUserRepository,UserRepository>();
-builder.Services.AddTransient<IItemsRepository,ItemsRepository>();
+builder.Services.AddScoped<IUserItemsRepository,UserItemsRepository>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IItemsRepository,ItemsRepository>();
 builder.Services.AddTransient<IItemManager,ItemManager>();
 builder.Services.AddTransient<IUserManager, UserManager>();
 // Add services to the container.

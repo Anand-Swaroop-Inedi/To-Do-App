@@ -2,11 +2,6 @@
   display: flex;
   flex-direction: column;
 }
-@media only screen and (max-width: 900px) {
-  .home {
-    margin-left: 15px;
-  }
-}
 .blur {
   filter: blur(3px);
 }
@@ -16,49 +11,18 @@
 .mobile-side-bar {
   display: none;
 }
-@media only screen and (max-width: 900px) {
-  .mobile-side-bar {
-    display: block;
-    width: 100%;
-    margin: auto;
-  }
-}
-@media only screen and (max-width: 900px) {
-  .header {
-    width: 100%;
-  }
-}
 .side-bar {
   width: 19%;
-}
-@media only screen and (max-width: 900px) {
-  .side-bar {
-    display: none;
-  }
 }
 .right-container {
   width: 81%;
   margin: 10px 30px 10px 20px;
-}
-@media only screen and (max-width: 900px) {
-  .right-container {
-    width: 100%;
-    margin: 10px;
-  }
 }
 .body {
   display: flex;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-}
-@media only screen and (max-width: 900px) {
-  .body {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-  }
 }
 .add-task {
   display: none;
@@ -76,5 +40,29 @@
   .add-task {
     width: 90%;
     left: 8%;
+  }
+  .home {
+    margin-left: 15px;
+  }
+  .body {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .right-container {
+    width: 100%;
+    margin: 10px;
+  }
+  .side-bar {
+    display: none;
+  }
+  .header {
+    width: 100%;
+  }
+  .mobile-side-bar {
+    display: block;
+    width: 100%;
+    margin: auto;
   }
 }

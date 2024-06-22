@@ -12,6 +12,7 @@ namespace DataAccessLayer.Repositories
     public class UserItemsRepository:IUserItemsRepository
     {
         private readonly ToDoAppContext _context;
+        private static string todayString = DateTime.Today.ToString("MM/dd/yyyy");
         public UserItemsRepository(ToDoAppContext toDoAppContext)
         {
             _context = toDoAppContext;
@@ -67,8 +68,8 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                int count = _context.Useritems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.Isdeleted == 0 && u.Userid == UserId).Count();
-                int totalCount = _context.Useritems.Where(u => u.Isdeleted == 0 && u.Userid == UserId).Count();
+                int count = _context.Useritems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.Isdeleted == 0 && u.Userid == UserId && EF.Functions.Like(u.Createdon, todayString + "%")).Count();
+                int totalCount = _context.Useritems.Where(u => u.Isdeleted == 0 && u.Userid == UserId && EF.Functions.Like(u.Createdon, todayString + "%")).Count();
                 int completedPercentage = 0;
                 int activePercentage = 0;
                 if (totalCount > 0)
@@ -197,13 +198,25 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<ApiResponse> GetAllItems(int UserId)
         {
-            List<Useritem> Useritems= _context.Useritems.Where(x=>x.Isdeleted == 0 && x.Userid == UserId).Include(u=>u.Item).Include(u=>u.User).Include(u=>u.Status).ToList();
-            return new ApiResponse
+            try
             {
-                StatusCode = 200,
-                Message = "Retrieval successful",
-                result = Useritems
-            };
+           
+                List<Useritem> Useritems = _context.Useritems.Where(x => x.Isdeleted == 0 && x.Userid == UserId  && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+                return new ApiResponse
+                {
+                    StatusCode = 200,
+                    Message = "Retrieval successful",
+                    result = Useritems
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
         }
         public async Task<ApiResponse> UpdateItem(Useritem useritem)
         {
@@ -248,7 +261,7 @@ namespace DataAccessLayer.Repositories
                         {
                             StatusCode=200,
                             Message="Successful",
-                            result = _context.Useritems.Where(x=>x.Status.Name.ToUpper()=="ACTIVE" && x.Isdeleted == 0 && x.Userid == UserId).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
+                            result = _context.Useritems.Where(x=>x.Status.Name.ToUpper()=="ACTIVE" && x.Isdeleted == 0 && x.Userid == UserId && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
                         };
 
             }
@@ -269,7 +282,7 @@ namespace DataAccessLayer.Repositories
                 {
                     StatusCode = 200,
                     Message = "Successful",
-                    result = _context.Useritems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.Isdeleted==0 && x.Userid==UserId).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
+                    result = _context.Useritems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.Isdeleted==0 && x.Userid==UserId && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList()
                 };
 
             }

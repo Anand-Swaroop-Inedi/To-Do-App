@@ -12,7 +12,6 @@
 .selectedPage {
   background-color: #edb046;
 }
-
 .add-button {
   margin: 50px 40px 30px 40px;
   display: flex;
@@ -26,22 +25,11 @@
   width: 140px;
   cursor: pointer;
 }
-@media only screen and (max-width: 900px) {
-  .add-button {
-    align-items: center;
-    margin: 13px 0px;
-  }
-}
 .add-button p {
   margin: 0px;
   font-family: "Lexend";
   font-size: 20px;
   font-weight: 400;
-}
-@media only screen and (max-width: 900px) {
-  .add-button p {
-    font-size: 13px;
-  }
 }
 .button-image {
   width: 20px;
@@ -49,5 +37,12 @@
 @media only screen and (max-width: 900px) {
   .button-image {
     width: 13px;
+  }
+  .add-button p {
+    font-size: 13px;
+  }
+  .add-button {
+    align-items: center;
+    margin: 13px 0px;
   }
 }

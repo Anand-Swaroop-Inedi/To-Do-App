@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.Interfaces;
+using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -28,11 +29,13 @@ namespace BusinessLogicLayer.Services
         }
         public async Task<ApiResponse> AddUser(UserDto user)
         {
+            user.Password=PasswordHashing.HashPassword(user.Password);
             return await _userRepository.AddUser(_mapper.Map<User>(user));
         }
         public async Task<ApiResponse> AuthenticateUser(UserDto user)
         {
-            ApiResponse response= await _userRepository.AuthenticateUser(_mapper.Map<User>(user));
+            user.Password = PasswordHashing.HashPassword(user.Password);
+            ApiResponse response = await _userRepository.AuthenticateUser(_mapper.Map<User>(user));
             if(response.StatusCode == 200 && (int)response.result>0)
             {
                 response.result = GenerateToken((int)response.result);

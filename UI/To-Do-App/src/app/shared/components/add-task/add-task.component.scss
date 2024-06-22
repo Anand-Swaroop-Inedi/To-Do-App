@@ -29,13 +29,6 @@ textarea {
   flex-direction: row;
   justify-content: space-between;
 }
-@media only screen and (max-width: 900px) {
-  .operations {
-    width: 100%;
-    gap: 5%;
-    justify-content: flex-end;
-  }
-}
 .cancel-button {
   border: 2px solid #edb046;
   background-color: white;
@@ -62,4 +55,11 @@ textarea:focus {
 .danger {
   color: red;
   text-align: center;
+}
+@media only screen and (max-width: 900px) {
+  .operations {
+    width: 100%;
+    gap: 5%;
+    justify-content: flex-end;
+  }
 }

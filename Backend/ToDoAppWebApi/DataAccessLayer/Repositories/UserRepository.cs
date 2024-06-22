@@ -31,8 +31,6 @@ namespace DataAccessLayer.Repositories
                 }
                 else
                 {
-                    user.Password = PasswordHashing.HashPassword(user.Password);
-                    Console.WriteLine(user.Password + " " + user.Username);
                     _context.Users.Add(user);
                     _context.SaveChanges();
                     return new ApiResponse
@@ -60,7 +58,7 @@ namespace DataAccessLayer.Repositories
                 User result = _context.Users.Where(u => u.Username == user.Username).FirstOrDefault();
                 if (result != null)
                 {
-                    if (PasswordHashing.VerifyPassword(result.Password, user.Password))
+                    if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
                     {
                         return new ApiResponse
                         {

@@ -33,7 +33,9 @@
         <div *ngIf="userForm.controls['userName'].errors?.['required']">
           <app-required-error [errorMessage]="requiredMessage"></app-required-error>
         </div>
-        
+        <div *ngIf="userForm.controls['userName'].errors?.['pattern']">
+          <app-required-error [errorMessage]="usernameErrorMessage"></app-required-error>
+        </div>
         }
         <div class="form-input password">
           <input
@@ -66,12 +68,9 @@
           {{ pageName }}
         </button>
       </form>
-      <div class="footer">
-        <p [ngStyle]="isSignUp ? { color: 'white' } : { color: '#251814' }">
-          {{ footerMsg }}
+        <p class="footer" [ngStyle]="isSignUp ? { color: 'white' } : { color: '#251814' }">
+          {{ footerMsg }}<span class="navigate-link-text" (click)="navigate()">here.</span>
         </p>
-        <p class="navigate-link-text" (click)="navigate()">here.</p>
-      </div>
     </div>
   </div>
   
