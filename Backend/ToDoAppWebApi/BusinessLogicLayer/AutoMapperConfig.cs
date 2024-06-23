@@ -14,7 +14,7 @@ namespace BusinessLogicLayer
         {
             CreateMap<ItemDto, Item>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
-            CreateMap<ItemDto, Useritem>().ReverseMap();
+            CreateMap<ItemDto, Useritem>();
             CreateMap<Useritem,ItemDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Item.Description))

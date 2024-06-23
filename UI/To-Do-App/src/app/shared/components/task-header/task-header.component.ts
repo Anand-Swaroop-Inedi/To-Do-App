@@ -35,7 +35,9 @@ export class TaskHeaderComponent {
     }
   }
   deleteAll() {
+    this.taskService.isLoading$.next(true);
     this.genericService.delete<ApiResponse>(this.apiUrls.deleteAllTasks).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.dataManipulated.emit(true);
         this.taskService.isDashboardManipulted$.next(true);

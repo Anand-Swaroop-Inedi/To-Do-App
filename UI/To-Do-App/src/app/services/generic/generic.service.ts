@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 export class GenericService {
   constructor(private http: HttpClient) { }
   get<T>(url: string): Observable<T> {
-    debugger;
     return this.http.get<T>(url);
   }
   post<T>(url: string, body: any): Observable<T> {

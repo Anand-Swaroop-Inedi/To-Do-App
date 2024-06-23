@@ -34,9 +34,11 @@ export class ActiveComponent implements OnInit {
     this.getActiveTasksData();
   }
   getActiveTasksData() {
+    this.taskService.isLoading$.next(true);
     this.genericService
       .get<ApiResponse>(this.apiUrls.getActiveTasks)
       .subscribe((response) => {
+        this.taskService.isLoading$.next(false);
         if (response.statusCode == 200) {
           this.taskService.taskData$.next(response.result);
         } else {

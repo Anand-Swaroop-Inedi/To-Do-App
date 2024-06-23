@@ -15,7 +15,11 @@ namespace DataAccessLayer.Repositories
         public UserRepository(ToDoAppContext toDoAppContext) {
             _context = toDoAppContext;
         }
-        public async Task<ApiResponse> AddUser(User user)
+        public async Task AddUser(User user)
+        {
+            _context.Users.Add(user);
+        }
+        /*public async Task<ApiResponse> AddUser(User user)
         {
             try
             {
@@ -50,8 +54,16 @@ namespace DataAccessLayer.Repositories
                 };
             }
 
+        }*/
+        public async Task<User> GetByUsername(string username)
+        {
+            return _context.Users.FirstOrDefault(u => u.Username == username);
         }
-        public async Task<ApiResponse> AuthenticateUser(User user)
+        public async Task<User> AuthenticateUser(User user)
+        {
+            return _context.Users.Where(u => u.Username == user.Username).FirstOrDefault();
+        }
+        /*public async Task<ApiResponse> AuthenticateUser(User user)
         {
             try
             {
@@ -96,7 +108,7 @@ namespace DataAccessLayer.Repositories
                     Message = ex.Message
                 };
             }
-        }
+        }*/
         public async Task<ApiResponse> GetAllUsers()
         {
             try

@@ -12,9 +12,11 @@ export class TaskService {
   taskData$: Subject<Task[]>;
   isDashboardManipulted$: Subject<boolean>;
   editTask$: Subject<Task>;
+  isLoading$:Subject<boolean>;
   constructor(private apiUrls: WebApiUrls, private http: HttpClient) {
     this.taskData$ = new Subject<Task[]>();
     this.isDashboardManipulted$ = new Subject<boolean>();
     this.editTask$ = new Subject<Task>();
+    this.isLoading$=new Subject<boolean>();
   }
 }

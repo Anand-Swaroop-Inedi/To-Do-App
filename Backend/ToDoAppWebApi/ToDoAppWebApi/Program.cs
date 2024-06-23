@@ -38,8 +38,10 @@ builder.Services.AddScoped<ToDoAppContext, ToDoAppContext>();
 builder.Services.AddScoped<IUserItemsRepository,UserItemsRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IItemsRepository,ItemsRepository>();
+builder.Services.AddScoped<IStatusRepository,StatusRepository>();
 builder.Services.AddTransient<IItemManager,ItemManager>();
 builder.Services.AddTransient<IUserManager, UserManager>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Add services to the container.
 
 builder.Services.AddControllers();

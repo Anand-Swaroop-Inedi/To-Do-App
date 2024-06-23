@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Azure;
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -21,13 +23,102 @@ namespace BusinessLogicLayer.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private IConfiguration _config;
-        public UserManager(IUserRepository userRepository,IMapper mapper,IConfiguration configuration) 
+        private IUnitOfWork _unitOfWork;
+        public UserManager(IUserRepository userRepository,IMapper mapper,IConfiguration configuration,IUnitOfWork unitOfWork) 
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _config = configuration;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ApiResponse> AddUser(UserDto user)
+        {
+            
+            try
+            {
+                _unitOfWork.BeginTransaction();
+                user.Password = PasswordHashing.HashPassword(user.Password);
+                User result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
+                if (result != null)
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "UserName Already Exists so choose other",
+                        result = -1
+                    };
+                }
+                else
+                {
+                    _unitOfWork.UserRepository.AddUser(_mapper.Map<User>(user));
+                    _unitOfWork.SaveChanges();
+                    _unitOfWork.Commit();
+                    return new ApiResponse
+                    {
+                        StatusCode = 200,
+                        Message = "Successfully registered",
+                        result = 0
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.Rollback();
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+        public async Task<ApiResponse> AuthenticateUser(UserDto user)
+        {
+            try
+            {
+                user.Password = PasswordHashing.HashPassword(user.Password);
+                User result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<User>(user));
+                if (result != null)
+                {
+                    if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return new ApiResponse
+                        {
+                            StatusCode = 200,
+                            Message = "successfully logged in",
+                            result = GenerateToken(result.Id)
+                        };
+
+                }
+                else
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "Password is Incorrect",
+                        result = -1
+                    };
+                }
+                }
+                else
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "UserName incorrect check the username",
+                        result = -1
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+        /*public async Task<ApiResponse> AddUser(UserDto user)
         {
             user.Password=PasswordHashing.HashPassword(user.Password);
             return await _userRepository.AddUser(_mapper.Map<User>(user));
@@ -41,7 +132,7 @@ namespace BusinessLogicLayer.Services
                 response.result = GenerateToken((int)response.result);
             }
             return response;
-        }
+        }*/
         public async Task<ApiResponse> GetAllUsers()
         {
             return await _userRepository.GetAllUsers();

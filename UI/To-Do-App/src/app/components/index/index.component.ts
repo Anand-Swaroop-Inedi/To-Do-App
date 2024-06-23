@@ -12,6 +12,6 @@ export class IndexComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.router.navigate(['/login']);
-    }, 3000);
+    }, 1000);
   }
 }

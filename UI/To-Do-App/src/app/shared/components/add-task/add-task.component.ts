@@ -57,6 +57,7 @@ export class AddTaskComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
+      this.taskService.isLoading$.next(true);
       if (!this.isEdit) {
         this.genericService.post<ApiResponse>(this.apiUrls.createTask,new Task(this.taskForm.value)).subscribe((response) => {
           if (response.statusCode == 200) {
@@ -64,30 +65,37 @@ export class AddTaskComponent {
             this.toaster.success(response.message);
             setTimeout(() => {
               this.onCancel();
+              this.taskService.isLoading$.next(false);
             }, 2000);
           } else if (response.statusCode == 400) {
             this.addedTasksCount += 1;
             this.toaster.warning(response.message);
             setTimeout(() => {
               this.onCancel();
+              this.taskService.isLoading$.next(false);
             }, 2000);
           } else {
             this.toaster.error(response.message);
+            this.taskService.isLoading$.next(false);
           }
         });
       } else {
         var t: Task = new Task(this.taskForm.value);
         t.id = this.editableTask.id;
         t.statusid = this.editableTask.statusid;
+        t.createdon=this.editableTask.createdon;
         this.genericService.put<ApiResponse>(this.apiUrls.updateTask,t).subscribe((response) => {
+
           if (response.statusCode == 200) {
             this.addedTasksCount += 1;
             this.toaster.success(response.message);
             setTimeout(() => {
               this.onCancel();
+              this.taskService.isLoading$.next(false);
             }, 2000);
           } else {
             this.toaster.error(response.message);
+            this.taskService.isLoading$.next(false);
           }
         });
       }

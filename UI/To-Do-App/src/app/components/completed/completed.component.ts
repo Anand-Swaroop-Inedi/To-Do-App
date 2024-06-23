@@ -23,7 +23,9 @@ export class CompletedComponent implements OnInit {
   }
 
   getCompletedTasksData() {
+    this.taskService.isLoading$.next(true);
     this.genericService.get<ApiResponse>(this.apiUrls.getCompletedTasks).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
       }

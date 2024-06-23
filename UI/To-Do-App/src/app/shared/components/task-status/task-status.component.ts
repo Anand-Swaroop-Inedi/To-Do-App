@@ -25,9 +25,11 @@ export class TaskStatusComponent implements OnInit {
     this.getCompletionpercentage();
   }
   getCompletionpercentage() {
+    this.taskService.isLoading$.next(true);
     this.genericService
       .get<ApiResponse>(this.apiUrls.getCompletionPercentage)
       .subscribe((response: ApiResponse) => {
+        this.taskService.isLoading$.next(false);
         if (response.statusCode == 200) {
           this.completionPercentage = response.result[0];
           this.activePercentage = response.result[1];

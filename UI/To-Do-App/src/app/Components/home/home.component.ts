@@ -52,9 +52,11 @@ export class HomeComponent implements OnInit {
     this.homeDivRef.nativeElement.classList.remove('blur');
     if (count > 0) {
       let pgName: string | undefined = this.router.url.split('/').pop();
+      this.taskService.isLoading$.next(true);
       if (pgName == 'dashboard') {
         this.taskService.isDashboardManipulted$.next(true);
         this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+          this.taskService.isLoading$.next(false);
           if (response.statusCode == 200) {
             this.taskService.taskData$.next(response.result);
           } else {
@@ -63,6 +65,7 @@ export class HomeComponent implements OnInit {
         });
       } else {
         this.genericService.get<ApiResponse>(this.apiUrls.getActiveTasks).subscribe((response) => {
+          this.taskService.isLoading$.next(false);
           if (response.statusCode == 200) {
             this.taskService.taskData$.next(response.result);
           } else {

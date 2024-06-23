@@ -19,12 +19,14 @@ import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-Ap
 import { GenericService } from '../../services/generic/generic.service';
 import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { ApiResponse } from '../../models/ApiResponse';
+import { SpinnerComponent } from "../../shared/components/spinner/spinner.component";
+import { TaskService } from '../../services/task/task.service';
 @Component({
-  selector: 'app-authenticate',
-  standalone: true,
-  templateUrl: './authenticate.component.html',
-  styleUrl: './authenticate.component.scss',
-  imports: [CommonModule, ReactiveFormsModule, ErrorComponent],
+    selector: 'app-authenticate',
+    standalone: true,
+    templateUrl: './authenticate.component.html',
+    styleUrl: './authenticate.component.scss',
+    imports: [CommonModule, ReactiveFormsModule, ErrorComponent, SpinnerComponent]
 })
 export class AuthenticateComponent implements OnInit, AfterViewInit {
   @ViewChild('password') passwordRef!: ElementRef<HTMLInputElement>;
@@ -40,11 +42,13 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     'Please ensure your password has at least 8 characters, including a capital letter, a lowercase letter, a digit, and a special symbol';
   usernameErrorMessage: string =
     'Username must start with an alphanumeric character and can only contain letters, numbers, underscores, and dots. Length must be between 3 and 20 characters.';
+  //isLoading:boolean=false;
   constructor(
     private router: Router,
     private toaster: ToastrService,
     private apiUrls: WebApiUrls,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private taskService:TaskService
   ) {}
   ngOnInit() {
     var pageName = this.router.url.split('/').pop();
@@ -84,7 +88,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     debugger;
     this.isSubmitted = true;
     if (this.userForm.valid) {
-      debugger;
+      this.taskService.isLoading$.next(true);
       if (this.isSignUp) {
         this.genericService
           .post<ApiResponse>(this.apiUrls.addUser, this.userForm.value)
@@ -93,6 +97,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
               setTimeout(() => {
                 this.userForm.reset();
                 this.toaster.error('Sign in Now to view dashboard');
+                this.taskService.isLoading$.next(false);
                 this.navigate();
               }, 1000);
               this.toaster.success(response.message);
@@ -107,10 +112,12 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
             if (response.statusCode == 200) {
               sessionStorage.setItem('Token', response.result);
               setTimeout(() => {
+                this.taskService.isLoading$.next(false);
                 this.router.navigate(['home/dashboard']);
               }, 3000);
               this.toaster.success(response.message);
             } else {
+              this.taskService.isLoading$.next(false);
               this.toaster.error(response.message);
             }
           });

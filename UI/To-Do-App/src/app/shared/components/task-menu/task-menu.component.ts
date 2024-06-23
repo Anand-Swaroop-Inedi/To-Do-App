@@ -60,7 +60,9 @@ export class TaskMenuComponent {
     }
   }
   delete(id: number) {
+    this.taskService.isLoading$.next(true);
     this.genericService.delete<ApiResponse>(this.apiUrls.deleteTask,id).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.dataManipulated.emit(true);
         this.toaster.success(response.message);
@@ -80,7 +82,7 @@ export class TaskMenuComponent {
         }
       });
     } else if (this.pageName.toLowerCase() == 'completed') {
-      this.genericService.post<ApiResponse>(this.apiUrls.makeCompleted,id).subscribe((response) => {
+      this.genericService.post<ApiResponse>(this.apiUrls.makeActive,id).subscribe((response) => {
         if (response.statusCode == 200) {
           this.dataManipulated.emit(true);
           this.toaster.success(response.message);

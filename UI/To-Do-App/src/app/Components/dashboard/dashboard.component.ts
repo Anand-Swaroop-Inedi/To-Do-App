@@ -46,7 +46,9 @@ export class DashboardComponent implements OnInit, OnChanges {
     this.taskStatus.getCompletionpercentage();
   }
   getAllTasksData() {
+    this.taskService.isLoading$.next(true);
     this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
       } else {
