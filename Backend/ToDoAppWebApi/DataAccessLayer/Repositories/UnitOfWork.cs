@@ -14,7 +14,7 @@ namespace DataAccessLayer.Repositories
         public UnitOfWork(ToDoAppContext context)
         {
             _context = context;
-            _transaction = null; // Initialize transaction as null
+            _transaction = null; 
         }
 
         public IItemsRepository ItemRepository

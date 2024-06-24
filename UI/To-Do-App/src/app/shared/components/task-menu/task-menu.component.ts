@@ -3,6 +3,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   Output,
 } from '@angular/core';
 import { Task } from '../../../models/Task';
@@ -13,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { WebApiUrls } from '../../end-points/WebApiUrls';
 import { GenericService } from '../../../services/generic/generic.service';
 import { ApiResponse } from '../../../models/ApiResponse';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-menu',
@@ -32,6 +34,10 @@ export class TaskMenuComponent {
     private genericService: GenericService
   ) {}
   ngOnInit() {
+    this.getUpdatedTasks();
+  }
+  getUpdatedTasks()
+  {
     let name: string | undefined = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
     this.taskService.taskData$.subscribe((value) => {
@@ -62,24 +68,21 @@ export class TaskMenuComponent {
   }
   ToggleActiveComplete(id: number) {
     if (this.pageName.toLowerCase() == 'active') {
-      this.genericService.post<ApiResponse>(this.apiUrls.makeCompleted,id).subscribe((response) => {
-        if (response.statusCode == 200) {
-          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-          this.toaster.success(response.message);
-        } else {
-          this.toaster.error(response.message);
-        }
-      });
+      this.changeTaskStatus(this.apiUrls.makeCompleted,id);
     } else if (this.pageName.toLowerCase() == 'completed') {
-      this.genericService.post<ApiResponse>(this.apiUrls.makeActive,id).subscribe((response) => {
-        if (response.statusCode == 200) {
-          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-          this.toaster.success(response.message);
-        } else {
-          this.toaster.error(response.message);
-        }
-      });
+      this.changeTaskStatus(this.apiUrls.makeActive,id);
     }
+  }
+  changeTaskStatus(url:string,id:number)
+  {
+    this.genericService.post<ApiResponse>(url,id).subscribe((response) => {
+      if (response.statusCode == 200) {
+        this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
+        this.toaster.success(response.message);
+      } else {
+        this.toaster.error(response.message);
+      }
+    });
   }
   openEditForm(task: Task) {
     this.taskService.editTask$.next(task);

@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -21,15 +22,19 @@ import { Subscription } from 'rxjs';
   templateUrl: './side-bar-mobile.component.html',
   styleUrl: './side-bar-mobile.component.scss',
 })
-export class SideBarMobileComponent implements AfterViewInit {
+export class SideBarMobileComponent implements AfterViewInit,OnDestroy {
   @Output() name: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('menu') selectMenu!: ElementRef<HTMLInputElement>;
-  subscription!: Subscription;
+  routerSubscription!: Subscription;
   constructor(private router: Router) {}
   ngAfterViewInit(): void {
+    this.assignDefaultSelect();
+  }
+  assignDefaultSelect()
+  {
     const url: any = this.router.url.split('/').pop();
     if (url) this.selectMenu.nativeElement.value = url;
-    this.subscription = this.router.events.subscribe(
+    this.routerSubscription = this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
           const url: any = this.router.url.split('/').pop();
@@ -47,5 +52,9 @@ export class SideBarMobileComponent implements AfterViewInit {
     } else {
       this.router.navigateByUrl('/home/completed');
     }
+  }
+  ngOnDestroy()
+  {
+    this.routerSubscription.unsubscribe();
   }
 }

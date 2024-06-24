@@ -15,6 +15,7 @@ import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-Ap
 import { WebApiUrls } from '../../end-points/WebApiUrls';
 import { GenericService } from '../../../services/generic/generic.service';
 import { ApiResponse } from '../../../models/ApiResponse';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -30,6 +31,7 @@ export class AddTaskComponent {
   isEdit: boolean = false;
   editableTask!: Task;
   requiredMessage: string = 'This Field is Required';
+  editTaskSubscribtion!:Subscription;
   constructor(
     private taskService: TaskService,
     private router: Router,
@@ -38,17 +40,25 @@ export class AddTaskComponent {
     private genericService: GenericService
   ) {}
   ngOnInit() {
-    this.taskService.editTask$.subscribe((value) => {
+    this.getDataIfEdit();
+    this.createForm(); 
+  }
+  createForm()
+  {
+    this.taskForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+    });
+  }
+  getDataIfEdit()
+  {
+    this.editTaskSubscribtion=this.taskService.editTask$.subscribe((value) => {
       this.taskForm.patchValue({
         name: value.name,
         description: value.description,
       });
       this.editableTask = value;
       this.isEdit = true;
-    });
-    this.taskForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required]),
     });
   }
   onCancel() {
@@ -66,46 +76,59 @@ export class AddTaskComponent {
     if (this.taskForm.valid) {
       this.taskService.isLoading$.next(true);
       if (!this.isEdit) {
-        this.genericService.post<ApiResponse>(this.apiUrls.createTask,new Task(this.taskForm.value)).subscribe((response) => {
-          if (response.statusCode == 200) {
-            this.addedTasksCount += 1;
-            this.toaster.success(response.message);
-            setTimeout(() => {
-              this.onCancel();
-              this.taskService.isLoading$.next(false);
-            }, 2000);
-          } else if (response.statusCode == 400) {
-            this.addedTasksCount += 1;
-            this.toaster.warning(response.message);
-            setTimeout(() => {
-              this.onCancel();
-              this.taskService.isLoading$.next(false);
-            }, 2000);
-          } else {
-            this.toaster.error(response.message);
-            this.taskService.isLoading$.next(false);
-          }
-        });
+        this.editTask();
+        
       } else {
-        var t: Task = new Task(this.taskForm.value);
-        t.id = this.editableTask.id;
-        t.statusid = this.editableTask.statusid;
-        t.createdon=this.editableTask.createdon;
-        this.genericService.put<ApiResponse>(this.apiUrls.updateTask,t).subscribe((response) => {
-
-          if (response.statusCode == 200) {
-            this.addedTasksCount += 1;
-            this.toaster.success(response.message);
-            setTimeout(() => {
-              this.onCancel();
-              this.taskService.isLoading$.next(false);
-            }, 2000);
-          } else {
-            this.toaster.error(response.message);
-            this.taskService.isLoading$.next(false);
-          }
-        });
+        this.addTask();
       }
     }
+  }
+  editTask()
+  {
+    this.genericService.post<ApiResponse>(this.apiUrls.createTask,new Task(this.taskForm.value)).subscribe((response) => {
+      if (response.statusCode == 200) {
+        this.addedTasksCount += 1;
+        this.toaster.success(response.message);
+        setTimeout(() => {
+          this.onCancel();
+          this.taskService.isLoading$.next(false);
+        }, 2000);
+      } else if (response.statusCode == 400) {
+        this.addedTasksCount += 1;
+        this.toaster.warning(response.message);
+        setTimeout(() => {
+          this.onCancel();
+          this.taskService.isLoading$.next(false);
+        }, 2000);
+      } else {
+        this.toaster.error(response.message);
+        this.taskService.isLoading$.next(false);
+      }
+    });
+  }
+  addTask()
+  {
+    var t: Task = new Task(this.taskForm.value);
+    t.id = this.editableTask.id;
+    t.statusid = this.editableTask.statusid;
+    t.createdon=this.editableTask.createdon;
+    this.genericService.put<ApiResponse>(this.apiUrls.updateTask,t).subscribe((response) => {
+
+      if (response.statusCode == 200) {
+        this.addedTasksCount += 1;
+        this.toaster.success(response.message);
+        setTimeout(() => {
+          this.onCancel();
+          this.taskService.isLoading$.next(false);
+        }, 2000);
+      } else {
+        this.toaster.error(response.message);
+        this.taskService.isLoading$.next(false);
+      }
+    });
+  }
+  ngOnDestroy()
+  {
+    this.editTaskSubscribtion.unsubscribe();
   }
 }

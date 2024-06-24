@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { SideBarComponent } from '../layout/side-bar/side-bar.component';
@@ -11,6 +11,7 @@ import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { DeleteConfirmationComponent } from "../../shared/components/delete-confirmation/delete-confirmation.component";
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-home',
     standalone: true,
@@ -26,13 +27,15 @@ import { DeleteConfirmationComponent } from "../../shared/components/delete-conf
         DeleteConfirmationComponent
     ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit,OnDestroy {
   pageName: string = '';
   @ViewChild('addTask') addTaskRef!: ElementRef<HTMLInputElement>;
   @ViewChild('deleteConfirmation') deleteConfirmationRef!: ElementRef<HTMLInputElement>;
   @ViewChild('home') homeDivRef!: ElementRef<HTMLInputElement>;
   isNewTaskAdded: boolean = false;
   deleteItemId!:number;
+  editTaskSubscribtion!:Subscription;
+  deleteTaskSubscription!:Subscription;
   constructor(
     private router: Router,
     private taskService: TaskService,
@@ -41,14 +44,22 @@ export class HomeComponent implements OnInit {
     private genericService: GenericService
   ) {}
   ngOnInit() {
-    this.taskService.editTask$.subscribe((value) => {
+    this.checkEditButtonClicked()
+    this.checkDeleteButtonClicked()
+  }
+  checkEditButtonClicked()
+  {
+    this.editTaskSubscribtion=this.taskService.editTask$.subscribe((value) => {
       if (value != null) {
         this.openAddTaskContainer();
       }
     });
-    this.taskService.deleteConfirm$.subscribe((value)=>{
-        this.openDeleteConfirmContainer(value);
-    });
+  }
+  checkDeleteButtonClicked()
+  {
+    this.deleteTaskSubscription=this.taskService.deleteConfirm$.subscribe((value)=>{
+      this.openDeleteConfirmContainer(value);
+  });
   }
   openDeleteConfirmContainer(id:number) {
     this.deleteItemId=id;
@@ -61,7 +72,6 @@ export class HomeComponent implements OnInit {
   }
   closeDeleteConfirmContainer()
   {
-    debugger
     this.deleteConfirmationRef.nativeElement.style.display = 'none';
     this.homeDivRef.nativeElement.classList.remove('blur');
   }
@@ -72,25 +82,38 @@ export class HomeComponent implements OnInit {
       let pgName: string | undefined = this.router.url.split('/').pop();
       this.taskService.isLoading$.next(true);
       if (pgName == 'dashboard') {
-        this.taskService.pageManiulated$.next('dashboard');
-        this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
-          this.taskService.isLoading$.next(false);
-          if (response.statusCode == 200) {
-            this.taskService.taskData$.next(response.result);
-          } else {
-            this.toaster.error(response.message);
-          }
-        });
+        this.changeDashboardContent();
       } else {
-        this.genericService.get<ApiResponse>(this.apiUrls.getActiveTasks).subscribe((response) => {
-          this.taskService.isLoading$.next(false);
-          if (response.statusCode == 200) {
-            this.taskService.taskData$.next(response.result);
-          } else {
-            this.toaster.error(response.message);
-          }
-        });
+        this.changeActivePageContent();
       }
     }
+  }
+  changeDashboardContent()
+  {
+    this.taskService.pageManiulated$.next('dashboard');
+    this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
+      if (response.statusCode == 200) {
+        this.taskService.taskData$.next(response.result);
+      } else {
+        this.toaster.error(response.message);
+      }
+    });
+  }
+  changeActivePageContent()
+  {
+    this.genericService.get<ApiResponse>(this.apiUrls.getActiveTasks).subscribe((response) => {
+      this.taskService.isLoading$.next(false);
+      if (response.statusCode == 200) {
+        this.taskService.taskData$.next(response.result);
+      } else {
+        this.toaster.error(response.message);
+      }
+    });
+  }
+  ngOnDestroy()
+  {
+    this.editTaskSubscribtion.unsubscribe();
+    this.deleteTaskSubscription.unsubscribe();
   }
 }

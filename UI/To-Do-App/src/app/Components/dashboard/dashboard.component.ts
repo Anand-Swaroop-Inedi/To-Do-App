@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
@@ -9,6 +9,7 @@ import { Task } from '../../models/Task';
 import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,11 +23,13 @@ import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
     TaskHeaderComponent,
   ],
 })
-export class DashboardComponent implements OnInit, OnChanges {
+export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
   name: string = 'dashboard';
   tasks: Task[] = [];
   @Input() changeMenu: boolean = false;
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
+  pageManiulatedSubscribtion!:Subscription;
+  genericServiceSubscription!:Subscription;
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
@@ -34,12 +37,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     private apiUrls:WebApiUrls
   ) {}
   ngOnInit() {
-    this.taskService.pageManiulated$.subscribe((value)=>{
-      if(value=='dashboard')
-      {
-        this.sendUpdatedData();
-      }
-    })
+    this.checkDashboardManipulated();
     this.getAllTasksData();
   }
   ngOnChanges(): void {
@@ -47,13 +45,22 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.getAllTasksData();
     }
   }
+  checkDashboardManipulated()
+  {
+    this.pageManiulatedSubscribtion=this.taskService.pageManiulated$.subscribe((value)=>{
+      if(value=='dashboard')
+      {
+        this.sendUpdatedData();
+      }
+    });
+  }
   sendUpdatedData() {
     this.getAllTasksData();
     this.taskStatus.getCompletionpercentage();
   }
   getAllTasksData() {
     this.taskService.isLoading$.next(true);
-    this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+    this.genericServiceSubscription=this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
@@ -61,5 +68,10 @@ export class DashboardComponent implements OnInit, OnChanges {
         this.toaster.error(response.message);
       }
     });
+  }
+  ngOnDestroy()
+  {
+    this.genericServiceSubscription.unsubscribe();
+    this.pageManiulatedSubscribtion.unsubscribe();
   }
 }

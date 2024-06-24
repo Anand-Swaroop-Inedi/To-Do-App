@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -21,6 +22,7 @@ import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { ApiResponse } from '../../models/ApiResponse';
 import { SpinnerComponent } from "../../shared/components/spinner/spinner.component";
 import { TaskService } from '../../services/task/task.service';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-authenticate',
     standalone: true,
@@ -50,20 +52,20 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     private taskService:TaskService
   ) {}
   ngOnInit() {
-    if(sessionStorage.getItem('Token')!=null)
-    {
-      this.router.navigate(['home/dashboard']);
-    }
-    var pageName = this.router.url.split('/').pop();
-    if (pageName && pageName == 'signup') {
-      this.isSignUp = true;
-    } else {
-      this.isSignUp = false;
-    }
-    this.pageName = this.isSignUp ? 'Sign Up' : 'Sign In';
-    this.footerMsg = this.isSignUp
-      ? 'Already have an account? sign in'
-      : "Don't have an account? Create";
+    this.checkTokenPresent();
+    this.assignVariablesBasedOnPage();
+    this.createForm();
+  }
+  ngAfterViewInit(): void {
+    this.passwordRef.nativeElement.placeholder = this.isSignUp
+      ? 'Password'
+      : 'Enter Your Password';
+    this.userNameRef.nativeElement.placeholder = this.isSignUp
+      ? 'Username'
+      : 'Enter your username';
+  }
+  createForm()
+  {
     this.userForm = new FormGroup({
       userName: new FormControl('', [
         Validators.required,
@@ -79,53 +81,73 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       ]),
     });
   }
-  ngAfterViewInit(): void {
-    this.passwordRef.nativeElement.placeholder = this.isSignUp
-      ? 'Password'
-      : 'Enter Your Password';
-    this.userNameRef.nativeElement.placeholder = this.isSignUp
-      ? 'Username'
-      : 'Enter your username';
+  assignVariablesBasedOnPage()
+  {
+    var pageName = this.router.url.split('/').pop();
+    if (pageName && pageName == 'signup') {
+      this.isSignUp = true;
+    } else {
+      this.isSignUp = false;
+    }
+    this.pageName = this.isSignUp ? 'Sign Up' : 'Sign In';
+    this.footerMsg = this.isSignUp
+      ? 'Already have an account? sign in'
+      : "Don't have an account? Create";
   }
-  OnSubmit() {
-    debugger;
+  checkTokenPresent()
+  {
+    if(sessionStorage.getItem('Token')!=null)
+    {
+      this.router.navigate(['home/dashboard']);
+    }
+  }
+  onSubmit() {
     this.isSubmitted = true;
     if (this.userForm.valid) {
       this.taskService.isLoading$.next(true);
       if (this.isSignUp) {
-        this.genericService
-          .post<ApiResponse>(this.apiUrls.addUser, this.userForm.value)
-          .subscribe((response) => {
-            if (response.statusCode == 200) {
-              setTimeout(() => {
-                this.userForm.reset();
-                this.toaster.error('Sign in Now to view dashboard');
-                this.taskService.isLoading$.next(false);
-                this.navigate();
-              }, 1000);
-              this.toaster.success(response.message);
-            } else {
-              this.toaster.error(response.message);
-            }
-          });
+        this.addNewUser();
       } else {
-        this.genericService
-          .post<ApiResponse>(this.apiUrls.authenticateUser, this.userForm.value)
-          .subscribe((response) => {
-            if (response.statusCode == 200) {
-              sessionStorage.setItem('Token', response.result);
-              setTimeout(() => {
-                this.taskService.isLoading$.next(false);
-                this.router.navigate(['home/dashboard']);
-              }, 3000);
-              this.toaster.success(response.message);
-            } else {
-              this.taskService.isLoading$.next(false);
-              this.toaster.error(response.message);
-            }
-          });
+        this.authenticateUser();
       }
     }
+  }
+  addNewUser()
+  {
+    this.genericService
+    .post<ApiResponse>(this.apiUrls.addUser, this.userForm.value)
+    .subscribe((response) => {
+      if (response.statusCode == 200) {
+        setTimeout(() => {
+          this.userForm.reset();
+          this.toaster.warning('Sign in Now to view dashboard');
+          this.taskService.isLoading$.next(false);
+          this.navigate();
+        }, 2000);
+        this.toaster.success(response.message);
+      } else {
+        this.toaster.error(response.message);
+        this.taskService.isLoading$.next(false);
+      }
+    });
+  }
+  authenticateUser()
+  {
+    this.genericService
+    .post<ApiResponse>(this.apiUrls.authenticateUser, this.userForm.value)
+    .subscribe((response) => {
+      if (response.statusCode == 200) {
+        sessionStorage.setItem('Token', response.result);
+        setTimeout(() => {
+          this.taskService.isLoading$.next(false);
+          this.router.navigate(['home/dashboard']);
+        }, 3000);
+        this.toaster.success(response.message);
+      } else {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error(response.message);
+      }
+    });
   }
   navigate() {
     this.userForm.reset();

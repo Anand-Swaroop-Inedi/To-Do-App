@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { WebApiUrls } from '../../end-points/WebApiUrls';
 import { TaskService } from '../../../services/task/task.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -28,21 +29,30 @@ export class DeleteConfirmationComponent {
   }
   onDelete() {
     if (this.id == 0) {
-      this.taskService.isLoading$.next(true);
-      this.service
-        .delete<ApiResponse>(this.apiUrls.deleteAllTasks)
-        .subscribe((response) => {
-          this.taskService.isLoading$.next(false);
-          if (response.statusCode == 200) {
-            this.taskService.pageManiulated$.next('dashboard');
-            this.toaster.success(response.message);
-          } else {
-            this.toaster.error(response.message);
-          }
-          this.onCancel();
-        });
+      this.DeleteAll()
     }
     else{
+      this.DeleteSingleTask();
+    }
+  }
+  DeleteAll()
+  {
+    this.taskService.isLoading$.next(true);
+    this.service
+      .delete<ApiResponse>(this.apiUrls.deleteAllTasks)
+      .subscribe((response) => {
+        this.taskService.isLoading$.next(false);
+        if (response.statusCode == 200) {
+          this.taskService.pageManiulated$.next('dashboard');
+          this.toaster.success(response.message);
+        } else {
+          this.toaster.error(response.message);
+        }
+        this.onCancel();
+      });
+  }
+  DeleteSingleTask()
+  {
     this.taskService.isLoading$.next(true);
     this.service.delete<ApiResponse>(this.apiUrls.deleteTask,this.id).subscribe((response) => {
       this.taskService.isLoading$.next(false);
@@ -58,6 +68,5 @@ export class DeleteConfirmationComponent {
       }
       this.onCancel();
     });
-    }
   }
 }

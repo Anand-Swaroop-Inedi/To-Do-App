@@ -3,6 +3,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -23,15 +25,19 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './header.component.scss',
   imports: [],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit,OnDestroy {
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
   pageName: string = '';
-  subscription!: Subscription;
+  routerSubscription!: Subscription;
   constructor(private router: Router,private toaster:ToastrService) {}
   ngOnInit() {
+    this.setPageName();
+  }
+  setPageName()
+  {
     let name = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
-    this.subscription = this.router.events.subscribe(
+    this.routerSubscription = this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
           let name = event.urlAfterRedirects.split('/').pop();
@@ -44,11 +50,12 @@ export class HeaderComponent {
     sessionStorage.removeItem('Token');
     this.toaster.success("Signed out successfully");
     this.router.navigate(['/']);
+    debugger;
   }
   sendAddTaskRequest() {
     this.flag.emit();
   }
-  OnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
   }
 }
