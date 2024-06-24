@@ -77,20 +77,5 @@ namespace DataAccessLayer.Repositories
                 _transaction = null;
             }
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _transaction?.Dispose(); // Dispose transaction if not null
-                _context.Dispose(); // Dispose context
-            }
-        }
     }
 }

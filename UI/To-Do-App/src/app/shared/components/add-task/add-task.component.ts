@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -8,7 +9,7 @@ import {
 } from '@angular/forms';
 import { TaskService } from '../../../services/task/task.service';
 import { Task } from '../../../models/Task';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
 import { WebApiUrls } from '../../end-points/WebApiUrls';
@@ -51,7 +52,13 @@ export class AddTaskComponent {
     });
   }
   onCancel() {
+    let control: AbstractControl;
     this.taskForm.reset();
+    this.taskForm.markAsUntouched();
+    Object.keys(this.taskForm.controls).forEach((name) => {
+      control = this.taskForm.controls[name];
+      control.setErrors(null);
+    });
     this.close.emit(this.addedTasksCount);
   }
   onSubmit() {

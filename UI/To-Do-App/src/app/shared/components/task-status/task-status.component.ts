@@ -17,8 +17,8 @@ export class TaskStatusComponent implements OnInit {
   activePercentage: number = 0;
   constructor(private taskService: TaskService,private apiUrls:WebApiUrls,private genericService:GenericService) {}
   ngOnInit() {
-    this.taskService.isDashboardManipulted$.subscribe((response) => {
-      if (response) {
+    this.taskService.pageManiulated$.subscribe((response) => {
+      if (response=='dashboard') {
         this.getCompletionpercentage();
       }
     });

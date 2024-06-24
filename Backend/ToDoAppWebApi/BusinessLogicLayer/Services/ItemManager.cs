@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using Azure;
 using BusinessLogicLayer.Interfaces;
-using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Models;
-using System.Net.Http;
 
 namespace BusinessLogicLayer.Services
 {
@@ -18,12 +13,12 @@ namespace BusinessLogicLayer.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         //private readonly IHttpContextAccessor  _httpContextAccessor;
-        public ItemManager(IItemsRepository taskRepository, IUserItemsRepository usersItemsRepository, IMapper mapper,IUnitOfWork unitOfWork)
+        public ItemManager(IItemsRepository taskRepository, IUserItemsRepository usersItemsRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _taskRepository = taskRepository;
             _userItemsRepository = usersItemsRepository;
             _mapper = mapper;
-           _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ApiResponse> AddItem(ItemDto item)
         {
@@ -32,13 +27,13 @@ namespace BusinessLogicLayer.Services
                 _unitOfWork.BeginTransaction();
                 string time = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
                 int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
-                int result =await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
+                int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
                 if (result > 0)
                 {
 
                     item.Itemid = result;
                     result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<Useritem>(item));
-                    if(result > 0)
+                    if (result > 0)
                     {
                         return new ApiResponse
                         {
@@ -46,7 +41,7 @@ namespace BusinessLogicLayer.Services
                             Message = "Task already exists"
                         };
                     }
-                    Useritem u=await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<Useritem>(item));
+                    Useritem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<Useritem>(item));
                     if (u != null)
                     {
                         u.Statusid = statusId;
@@ -64,9 +59,9 @@ namespace BusinessLogicLayer.Services
                 else
                 {
                     await _unitOfWork.ItemRepository.Add(_mapper.Map<Item>(item));
-                    item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId()+1;
+                    item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
                     item.Createdon = time;
-                    item.Statusid= statusId;
+                    item.Statusid = statusId;
                     await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
                 }
                 _unitOfWork.Commit();
@@ -114,10 +109,10 @@ namespace BusinessLogicLayer.Services
             {
                 _unitOfWork.BeginTransaction();
                 int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
-                if(result== 0)
+                if (result == 0)
                 {
                     await _unitOfWork.ItemRepository.Add(_mapper.Map<Item>(item));
-                    item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId()+1;
+                    item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
                 }
                 else
                 {
@@ -145,10 +140,10 @@ namespace BusinessLogicLayer.Services
         {
             try
             {
-                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id,userId);
-                if(result!= null)
+                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
+                if (result != null)
                 {
-                    await _unitOfWork.UserItemRepository.DeleteItem(result,userId);
+                    await _unitOfWork.UserItemRepository.DeleteItem(result, userId);
                     _unitOfWork.Commit();
                     return new ApiResponse
                     {
@@ -219,7 +214,7 @@ namespace BusinessLogicLayer.Services
             }
         }
         public async Task<ApiResponse> GetCompletedItems(int userId)
-        { 
+        {
             try
             {
                 return new ApiResponse
@@ -244,7 +239,7 @@ namespace BusinessLogicLayer.Services
             try
             {
                 int count = await _unitOfWork.UserItemRepository.GetCompletedItemsCount(userId);
-                int totalCount =await _unitOfWork.UserItemRepository.TotalItemsCount(userId);
+                int totalCount = await _unitOfWork.UserItemRepository.TotalItemsCount(userId);
                 int completedPercentage = 0;
                 int activePercentage = 0;
                 if (totalCount > 0)
@@ -267,7 +262,7 @@ namespace BusinessLogicLayer.Services
         {
             try
             {
-                Useritem result =await _unitOfWork.UserItemRepository.GetItemById(id, userId);
+                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
                 if (result != null)
                 {
                     result.Statusid = await _unitOfWork.StatusRepository.getIdByName("COMPLETED");

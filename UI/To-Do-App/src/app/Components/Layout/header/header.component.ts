@@ -14,6 +14,7 @@ import {
 } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { debug } from 'console';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,7 @@ export class HeaderComponent {
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
   pageName: string = '';
   subscription!: Subscription;
-  constructor(private router: Router) {}
+  constructor(private router: Router,private toaster:ToastrService) {}
   ngOnInit() {
     let name = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
@@ -41,6 +42,7 @@ export class HeaderComponent {
   }
   onSignOut() {
     sessionStorage.removeItem('Token');
+    this.toaster.success("Signed out successfully");
     this.router.navigate(['/']);
   }
   sendAddTaskRequest() {

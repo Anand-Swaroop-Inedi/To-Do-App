@@ -34,6 +34,12 @@ export class DashboardComponent implements OnInit, OnChanges {
     private apiUrls:WebApiUrls
   ) {}
   ngOnInit() {
+    this.taskService.pageManiulated$.subscribe((value)=>{
+      if(value=='dashboard')
+      {
+        this.sendUpdatedData();
+      }
+    })
     this.getAllTasksData();
   }
   ngOnChanges(): void {

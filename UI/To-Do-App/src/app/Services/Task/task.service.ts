@@ -10,13 +10,15 @@ import { Task } from '../../models/Task';
 })
 export class TaskService {
   taskData$: Subject<Task[]>;
-  isDashboardManipulted$: Subject<boolean>;
+  pageManiulated$:Subject<string>;
   editTask$: Subject<Task>;
   isLoading$:Subject<boolean>;
+  deleteConfirm$:Subject<number>;
   constructor(private apiUrls: WebApiUrls, private http: HttpClient) {
     this.taskData$ = new Subject<Task[]>();
-    this.isDashboardManipulted$ = new Subject<boolean>();
     this.editTask$ = new Subject<Task>();
     this.isLoading$=new Subject<boolean>();
+    this.deleteConfirm$=new Subject<number>();
+    this.pageManiulated$=new Subject<string>();
   }
 }

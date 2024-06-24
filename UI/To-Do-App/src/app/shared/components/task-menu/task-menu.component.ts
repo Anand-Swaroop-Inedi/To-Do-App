@@ -24,8 +24,6 @@ import { ApiResponse } from '../../../models/ApiResponse';
 export class TaskMenuComponent {
   pageName: string = '';
   tasks: Task[] = [];
-  @Output() dataManipulated: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
   constructor(
     private taskService: TaskService,
     private router: Router,
@@ -60,22 +58,13 @@ export class TaskMenuComponent {
     }
   }
   delete(id: number) {
-    this.taskService.isLoading$.next(true);
-    this.genericService.delete<ApiResponse>(this.apiUrls.deleteTask,id).subscribe((response) => {
-      this.taskService.isLoading$.next(false);
-      if (response.statusCode == 200) {
-        this.dataManipulated.emit(true);
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
-    });
+    this.taskService.deleteConfirm$.next(id);
   }
   ToggleActiveComplete(id: number) {
     if (this.pageName.toLowerCase() == 'active') {
       this.genericService.post<ApiResponse>(this.apiUrls.makeCompleted,id).subscribe((response) => {
         if (response.statusCode == 200) {
-          this.dataManipulated.emit(true);
+          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
           this.toaster.success(response.message);
         } else {
           this.toaster.error(response.message);
@@ -84,7 +73,7 @@ export class TaskMenuComponent {
     } else if (this.pageName.toLowerCase() == 'completed') {
       this.genericService.post<ApiResponse>(this.apiUrls.makeActive,id).subscribe((response) => {
         if (response.statusCode == 200) {
-          this.dataManipulated.emit(true);
+          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
           this.toaster.success(response.message);
         } else {
           this.toaster.error(response.message);

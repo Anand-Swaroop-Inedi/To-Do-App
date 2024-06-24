@@ -10,25 +10,29 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
+import { DeleteConfirmationComponent } from "../../shared/components/delete-confirmation/delete-confirmation.component";
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  imports: [
-    SideBarComponent,
-    HeaderComponent,
-    DashboardComponent,
-    SideBarMobileComponent,
-    RouterModule,
-    AddTaskComponent,
-  ],
+    selector: 'app-home',
+    standalone: true,
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    imports: [
+        SideBarComponent,
+        HeaderComponent,
+        DashboardComponent,
+        SideBarMobileComponent,
+        RouterModule,
+        AddTaskComponent,
+        DeleteConfirmationComponent
+    ]
 })
 export class HomeComponent implements OnInit {
   pageName: string = '';
   @ViewChild('addTask') addTaskRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('deleteConfirmation') deleteConfirmationRef!: ElementRef<HTMLInputElement>;
   @ViewChild('home') homeDivRef!: ElementRef<HTMLInputElement>;
   isNewTaskAdded: boolean = false;
+  deleteItemId!:number;
   constructor(
     private router: Router,
     private taskService: TaskService,
@@ -42,10 +46,24 @@ export class HomeComponent implements OnInit {
         this.openAddTaskContainer();
       }
     });
+    this.taskService.deleteConfirm$.subscribe((value)=>{
+        this.openDeleteConfirmContainer(value);
+    });
+  }
+  openDeleteConfirmContainer(id:number) {
+    this.deleteItemId=id;
+    this.deleteConfirmationRef.nativeElement.style.display = 'block';
+    this.homeDivRef.nativeElement.classList.add('blur');
   }
   openAddTaskContainer() {
     this.addTaskRef.nativeElement.style.display = 'block';
     this.homeDivRef.nativeElement.classList.add('blur');
+  }
+  closeDeleteConfirmContainer()
+  {
+    debugger
+    this.deleteConfirmationRef.nativeElement.style.display = 'none';
+    this.homeDivRef.nativeElement.classList.remove('blur');
   }
   closeAddTaskContainer(count: number) {
     this.addTaskRef.nativeElement.style.display = 'none';
@@ -54,7 +72,7 @@ export class HomeComponent implements OnInit {
       let pgName: string | undefined = this.router.url.split('/').pop();
       this.taskService.isLoading$.next(true);
       if (pgName == 'dashboard') {
-        this.taskService.isDashboardManipulted$.next(true);
+        this.taskService.pageManiulated$.next('dashboard');
         this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
           this.taskService.isLoading$.next(false);
           if (response.statusCode == 200) {

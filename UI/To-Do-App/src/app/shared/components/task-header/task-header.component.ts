@@ -16,8 +16,6 @@ import { ApiResponse } from '../../../models/ApiResponse';
 })
 export class TaskHeaderComponent {
   pageName: string = '';
-  @Output() dataManipulated: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
   today: Date;
   constructor(
     private taskService: TaskService,
@@ -35,16 +33,6 @@ export class TaskHeaderComponent {
     }
   }
   deleteAll() {
-    this.taskService.isLoading$.next(true);
-    this.genericService.delete<ApiResponse>(this.apiUrls.deleteAllTasks).subscribe((response) => {
-      this.taskService.isLoading$.next(false);
-      if (response.statusCode == 200) {
-        this.dataManipulated.emit(true);
-        this.taskService.isDashboardManipulted$.next(true);
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
-    });
+    this.taskService.deleteConfirm$.next(0);
   }
 }

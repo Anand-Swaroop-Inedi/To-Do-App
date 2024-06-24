@@ -42,7 +42,6 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     'Please ensure your password has at least 8 characters, including a capital letter, a lowercase letter, a digit, and a special symbol';
   usernameErrorMessage: string =
     'Username must start with an alphanumeric character and can only contain letters, numbers, underscores, and dots. Length must be between 3 and 20 characters.';
-  //isLoading:boolean=false;
   constructor(
     private router: Router,
     private toaster: ToastrService,
@@ -51,6 +50,10 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     private taskService:TaskService
   ) {}
   ngOnInit() {
+    if(sessionStorage.getItem('Token')!=null)
+    {
+      this.router.navigate(['home/dashboard']);
+    }
     var pageName = this.router.url.split('/').pop();
     if (pageName && pageName == 'signup') {
       this.isSignUp = true;

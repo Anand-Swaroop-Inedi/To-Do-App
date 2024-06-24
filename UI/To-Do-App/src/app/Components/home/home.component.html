@@ -14,3 +14,6 @@
 <div #addTask class="add-task">
   <app-add-task (close)="closeAddTaskContainer($event)"></app-add-task>
 </div>
+<div #deleteConfirmation class="delete-box">
+  <app-delete-confirmation (close)="closeDeleteConfirmContainer()" [id]="deleteItemId" ></app-delete-confirmation>
+</div>

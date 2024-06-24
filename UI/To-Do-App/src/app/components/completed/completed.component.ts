@@ -16,6 +16,12 @@ import { ApiResponse } from '../../models/ApiResponse';
 export class CompletedComponent implements OnInit {
   constructor(private taskService: TaskService,private apiUrls:WebApiUrls,private genericService:GenericService) {}
   ngOnInit() {
+    this.taskService.pageManiulated$.subscribe((response)=>{
+      if(response=="completed")
+      {
+        this.sendUpdatedData();
+      }
+    })
     this.getCompletedTasksData();
   }
   sendUpdatedData() {

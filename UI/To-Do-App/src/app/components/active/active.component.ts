@@ -23,6 +23,12 @@ export class ActiveComponent implements OnInit {
     private genericService: GenericService
   ) {}
   ngOnInit() {
+    this.taskService.pageManiulated$.subscribe((response)=>{
+      if(response=="active")
+      {
+        this.sendUpdatedData();
+      }
+    });
     this.getActiveTasksData();
   }
   ngOnChanges(): void {
