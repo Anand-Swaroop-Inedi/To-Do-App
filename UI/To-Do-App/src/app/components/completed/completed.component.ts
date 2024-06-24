@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task/task.service';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
-import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
-import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 
@@ -16,8 +14,8 @@ import { Subscription } from 'rxjs';
 })
 export class CompletedComponent implements OnInit,OnDestroy {
   pageManiulatedSubscribtion!:Subscription;
-  genericServiceSubscription!:Subscription;
-  constructor(private taskService: TaskService,private apiUrls:WebApiUrls,private genericService:GenericService) {}
+  taskServiceSubscription!:Subscription;
+  constructor(private taskService: TaskService) {}
   ngOnInit() {
     this.checkChangesMade();
     this.getCompletedTasksData();
@@ -37,7 +35,7 @@ export class CompletedComponent implements OnInit,OnDestroy {
 
   getCompletedTasksData() {
     this.taskService.isLoading$.next(true);
-    this.genericServiceSubscription=this.genericService.get<ApiResponse>(this.apiUrls.getCompletedTasks).subscribe((response) => {
+    this.taskServiceSubscription=this.taskService.getCompletedTasks<ApiResponse>().subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
@@ -46,7 +44,7 @@ export class CompletedComponent implements OnInit,OnDestroy {
   }
   ngOnDestroy()
   {
-    this.genericServiceSubscription.unsubscribe();
+    this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();
   }
 }

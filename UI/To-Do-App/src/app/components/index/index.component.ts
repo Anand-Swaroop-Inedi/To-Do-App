@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { routePaths } from '../../shared/route-paths/route-paths';
 @Component({
   selector: 'app-index',
   standalone: true,
@@ -11,7 +12,7 @@ export class IndexComponent implements OnInit {
   constructor(private router: Router) {}
   ngOnInit() {
     setTimeout(() => {
-      this.router.navigate(['/login']);
+      this.router.navigate(routePaths.login);
     }, 2000);
   }
 }

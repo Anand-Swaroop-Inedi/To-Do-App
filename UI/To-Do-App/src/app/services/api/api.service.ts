@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class GenericService {
+export class ApiService {
   constructor(private http: HttpClient) { }
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
@@ -16,8 +16,7 @@ export class GenericService {
   put<T>(url: string, body: any): Observable<T> {
     return this.http.put<T>(url, body);
   }
-  delete<T>(url: string, data?: any): Observable<T> {
-    const deleteUrl = data ? url+data : url; 
-    return this.http.delete<T>(deleteUrl);
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(url);
   }
 }

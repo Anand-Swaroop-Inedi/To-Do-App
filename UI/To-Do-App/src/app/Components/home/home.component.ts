@@ -7,8 +7,6 @@ import { SideBarMobileComponent } from '../layout/side-bar-mobile/side-bar-mobil
 import { Router, RouterModule } from '@angular/router';
 import { AddTaskComponent } from '../../shared/components/add-task/add-task.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
-import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { DeleteConfirmationComponent } from "../../shared/components/delete-confirmation/delete-confirmation.component";
 import { Subscription } from 'rxjs';
@@ -40,8 +38,6 @@ export class HomeComponent implements OnInit,OnDestroy {
     private router: Router,
     private taskService: TaskService,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
-    private genericService: GenericService
   ) {}
   ngOnInit() {
     this.checkEditButtonClicked()
@@ -65,19 +61,24 @@ export class HomeComponent implements OnInit,OnDestroy {
     this.deleteItemId=id;
     this.deleteConfirmationRef.nativeElement.style.display = 'block';
     this.homeDivRef.nativeElement.classList.add('blur');
+    this.homeDivRef.nativeElement.style.pointerEvents='none';
   }
   openAddTaskContainer() {
     this.addTaskRef.nativeElement.style.display = 'block';
     this.homeDivRef.nativeElement.classList.add('blur');
+    this.homeDivRef.nativeElement.style.pointerEvents='none';
   }
   closeDeleteConfirmContainer()
   {
     this.deleteConfirmationRef.nativeElement.style.display = 'none';
     this.homeDivRef.nativeElement.classList.remove('blur');
+    this.homeDivRef.nativeElement.style.pointerEvents='auto';
   }
   closeAddTaskContainer(count: number) {
     this.addTaskRef.nativeElement.style.display = 'none';
     this.homeDivRef.nativeElement.classList.remove('blur');
+    this.homeDivRef.nativeElement.style.pointerEvents='auto';
+
     if (count > 0) {
       let pgName: string | undefined = this.router.url.split('/').pop();
       this.taskService.isLoading$.next(true);
@@ -91,7 +92,7 @@ export class HomeComponent implements OnInit,OnDestroy {
   changeDashboardContent()
   {
     this.taskService.pageManiulated$.next('dashboard');
-    this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+    this.taskService.getAllTasks<ApiResponse>().subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
@@ -102,7 +103,7 @@ export class HomeComponent implements OnInit,OnDestroy {
   }
   changeActivePageContent()
   {
-    this.genericService.get<ApiResponse>(this.apiUrls.getActiveTasks).subscribe((response) => {
+    this.taskService.getActiveTasks<ApiResponse>().subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);

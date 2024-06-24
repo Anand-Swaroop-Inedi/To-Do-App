@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { routePaths } from '../route-paths/route-paths';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const toaster:ToastrService=inject(ToastrService);
@@ -10,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     toaster.error("please login to continue");
-    router.navigate(['/']);
+    router.navigate(routePaths.index);
     return false;
   }
 };

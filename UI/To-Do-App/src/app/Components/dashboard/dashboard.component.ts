@@ -6,9 +6,7 @@ import { TaskStatusComponent } from '../../shared/components/task-status/task-st
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
 import { TaskService } from '../../services/task/task.service';
 import { Task } from '../../models/Task';
-import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
-import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -29,12 +27,10 @@ export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
   @Input() changeMenu: boolean = false;
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
   pageManiulatedSubscribtion!:Subscription;
-  genericServiceSubscription!:Subscription;
+  taskServiceSubscription!:Subscription;
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private genericService:GenericService,
-    private apiUrls:WebApiUrls
   ) {}
   ngOnInit() {
     this.checkDashboardManipulated();
@@ -60,7 +56,7 @@ export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
   }
   getAllTasksData() {
     this.taskService.isLoading$.next(true);
-    this.genericServiceSubscription=this.genericService.get<ApiResponse>(this.apiUrls.getAllTasks).subscribe((response) => {
+    this.taskServiceSubscription=this.taskService.getAllTasks<ApiResponse>().subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         this.taskService.taskData$.next(response.result);
@@ -71,7 +67,7 @@ export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
   }
   ngOnDestroy()
   {
-    this.genericServiceSubscription.unsubscribe();
+    this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();
   }
 }

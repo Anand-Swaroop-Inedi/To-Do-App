@@ -17,12 +17,12 @@ import {
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
-import { GenericService } from '../../services/generic/generic.service';
-import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
 import { ApiResponse } from '../../models/ApiResponse';
 import { SpinnerComponent } from "../../shared/components/spinner/spinner.component";
 import { TaskService } from '../../services/task/task.service';
-import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user/user.service';
+import { routePaths } from '../../shared/route-paths/route-paths';
+
 @Component({
     selector: 'app-authenticate',
     standalone: true,
@@ -47,8 +47,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
-    private genericService: GenericService,
+    private userService: UserService,
     private taskService:TaskService
   ) {}
   ngOnInit() {
@@ -98,7 +97,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
   {
     if(sessionStorage.getItem('Token')!=null)
     {
-      this.router.navigate(['home/dashboard']);
+      this.router.navigate(routePaths.dashboard);
     }
   }
   onSubmit() {
@@ -114,8 +113,8 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
   }
   addNewUser()
   {
-    this.genericService
-    .post<ApiResponse>(this.apiUrls.addUser, this.userForm.value)
+    this.userService
+    .addUser<ApiResponse>(this.userForm.value)
     .subscribe((response) => {
       if (response.statusCode == 200) {
         setTimeout(() => {
@@ -133,31 +132,33 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
   }
   authenticateUser()
   {
-    this.genericService
-    .post<ApiResponse>(this.apiUrls.authenticateUser, this.userForm.value)
+    this.userService
+    .authenticateUser<ApiResponse>(this.userForm.value)
     .subscribe((response) => {
       if (response.statusCode == 200) {
         sessionStorage.setItem('Token', response.result);
         setTimeout(() => {
-          this.taskService.isLoading$.next(false);
-          this.router.navigate(['home/dashboard']);
+          this.router.navigate(routePaths.dashboard);
         }, 3000);
         this.toaster.success(response.message);
       } else {
-        this.taskService.isLoading$.next(false);
         this.toaster.error(response.message);
       }
+      this.taskService.isLoading$.next(false);
     });
   }
   navigate() {
+    this.clear();
+    if (this.isSignUp) this.router.navigate(routePaths.login);
+    else {
+      this.router.navigate(routePaths.signup);
+    }
+  }
+  clear(){
     this.userForm.reset();
     Object.keys(this.userForm.controls).forEach((field) => {
       this.userForm.get(field)!.setErrors(null);
     });
-    if (this.isSignUp) this.router.navigate(['/login']);
-    else {
-      this.router.navigate(['/signup']);
-    }
   }
   makePasswordVisible() {
     this.isPasswordVisible = !this.isPasswordVisible;

@@ -1,22 +1,18 @@
 import {
   Component,
   EventEmitter,
-  Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges,
+  Output
 } from '@angular/core';
 import {
   Router,
   NavigationEnd,
   Event as NavigationEvent,
-  NavigationStart,
 } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { debug } from 'console';
 import { ToastrService } from 'ngx-toastr';
+import { routePaths } from '../../../shared/route-paths/route-paths';
 
 @Component({
   selector: 'app-header',
@@ -49,7 +45,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   onSignOut() {
     sessionStorage.removeItem('Token');
     this.toaster.success("Signed out successfully");
-    this.router.navigate(['/']);
+    this.router.navigate(routePaths.index);
     debugger;
   }
   sendAddTaskRequest() {

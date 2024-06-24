@@ -12,8 +12,6 @@ import { Task } from '../../../models/Task';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
-import { WebApiUrls } from '../../end-points/WebApiUrls';
-import { GenericService } from '../../../services/generic/generic.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 @Component({
@@ -34,10 +32,7 @@ export class AddTaskComponent {
   editTaskSubscribtion!:Subscription;
   constructor(
     private taskService: TaskService,
-    private router: Router,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
-    private genericService: GenericService
   ) {}
   ngOnInit() {
     this.getDataIfEdit();
@@ -76,16 +71,16 @@ export class AddTaskComponent {
     if (this.taskForm.valid) {
       this.taskService.isLoading$.next(true);
       if (!this.isEdit) {
-        this.editTask();
+        this.createTask();
         
       } else {
-        this.addTask();
+        this.editTask();
       }
     }
   }
-  editTask()
+  createTask()
   {
-    this.genericService.post<ApiResponse>(this.apiUrls.createTask,new Task(this.taskForm.value)).subscribe((response) => {
+    this.taskService.createTask<ApiResponse>(new Task(this.taskForm.value)).subscribe((response) => {
       if (response.statusCode == 200) {
         this.addedTasksCount += 1;
         this.toaster.success(response.message);
@@ -106,14 +101,13 @@ export class AddTaskComponent {
       }
     });
   }
-  addTask()
+  editTask()
   {
     var t: Task = new Task(this.taskForm.value);
     t.id = this.editableTask.id;
     t.statusid = this.editableTask.statusid;
     t.createdon=this.editableTask.createdon;
-    this.genericService.put<ApiResponse>(this.apiUrls.updateTask,t).subscribe((response) => {
-
+    this.taskService.updateTask<ApiResponse>(t).subscribe((response) => {
       if (response.statusCode == 200) {
         this.addedTasksCount += 1;
         this.toaster.success(response.message);

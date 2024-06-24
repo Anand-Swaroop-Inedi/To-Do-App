@@ -1,6 +1,7 @@
 .home {
   display: flex;
   flex-direction: column;
+  pointer-events: auto;
 }
 .blur {
   filter: blur(3px);

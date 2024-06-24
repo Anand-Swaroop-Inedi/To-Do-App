@@ -3,8 +3,6 @@ import { TaskService } from '../../services/task/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
-import { WebApiUrls } from '../../shared/end-points/WebApiUrls';
-import { GenericService } from '../../services/generic/generic.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 @Component({
@@ -17,12 +15,10 @@ import { Subscription } from 'rxjs';
 export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
   name: string = 'Active';
   @Input() changeMenu: boolean = false;
-  genericServiceSubscription!:Subscription;
+  taskServiceSubscription!:Subscription;
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
-    private genericService: GenericService
   ) {}
   ngOnInit() {
     this.checkPageManipulated();
@@ -48,8 +44,8 @@ export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
   }
   getActiveTasksData() {
     this.taskService.isLoading$.next(true);
-    this.genericServiceSubscription=this.genericService
-      .get<ApiResponse>(this.apiUrls.getActiveTasks)
+    this.taskServiceSubscription=this.taskService
+      .getActiveTasks<ApiResponse>()
       .subscribe((response) => {
         this.taskService.isLoading$.next(false);
         if (response.statusCode == 200) {
@@ -60,6 +56,6 @@ export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
       });
   }
   ngOnDestroy(): void {
-      this.genericServiceSubscription.unsubscribe();
+      this.taskServiceSubscription.unsubscribe();
   }
 }

@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { GenericService } from '../../../services/generic/generic.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { ToastrService } from 'ngx-toastr';
-import { WebApiUrls } from '../../end-points/WebApiUrls';
 import { TaskService } from '../../../services/task/task.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -19,9 +16,7 @@ export class DeleteConfirmationComponent {
   @Output() close: EventEmitter<null> = new EventEmitter<null>();
   constructor(
     private taskService: TaskService,
-    private service: GenericService,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
     private router:Router
   ) {}
   onCancel() {
@@ -38,8 +33,8 @@ export class DeleteConfirmationComponent {
   DeleteAll()
   {
     this.taskService.isLoading$.next(true);
-    this.service
-      .delete<ApiResponse>(this.apiUrls.deleteAllTasks)
+    this.taskService
+      .deleteAllTasks<ApiResponse>()
       .subscribe((response) => {
         this.taskService.isLoading$.next(false);
         if (response.statusCode == 200) {
@@ -54,7 +49,7 @@ export class DeleteConfirmationComponent {
   DeleteSingleTask()
   {
     this.taskService.isLoading$.next(true);
-    this.service.delete<ApiResponse>(this.apiUrls.deleteTask,this.id).subscribe((response) => {
+    this.taskService.deleteTask<ApiResponse>(this.id).subscribe((response) => {
       this.taskService.isLoading$.next(false);
       if (response.statusCode == 200) {
         const url=this.router.url.split('/').pop();

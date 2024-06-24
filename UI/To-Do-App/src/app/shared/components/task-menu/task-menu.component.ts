@@ -11,8 +11,6 @@ import { TaskService } from '../../../services/task/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { WebApiUrls } from '../../end-points/WebApiUrls';
-import { GenericService } from '../../../services/generic/generic.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 
@@ -30,8 +28,6 @@ export class TaskMenuComponent {
     private taskService: TaskService,
     private router: Router,
     private toaster: ToastrService,
-    private apiUrls: WebApiUrls,
-    private genericService: GenericService
   ) {}
   ngOnInit() {
     this.getUpdatedTasks();
@@ -68,14 +64,25 @@ export class TaskMenuComponent {
   }
   ToggleActiveComplete(id: number) {
     if (this.pageName.toLowerCase() == 'active') {
-      this.changeTaskStatus(this.apiUrls.makeCompleted,id);
+      this.makeTaskAsCompleted(id);
     } else if (this.pageName.toLowerCase() == 'completed') {
-      this.changeTaskStatus(this.apiUrls.makeActive,id);
+      this.makeTaskAsActive(id);
     }
   }
-  changeTaskStatus(url:string,id:number)
+  makeTaskAsCompleted(id:number)
   {
-    this.genericService.post<ApiResponse>(url,id).subscribe((response) => {
+    this.taskService.makeTaskAsCompleted<ApiResponse>(id).subscribe((response) => {
+      if (response.statusCode == 200) {
+        this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
+        this.toaster.success(response.message);
+      } else {
+        this.toaster.error(response.message);
+      }
+    });
+  }
+  makeTaskAsActive(id:number)
+  {
+    this.taskService.makeTaskAsActive<ApiResponse>(id).subscribe((response) => {
       if (response.statusCode == 200) {
         this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
         this.toaster.success(response.message);

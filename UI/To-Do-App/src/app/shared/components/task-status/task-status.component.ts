@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
-import { response } from 'express';
 import { ApiResponse } from '../../../models/ApiResponse';
-import { WebApiUrls } from '../../end-points/WebApiUrls';
-import { GenericService } from '../../../services/generic/generic.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,8 +13,8 @@ import { Subscription } from 'rxjs';
 export class TaskStatusComponent implements OnInit,OnDestroy {
   completionPercentage: number = 0;
   activePercentage: number = 0;
-  genericServiceSubscription!:Subscription;
-  constructor(private taskService: TaskService,private apiUrls:WebApiUrls,private genericService:GenericService) {}
+  taskServiceSubscription!:Subscription;
+  constructor(private taskService: TaskService) {}
   ngOnInit() {
     this.getDataChanges();
     this.getCompletionpercentage();
@@ -32,8 +29,8 @@ export class TaskStatusComponent implements OnInit,OnDestroy {
   }
   getCompletionpercentage() {
     this.taskService.isLoading$.next(true);
-    this.genericServiceSubscription=this.genericService
-      .get<ApiResponse>(this.apiUrls.getCompletionPercentage)
+    this.taskServiceSubscription=this.taskService
+      .getCompletionpercentage<ApiResponse>()
       .subscribe((response: ApiResponse) => {
         this.taskService.isLoading$.next(false);
         if (response.statusCode == 200) {
@@ -44,6 +41,6 @@ export class TaskStatusComponent implements OnInit,OnDestroy {
   }
   ngOnDestroy()
   {
-    this.genericServiceSubscription.unsubscribe();
+    this.taskServiceSubscription.unsubscribe();
   }
 }
