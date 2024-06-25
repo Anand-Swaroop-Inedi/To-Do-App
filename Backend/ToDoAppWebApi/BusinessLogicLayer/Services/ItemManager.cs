@@ -30,33 +30,34 @@ namespace BusinessLogicLayer.Services
             {
 
                 item.Itemid = result;
-                result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<Useritem>(item));
+                result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<UserItem>(item));
                 if (result > 0)
                 {
                         return 2;
                 }
-                Useritem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<Useritem>(item));
+                UserItem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<UserItem>(item));
                 if (u != null)
                 {
-                    u.Statusid = statusId;
-                    u.Createdon = time;
+                    u.StatusId = statusId;
+                    u.CreatedOn = time;
                     await _unitOfWork.UserItemRepository.Update(u);
                 }
                 else
                 {
                     item.Statusid = statusId;
                     item.Createdon = time;
-                    await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
+                    await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<UserItem>(item));
                 }
 
             }
             else
             {
                 await _unitOfWork.ItemRepository.Add(_mapper.Map<Item>(item));
-                item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
+                int id = await _unitOfWork.ItemRepository.recentlyAddedId();
+                item.Itemid =id + 1;
                 item.Createdon = time;
                 item.Statusid = statusId;
-                await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
+                await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<UserItem>(item));
             }
             _unitOfWork.Commit();
             return 1;
@@ -79,12 +80,12 @@ namespace BusinessLogicLayer.Services
                     item.Itemid = result;
                 }
                 item.Isdeleted = 0;
-                await _unitOfWork.UserItemRepository.Update(_mapper.Map<Useritem>(item));
+                await _unitOfWork.UserItemRepository.Update(_mapper.Map<UserItem>(item));
                 _unitOfWork.Commit();
         }
         public async Task<int> DeleteItem(int id, int userId)
         {
-                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
+                UserItem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
                 if (result != null)
                 {
                     await _unitOfWork.UserItemRepository.DeleteItem(result, userId);
@@ -121,11 +122,11 @@ namespace BusinessLogicLayer.Services
         }
         public async Task<int> makeItemCompleted(int id, int userId)
         {
-                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
+                UserItem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
             if (result != null)
             {
-                result.Statusid = await _unitOfWork.StatusRepository.getIdByName("COMPLETED");
-                result.Completedon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                result.StatusId = await _unitOfWork.StatusRepository.getIdByName("COMPLETED");
+                result.CompletedOn = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
                 await _unitOfWork.UserItemRepository.Update(result);
                 _unitOfWork.Commit();
                 return 1;
@@ -139,11 +140,11 @@ namespace BusinessLogicLayer.Services
         }
         public async Task<int> makeItemActive(int id, int userId)
         {
-                Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
+                UserItem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
                 if (result != null)
                 {
-                    result.Statusid = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
-                    result.Createdon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    result.StatusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
+                    result.CreatedOn = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
                     await _unitOfWork.UserItemRepository.Update(result);
                     _unitOfWork.SaveChanges();
                     _unitOfWork.Commit();

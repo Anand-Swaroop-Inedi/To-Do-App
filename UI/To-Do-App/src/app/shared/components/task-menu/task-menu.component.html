@@ -33,7 +33,7 @@
       <p
         class="duration"
         [ngStyle]="
-          pageName == 'completed' ? { color: '#BA5112' } : { color: '#B5B5B5' }
+          pageName.toLowerCase() == 'completed' ? { color: '#BA5112' } : { color: '#B5B5B5' }
         "
       >
         Added {{ calculateTime(task.createdon) }} ago

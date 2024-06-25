@@ -24,6 +24,10 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<int> recentlyAddedId()
         {
+            if(!_toDoAppContext.Items.Any())
+            {
+                return 0;
+            }
             return _toDoAppContext.Items.Select(r => r.Id).Max();
         }
         /*public async Task<ApiResponse> AddItem(Item item)

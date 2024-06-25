@@ -117,13 +117,11 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       next: (response) => {
         this.taskService.isLoading$.next(false);
         if (response.status == 1) {
-          setTimeout(() => {
+          this.toaster.success(response.message);
             this.userForm.reset();
             this.toaster.warning('Sign in Now to view dashboard');
             this.taskService.isLoading$.next(false);
             this.navigate();
-          }, 2000);
-          this.toaster.success(response.message);
         } else {
           this.toaster.error(response.message);
         }
@@ -142,9 +140,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
           this.taskService.isLoading$.next(false);
           if (response.status == 1) {
             sessionStorage.setItem('Token', response.result);
-            setTimeout(() => {
               this.router.navigate(routePaths.dashboard);
-            }, 3000);
             this.toaster.success(response.message);
           } else {
             this.toaster.error(response.message);

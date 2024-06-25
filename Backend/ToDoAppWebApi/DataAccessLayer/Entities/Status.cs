@@ -9,7 +9,7 @@ public partial class Status
 
     public string Name { get; set; } = null!;
 
-    public int? Isdeleted { get; set; }
+    public int? IsDeleted { get; set; }
 
-    public virtual ICollection<Useritem> Useritems { get; set; } = new List<Useritem>();
+    public virtual ICollection<UserItem> UserItems { get; set; } = new List<UserItem>();
 }

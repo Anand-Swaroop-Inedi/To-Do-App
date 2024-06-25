@@ -40,10 +40,14 @@ builder.Services.AddScoped<IUserItemsRepository,UserItemsRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IItemsRepository,ItemsRepository>();
 builder.Services.AddScoped<IStatusRepository,StatusRepository>();
+builder.Services.AddScoped<IErrorLogRepository,ErrorLogRepository>();
 builder.Services.AddTransient<IItemManager,ItemManager>();
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IErrorLogManager,ErrorLogManager>();
+
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();

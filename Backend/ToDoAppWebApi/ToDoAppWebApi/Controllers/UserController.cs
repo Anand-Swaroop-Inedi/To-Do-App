@@ -4,6 +4,7 @@ using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using ToDoAppWebApi.NewFolder;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -20,11 +21,11 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> AuthenticateUser(UserDto user)
         {
             int result = await _userManager.AuthenticateUser(user);
-            if (result == 1)
+            if (result ==(int) ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "successfully logged in",
                     Result = await _userManager.GenerateToken(result)
                 };
@@ -54,7 +55,7 @@ namespace ToDoAppWebApi.Controllers
             {
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "Successfully registered",
                 };
             }

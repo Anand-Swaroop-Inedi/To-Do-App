@@ -57,11 +57,11 @@ namespace DataAccessLayer.Repositories
         }*/
         public async Task<User> GetByUsername(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username);
+            return _context.Users.FirstOrDefault(u => u.UserName.ToLower() == username.ToLower());
         }
         public async Task<User> AuthenticateUser(User user)
         {
-            return _context.Users.Where(u => u.Username == user.Username).FirstOrDefault();
+            return _context.Users.Where(u => u.UserName.ToLower() == user.UserName.ToLower()).FirstOrDefault();
         }
         /*public async Task<ApiResponse> AuthenticateUser(User user)
         {

@@ -56,7 +56,7 @@ namespace BusinessLogicLayer.Services
                 {
                     if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
                     {
-                    return result.Id;
+                    return 1;
                     }
                     else
                     {

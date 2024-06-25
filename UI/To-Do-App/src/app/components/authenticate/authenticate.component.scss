@@ -51,6 +51,9 @@
   color: #b5b5b5;
   border-style: none;
 }
+.error-message{
+  width: 350px;
+}
 .form-input:focus {
   outline: none;
 }
@@ -151,5 +154,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     box-shadow: 2px 2px 8px 0px #0000001a;
     color: #b5b5b5;
     border-style: none;
+  }
+  .error-message
+  {
+    width: 260px;
+    margin: 0px auto 0px auto;
   }
 }

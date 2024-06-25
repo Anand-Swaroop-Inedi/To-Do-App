@@ -13,6 +13,7 @@ namespace DataAccessLayer.Interfaces
         IUserRepository UserRepository { get; }
         IUserItemsRepository UserItemRepository { get; }
         IStatusRepository StatusRepository { get; }
+        IErrorLogRepository ErrorLogRepository { get; }
         void SaveChanges();
         void BeginTransaction();
         void Commit();

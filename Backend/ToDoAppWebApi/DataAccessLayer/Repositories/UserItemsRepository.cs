@@ -18,57 +18,57 @@ namespace DataAccessLayer.Repositories
             _context = toDoAppContext;
         }
 
-        public async Task<int> checkItemLinkingExists(Useritem item)
+        public async Task<int> checkItemLinkingExists(UserItem item)
         {
-            return _context.Useritems.Where(r => r.Userid == item.Userid && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "ACTIVE").Select(r => r.Id).FirstOrDefault();
+            return _context.UserItems.Where(r => r.UserId == item.UserId && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == "ACTIVE").Select(r => r.Id).FirstOrDefault();
         }
-        public async Task<Useritem> checkItemCompleted(Useritem item)
+        public async Task<UserItem> checkItemCompleted(UserItem item)
         {
-            return _context.Useritems.Where(r => r.Userid == item.Id && r.Itemid == item.Itemid && r.Status.Name.ToUpper() == "COMPLETED" && r.Userid == item.Userid).FirstOrDefault();
+            return _context.UserItems.Where(r => r.UserId == item.Id && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == "COMPLETED" && r.UserId == item.UserId).FirstOrDefault();
         }
-        public async Task AddItem(Useritem item)
+        public async Task AddItem(UserItem item)
         {
-              _context.Useritems.Add(item);
+              _context.UserItems.Add(item);
         }
-        public async Task Update(Useritem item)
+        public async Task Update(UserItem item)
         {
-            _context.Useritems.Update(item);
+            _context.UserItems.Update(item);
         }
-        public async Task<List<Useritem>> GetAll(int userId)
+        public async Task<List<UserItem>> GetAll(int userId)
         {
-           return _context.Useritems.Where(x => x.Isdeleted == 0 && x.Userid == userId && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+           return _context.UserItems.Where(x => x.IsDeleted == 0 && x.UserId == userId && EF.Functions.Like(x.CreatedOn, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
 
-        public async Task<Useritem> GetItemById(int id,int userId)
+        public async Task<UserItem> GetItemById(int Id,int userId)
         {
-            return _context.Useritems.Where(r => r.Id == id && r.Userid == userId).First();
+            return _context.UserItems.Where(r => r.Id == Id && r.UserId == userId).First();
         }
-        public async Task DeleteItem(Useritem item, int UserId)
+        public async Task DeleteItem(UserItem item, int UserId)
         {
-            item.Isdeleted = 1;
-            _context.Useritems.Update(item);
+            item.IsDeleted = 1;
+            _context.UserItems.Update(item);
         }
         public async Task DeleteAllItems(int UserId)
         {
 
-           _context.Useritems.Where(x => x.Userid == UserId).ToList().ForEach(x => { x.Isdeleted = 1; });
+           _context.UserItems.Where(x => x.UserId == UserId).ToList().ForEach(x => { x.IsDeleted = 1; });
        }
-        public async Task<List<Useritem>> GetActiveItems(int UserId)
+        public async Task<List<UserItem>> GetActiveItems(int UserId)
         {
-            return _context.Useritems.Where(x => x.Status.Name.ToUpper() == "ACTIVE" && x.Isdeleted == 0 && x.Userid == UserId && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == "ACTIVE" && x.IsDeleted == 0 && x.UserId == UserId && EF.Functions.Like(x.CreatedOn, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
-        public async Task<List<Useritem>> GetCompletedItems(int UserId)
+        public async Task<List<UserItem>> GetCompletedItems(int UserId)
         {
-            return _context.Useritems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.Isdeleted == 0 && x.Userid == UserId && EF.Functions.Like(x.Createdon, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.IsDeleted == 0 && x.UserId == UserId && EF.Functions.Like(x.CreatedOn, todayString + "%")).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
             
         }
         public async Task<int> GetCompletedItemsCount(int userId)
         {
-            return _context.Useritems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.Isdeleted == 0 && u.Userid == userId && EF.Functions.Like(u.Createdon, todayString + "%")).Count();
+            return _context.UserItems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.IsDeleted == 0 && u.UserId == userId && EF.Functions.Like(u.CreatedOn, todayString + "%")).Count();
         }
         public async Task<int> TotalItemsCount(int userId)
         {
-            return _context.Useritems.Where(u => u.Isdeleted == 0 && u.Userid == userId && EF.Functions.Like(u.Createdon, todayString + "%")).Count();
+            return _context.UserItems.Where(u => u.IsDeleted == 0 && u.UserId == userId && EF.Functions.Like(u.CreatedOn, todayString + "%")).Count();
         }
 
         /* public async Task<ApiResponse> AddItem(Useritem item)

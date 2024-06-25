@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using System;
+using ToDoAppWebApi.NewFolder;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -22,10 +24,10 @@ namespace ToDoAppWebApi.Controllers
         {
             item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
             int result = await _itemManager.AddItem(item);
-            if (result==1)
+            if (result== (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse { 
-                            Status=1,
+                            Status= (int)ResponseMessages.Messages.Success,
                             Message="Task Added Successfully"
                 };
 
@@ -45,8 +47,8 @@ namespace ToDoAppWebApi.Controllers
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             return new ApiResponse
             {
-                Status = 1,
-                Message = "Successful",
+                Status = (int)ResponseMessages.Messages.Success,
+                Message = ResponseMessages.Messages.Success.GetEnumDescription(),
                 Result = await _itemManager.GetAll(userId)
         };
         }
@@ -55,11 +57,11 @@ namespace ToDoAppWebApi.Controllers
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             int result =await _itemManager.DeleteItem(id, userId);
-            if(result==1)
+            if(result== (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "Task Deleted from the list successfully"
                 };
             }
@@ -79,7 +81,7 @@ namespace ToDoAppWebApi.Controllers
              await _itemManager.UpdateItem(item);
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "Updated successfully",
                 };   
         }
@@ -87,13 +89,13 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> GetActiveItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse { Status = 1, Message = "Successfull", Result = await _itemManager.GetActiveItems(userId) };
+            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetActiveItems(userId) };
         }
         [HttpGet("completed-items")]
         public async Task<ApiResponse> GetCompletedItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse { Status = 1, Message = "Successfull", Result = await _itemManager.GetCompletedItems(userId) };
+            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetCompletedItems(userId) };
         }
         [HttpDelete("delete-all")]
         public async Task<ApiResponse> DeleteAllItems()
@@ -102,7 +104,7 @@ namespace ToDoAppWebApi.Controllers
             _itemManager.DeleteItems(userId);
             return new ApiResponse
             {
-                Status = 1,
+                Status = (int)ResponseMessages.Messages.Success,
                 Message = "All Tasks Deleted from the your list successfully"
             };
         }
@@ -112,8 +114,8 @@ namespace ToDoAppWebApi.Controllers
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             return new ApiResponse
             {
-                Status = 1,
-                Message = "Successfull",
+                Status = (int)ResponseMessages.Messages.Success,
+                Message = ResponseMessages.Messages.Success.GetEnumDescription(),
                 Result= await _itemManager.CompletionPercentage(userId)
             };
         }
@@ -122,11 +124,11 @@ namespace ToDoAppWebApi.Controllers
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             int result= await _itemManager.makeItemCompleted(id, userId);
-            if (result == 1)
+            if (result == (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "Task Updated as completed"
                 };
             }
@@ -144,11 +146,11 @@ namespace ToDoAppWebApi.Controllers
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
             int result= await _itemManager.makeItemActive(id, userId);
-            if(result==1)
+            if(result== (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
-                    Status = 1,
+                    Status = (int)ResponseMessages.Messages.Success,
                     Message = "Task Updated as active"
                 };
             }

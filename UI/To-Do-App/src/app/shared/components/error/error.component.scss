@@ -1,7 +1,7 @@
 .text-danger {
   display: flex;
   margin: 0% 0% 0% 3%;
-  width: 400px;
+  width: 100%;
   flex-direction: row;
 }
 .danger-msg {
@@ -17,6 +17,7 @@
 }
 @media only screen and (max-width: 900px) {
   .text-danger {
-    width: 250px;
+    width: 100%;
+    margin:auto;
   }
 }

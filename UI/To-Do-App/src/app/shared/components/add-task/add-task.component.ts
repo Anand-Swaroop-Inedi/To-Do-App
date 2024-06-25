@@ -57,6 +57,7 @@ export class AddTaskComponent {
     );
   }
   onCancel() {
+    this.isEdit=false;
     let control: AbstractControl;
     this.taskForm.reset();
     this.taskForm.markAsUntouched();
@@ -70,6 +71,7 @@ export class AddTaskComponent {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
       this.taskService.isLoading$.next(true);
+      debugger;
       if (!this.isEdit) {
         this.createTask();
       } else {
@@ -109,9 +111,7 @@ export class AddTaskComponent {
         this.taskService.isLoading$.next(false);
         this.addedTasksCount += 1;
         this.toaster.success(response.message);
-        setTimeout(() => {
           this.onCancel();
-        }, 2000);
       },
       error: (error) => {
         this.taskService.isLoading$.next(false);

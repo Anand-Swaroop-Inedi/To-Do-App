@@ -31,11 +31,11 @@
       @if(userForm.controls['userName'].invalid &&
       (isSubmitted||userForm.controls['userName'].touched ||
       userForm.controls['userName'].dirty)) {
-      <div *ngIf="userForm.controls['userName'].errors?.['required']">
-        <app-error [errorMessage]="requiredMessage"></app-error>
+      <div class="error-message" *ngIf="userForm.controls['userName'].errors?.['required']">
+        <app-error  [errorMessage]="requiredMessage"></app-error>
       </div>
-      <div *ngIf="userForm.controls['userName'].errors?.['pattern']">
-        <app-error [errorMessage]="usernameErrorMessage"></app-error>
+      <div class="error-message" *ngIf="userForm.controls['userName'].errors?.['pattern']">
+        <app-error  [errorMessage]="usernameErrorMessage"></app-error>
       </div>
       }
       <div class="form-input password">
@@ -58,12 +58,11 @@
       @if(userForm.controls['password'].invalid &&
       (isSubmitted||userForm.controls['password'].touched ||
       userForm.controls['password'].dirty)) {
-      <div *ngIf="userForm.controls['password'].errors?.['required']">
+      <div class="error-message" *ngIf="userForm.controls['password'].errors?.['required']">
         <app-error [errorMessage]="requiredMessage"></app-error>
       </div>
-      <div *ngIf="userForm.controls['password'].errors?.['pattern']">
+      <div class="error-message" *ngIf="userForm.controls['password'].errors?.['pattern']">
         <app-error
-          class="error-message"
           [errorMessage]="passwordErrorMessaage"
         ></app-error>
       </div>
