@@ -31,92 +31,42 @@ namespace BusinessLogicLayer.Services
             _config = configuration;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResponse> AddUser(UserDto user)
+        public async Task<int> AddUser(UserDto user)
         {
-            
-            try
-            {
                 _unitOfWork.BeginTransaction();
                 user.Password = PasswordHashing.HashPassword(user.Password);
                 User result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
                 if (result != null)
                 {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "UserName Already Exists so choose other",
-                        result = -1
-                    };
+                return 3;
                 }
                 else
                 {
                     _unitOfWork.UserRepository.AddUser(_mapper.Map<User>(user));
                     _unitOfWork.SaveChanges();
                     _unitOfWork.Commit();
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "Successfully registered",
-                        result = 0
-                    };
+                return 1;
                 }
-            }
-            catch (Exception ex)
-            {
-                _unitOfWork.Rollback();
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
         }
-        public async Task<ApiResponse> AuthenticateUser(UserDto user)
+        public async Task<int> AuthenticateUser(UserDto user)
         {
-            try
-            {
                 user.Password = PasswordHashing.HashPassword(user.Password);
                 User result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<User>(user));
                 if (result != null)
                 {
                     if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
                     {
-                        return new ApiResponse
-                        {
-                            StatusCode = 200,
-                            Message = "successfully logged in",
-                            result = GenerateToken(result.Id)
-                        };
-
-                }
+                    return result.Id;
+                    }
+                    else
+                    {
+                        return 3;
+                    }
+                 }
                 else
                 {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "Password is Incorrect",
-                        result = -1
-                    };
+                    return 4;
                 }
-                }
-                else
-                {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "UserName incorrect check the username",
-                        result = -1
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
         }
         /*public async Task<ApiResponse> AddUser(UserDto user)
         {
@@ -133,11 +83,7 @@ namespace BusinessLogicLayer.Services
             }
             return response;
         }*/
-        public async Task<ApiResponse> GetAllUsers()
-        {
-            return await _userRepository.GetAllUsers();
-        }
-        private string GenerateToken(int id)
+        public async Task<string> GenerateToken(int id)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var tokenDescdriptor = new SecurityTokenDescriptor

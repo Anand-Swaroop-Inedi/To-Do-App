@@ -27,13 +27,12 @@ export class TaskMenuComponent {
   constructor(
     private taskService: TaskService,
     private router: Router,
-    private toaster: ToastrService,
+    private toaster: ToastrService
   ) {}
   ngOnInit() {
     this.getUpdatedTasks();
   }
-  getUpdatedTasks()
-  {
+  getUpdatedTasks() {
     let name: string | undefined = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
     this.taskService.taskData$.subscribe((value) => {
@@ -69,26 +68,40 @@ export class TaskMenuComponent {
       this.makeTaskAsActive(id);
     }
   }
-  makeTaskAsCompleted(id:number)
-  {
-    this.taskService.makeTaskAsCompleted<ApiResponse>(id).subscribe((response) => {
-      if (response.statusCode == 200) {
-        this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
+  makeTaskAsCompleted(id: number) {
+    this.taskService.isLoading$.next(true);
+    this.taskService.makeTaskAsCompleted<ApiResponse>(id).subscribe({
+      next: (response) => {
+        this.taskService.isLoading$.next(false);
+        if (response.status == 1) {
+          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
+          this.toaster.success(response.message);
+        } else {
+          this.toaster.error(response.message);
+        }
+      },
+      error: (error) => {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error('Something went wrong. Please try again.');
+      },
     });
   }
-  makeTaskAsActive(id:number)
-  {
-    this.taskService.makeTaskAsActive<ApiResponse>(id).subscribe((response) => {
-      if (response.statusCode == 200) {
-        this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
+  makeTaskAsActive(id: number) {
+    this.taskService.isLoading$.next(true);
+    this.taskService.makeTaskAsActive<ApiResponse>(id).subscribe({
+      next: (response) => {
+        this.taskService.isLoading$.next(false);
+        if (response.status == 1) {
+          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
+          this.toaster.success(response.message);
+        } else {
+          this.toaster.error(response.message);
+        }
+      },
+      error: (error) => {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error('Something went wrong. Please try again.');
+      },
     });
   }
   openEditForm(task: Task) {

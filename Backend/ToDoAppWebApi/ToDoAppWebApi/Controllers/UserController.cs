@@ -19,17 +19,51 @@ namespace ToDoAppWebApi.Controllers
         [HttpPost("authenticate")]
         public async Task<ApiResponse> AuthenticateUser(UserDto user)
         {
-            return await _userManager.AuthenticateUser(user);
+            int result = await _userManager.AuthenticateUser(user);
+            if (result == 1)
+            {
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "successfully logged in",
+                    Result = await _userManager.GenerateToken(result)
+                };
+            }
+            else if (result == 3)
+            {
+                return new ApiResponse
+                {
+                    Status = 3,
+                    Message = "Password is Incorrect",
+                };
+            }
+            else
+            {
+                return new ApiResponse
+                {
+                    Status = 4,
+                    Message = "UserName incorrect check the username",
+                };
+            }
         }
         [HttpPost("add")]
         public async Task<ApiResponse> AddUser(UserDto user)
         {
-            return await _userManager.AddUser(user);
-        }
-        [HttpGet]
-        public async Task<ApiResponse> GetAllUsers()
-        {
-            return await _userManager.GetAllUsers();
+            int result= await _userManager.AddUser(user);
+            if(result==1)
+            {
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "Successfully registered",
+                };
+            }
+            return new ApiResponse
+            {
+                Status = 3,
+                Message = "UserName Already Exists so choose other",
+            };
+             
         }
     }
 }

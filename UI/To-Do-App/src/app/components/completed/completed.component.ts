@@ -4,30 +4,33 @@ import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.c
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-completed',
   standalone: true,
   imports: [TaskMenuComponent, TaskHeaderComponent],
   templateUrl: './completed.component.html',
-  styleUrl: './completed.component.scss'
+  styleUrl: './completed.component.scss',
 })
-export class CompletedComponent implements OnInit,OnDestroy {
-  pageManiulatedSubscribtion!:Subscription;
-  taskServiceSubscription!:Subscription;
-  constructor(private taskService: TaskService) {}
+export class CompletedComponent implements OnInit, OnDestroy {
+  pageManiulatedSubscribtion!: Subscription;
+  taskServiceSubscription!: Subscription;
+  constructor(
+    private taskService: TaskService,
+    private toaster: ToastrService
+  ) {}
   ngOnInit() {
     this.checkChangesMade();
     this.getCompletedTasksData();
   }
-  checkChangesMade()
-  {
-    this.pageManiulatedSubscribtion=this.taskService.pageManiulated$.subscribe((response)=>{
-      if(response=="completed")
-      {
-        this.sendUpdatedData();
-      }
-    });
+  checkChangesMade() {
+    this.pageManiulatedSubscribtion =
+      this.taskService.pageManiulated$.subscribe((response) => {
+        if (response == 'completed') {
+          this.sendUpdatedData();
+        }
+      });
   }
   sendUpdatedData() {
     this.getCompletedTasksData();
@@ -35,17 +38,21 @@ export class CompletedComponent implements OnInit,OnDestroy {
 
   getCompletedTasksData() {
     this.taskService.isLoading$.next(true);
-    this.taskServiceSubscription=this.taskService.getCompletedTasks<ApiResponse>().subscribe((response) => {
-      this.taskService.isLoading$.next(false);
-      if (response.statusCode == 200) {
-        this.taskService.taskData$.next(response.result);
-      }
-    });
+    this.taskServiceSubscription = this.taskService
+      .getCompletedTasks<ApiResponse>()
+      .subscribe({
+        next: (response) => {
+          this.taskService.isLoading$.next(false);
+          this.taskService.taskData$.next(response.result);
+        },
+        error: (error) => {
+          this.taskService.isLoading$.next(false);
+          this.toaster.error('Something went wrong. Please try again.');
+        },
+      });
   }
-  ngOnDestroy()
-  {
+  ngOnDestroy() {
     this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();
   }
 }
-

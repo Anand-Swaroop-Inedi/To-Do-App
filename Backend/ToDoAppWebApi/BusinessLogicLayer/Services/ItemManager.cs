@@ -20,93 +20,53 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResponse> AddItem(ItemDto item)
+        public async Task<int> AddItem(ItemDto item)
         {
-            try
+            _unitOfWork.BeginTransaction();
+            string time = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+            int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
+            int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
+            if (result > 0)
             {
-                _unitOfWork.BeginTransaction();
-                string time = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
-                int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
-                int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
+
+                item.Itemid = result;
+                result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<Useritem>(item));
                 if (result > 0)
                 {
-
-                    item.Itemid = result;
-                    result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<Useritem>(item));
-                    if (result > 0)
-                    {
-                        return new ApiResponse
-                        {
-                            StatusCode = 500,
-                            Message = "Task already exists"
-                        };
-                    }
-                    Useritem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<Useritem>(item));
-                    if (u != null)
-                    {
-                        u.Statusid = statusId;
-                        u.Createdon = time;
-                        await _unitOfWork.UserItemRepository.Update(u);
-                    }
-                    else
-                    {
-                        item.Statusid = statusId;
-                        item.Createdon = time;
-                        await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
-                    }
-
+                        return 2;
+                }
+                Useritem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<Useritem>(item));
+                if (u != null)
+                {
+                    u.Statusid = statusId;
+                    u.Createdon = time;
+                    await _unitOfWork.UserItemRepository.Update(u);
                 }
                 else
                 {
-                    await _unitOfWork.ItemRepository.Add(_mapper.Map<Item>(item));
-                    item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
-                    item.Createdon = time;
                     item.Statusid = statusId;
+                    item.Createdon = time;
                     await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
                 }
-                _unitOfWork.Commit();
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "Task added successfully"
-                };
 
             }
-            catch (Exception ex)
+            else
             {
-                _unitOfWork.Rollback();
-                var apiResponse = new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-                return apiResponse;
+                await _unitOfWork.ItemRepository.Add(_mapper.Map<Item>(item));
+                item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
+                item.Createdon = time;
+                item.Statusid = statusId;
+                await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<Useritem>(item));
             }
+            _unitOfWork.Commit();
+            return 1;
         }
-        public async Task<ApiResponse> GetAll(int userId)
+        public async Task<List<ItemDto>> GetAll(int userId)
         {
-            try
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "Successful",
-                    result = _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetAll(userId))
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetAll(userId));
         }
-        public async Task<ApiResponse> UpdateItem(ItemDto item)
+        public async Task UpdateItem(ItemDto item)
         {
-            try
-            {
                 _unitOfWork.BeginTransaction();
                 int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<Item>(item));
                 if (result == 0)
@@ -121,123 +81,33 @@ namespace BusinessLogicLayer.Services
                 item.Isdeleted = 0;
                 await _unitOfWork.UserItemRepository.Update(_mapper.Map<Useritem>(item));
                 _unitOfWork.Commit();
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "Updated successfully"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
         }
-        public async Task<ApiResponse> DeleteItem(int id, int userId)
+        public async Task<int> DeleteItem(int id, int userId)
         {
-            try
-            {
                 Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
                 if (result != null)
                 {
                     await _unitOfWork.UserItemRepository.DeleteItem(result, userId);
                     _unitOfWork.Commit();
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "Task Deleted from the list successfully"
-                    };
+                    return 1;
                 }
-                else
-                {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "Id not found"
-                    };
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
+                return 2;
         }
-        public async Task<ApiResponse> DeleteItems(int userId)
-        {
-            try
-            {
+        public async Task DeleteItems(int userId)
+        { 
                 await _unitOfWork.UserItemRepository.DeleteAllItems(userId);
                 _unitOfWork.Commit();
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "All Tasks Deleted from the your list successfully"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-
-                };
-            }
         }
-        public async Task<ApiResponse> GetActiveItems(int userId)
+        public async Task<List<ItemDto>> GetActiveItems(int userId)
         {
-            try
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "Successful",
-                    result = _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId))
-                };
-
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId));
         }
-        public async Task<ApiResponse> GetCompletedItems(int userId)
+        public async Task<List<ItemDto>> GetCompletedItems(int userId)
         {
-            try
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "Successful",
-                    result = _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId))
-                };
-
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId));
         }
-        public async Task<ApiResponse> CompletionPercentage(int userId)
+        public async Task<int[]> CompletionPercentage(int userId)
         {
-            try
-            {
                 int count = await _unitOfWork.UserItemRepository.GetCompletedItemsCount(userId);
                 int totalCount = await _unitOfWork.UserItemRepository.TotalItemsCount(userId);
                 int completedPercentage = 0;
@@ -247,57 +117,28 @@ namespace BusinessLogicLayer.Services
                     completedPercentage = (int)Math.Round((double)count * 100 / totalCount);
                     activePercentage = (int)Math.Round((double)(totalCount - count) * 100 / totalCount);
                 }
-                return new ApiResponse { StatusCode = 200, Message = "Successful", result = new int[] { completedPercentage, activePercentage } };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
-            }
+                return new int[] { completedPercentage, activePercentage } ;
         }
-        public async Task<ApiResponse> makeItemCompleted(int id, int userId)
+        public async Task<int> makeItemCompleted(int id, int userId)
         {
-            try
-            {
                 Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
-                if (result != null)
-                {
-                    result.Statusid = await _unitOfWork.StatusRepository.getIdByName("COMPLETED");
-                    result.Completedon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
-                    await _unitOfWork.UserItemRepository.Update(result);
-                    _unitOfWork.Commit();
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "Task Updated as completed"
-                    };
-                }
-                else
-                {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "Task not found"
-                    };
-                }
-
-            }
-            catch (Exception ex)
+            if (result != null)
             {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
+                result.Statusid = await _unitOfWork.StatusRepository.getIdByName("COMPLETED");
+                result.Completedon = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+                await _unitOfWork.UserItemRepository.Update(result);
+                _unitOfWork.Commit();
+                return 1;
+               
+            }
+            else
+            {
+                return 3;
+                
             }
         }
-        public async Task<ApiResponse> makeItemActive(int id, int userId)
+        public async Task<int> makeItemActive(int id, int userId)
         {
-            try
-            {
                 Useritem result = await _unitOfWork.UserItemRepository.GetItemById(id, userId);
                 if (result != null)
                 {
@@ -306,30 +147,13 @@ namespace BusinessLogicLayer.Services
                     await _unitOfWork.UserItemRepository.Update(result);
                     _unitOfWork.SaveChanges();
                     _unitOfWork.Commit();
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "Task Updated as active"
-                    };
+                return 1;
                 }
-                else
-                {
-                    return new ApiResponse
-                    {
-                        StatusCode = 500,
-                        Message = "Task not found"
-                    };
-                }
-
-            }
-            catch (Exception ex)
+            else
             {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = ex.Message
-                };
+                return 3;
             }
+
         }
         /*public async Task<ApiResponse> AddItem(ItemDto item)
         {

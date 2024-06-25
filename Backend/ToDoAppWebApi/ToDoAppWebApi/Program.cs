@@ -7,6 +7,7 @@ using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ToDoAppWebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IStatusRepository,StatusRepository>();
 builder.Services.AddTransient<IItemManager,ItemManager>();
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -58,12 +60,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

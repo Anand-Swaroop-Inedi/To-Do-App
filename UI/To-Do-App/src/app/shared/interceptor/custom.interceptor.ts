@@ -10,17 +10,8 @@ export const customInterceptor: HttpInterceptorFn = (req, next) => {
     headers: req.headers.set('Authorization', `Bearer ${token}`),
   });
   return next(req).pipe(
-    catchError((err: any) => {
-      if (err instanceof HttpErrorResponse) {
-        if (err.status == 401) {
-          toaster.error('Un Authorized');
-        } else {
-          toaster.error('Http Error ' + err.message);
-        }
-      } else {
-        toaster.error(err.message);
-      }
-      return throwError(() => err);
+    catchError((error: HttpErrorResponse) => {
+      return throwError(() => error);
     })
   );
 };

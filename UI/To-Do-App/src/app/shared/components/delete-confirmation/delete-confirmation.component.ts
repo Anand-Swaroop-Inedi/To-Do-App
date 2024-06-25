@@ -17,51 +17,49 @@ export class DeleteConfirmationComponent {
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private router:Router
+    private router: Router
   ) {}
   onCancel() {
     this.close.emit();
   }
   onDelete() {
     if (this.id == 0) {
-      this.DeleteAll()
-    }
-    else{
+      this.DeleteAll();
+    } else {
       this.DeleteSingleTask();
     }
   }
-  DeleteAll()
-  {
+  DeleteAll() {
     this.taskService.isLoading$.next(true);
-    this.taskService
-      .deleteAllTasks<ApiResponse>()
-      .subscribe((response) => {
+    this.taskService.deleteAllTasks<ApiResponse>().subscribe({
+      next: (response) => {
         this.taskService.isLoading$.next(false);
-        if (response.statusCode == 200) {
-          this.taskService.pageManiulated$.next('dashboard');
-          this.toaster.success(response.message);
-        } else {
-          this.toaster.error(response.message);
-        }
+        this.taskService.pageManiulated$.next('dashboard');
+        this.toaster.success(response.message);
         this.onCancel();
-      });
+      },
+      error: (error) => {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error('Something went wrong. Please try again.');
+      },
+    });
   }
-  DeleteSingleTask()
-  {
+  DeleteSingleTask() {
     this.taskService.isLoading$.next(true);
-    this.taskService.deleteTask<ApiResponse>(this.id).subscribe((response) => {
-      this.taskService.isLoading$.next(false);
-      if (response.statusCode == 200) {
-        const url=this.router.url.split('/').pop();
-        if(url)
-        {
+    this.taskService.deleteTask<ApiResponse>(this.id).subscribe({
+      next: (response) => {
+        this.taskService.isLoading$.next(false);
+        const url = this.router.url.split('/').pop();
+        if (url) {
           this.taskService.pageManiulated$.next(url);
         }
         this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
-      this.onCancel();
+        this.onCancel();
+      },
+      error: (error) => {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error('Something went wrong. Please try again.');
+      },
     });
   }
 }

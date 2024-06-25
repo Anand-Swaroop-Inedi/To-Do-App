@@ -10,16 +10,16 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IItemManager
     {
-        public Task<ApiResponse> AddItem(ItemDto task);
-        public  Task<ApiResponse> GetAll(int userId);
-        public Task<ApiResponse> UpdateItem(ItemDto task);
-        public Task<ApiResponse> DeleteItem(int id, int userId);
-        public Task<ApiResponse> GetActiveItems(int userId);
-        public Task<ApiResponse> GetCompletedItems(int userId);
-        public Task<ApiResponse> DeleteItems(int userId);
-        public Task<ApiResponse> CompletionPercentage(int userId);
-        public Task<ApiResponse> makeItemCompleted(int id, int userId);
-        public Task<ApiResponse> makeItemActive(int id, int UserId);
+        public Task<int> AddItem(ItemDto task);
+        public  Task<List<ItemDto>> GetAll(int userId);
+        public Task UpdateItem(ItemDto task);
+        public Task<int> DeleteItem(int id, int userId);
+        public Task<List<ItemDto>> GetActiveItems(int userId);
+        public Task<List<ItemDto>> GetCompletedItems(int userId);
+        public Task DeleteItems(int userId);
+        public Task<int[]> CompletionPercentage(int userId);
+        public Task<int> makeItemCompleted(int id, int userId);
+        public Task<int> makeItemActive(int id, int UserId);
 
     }
 }

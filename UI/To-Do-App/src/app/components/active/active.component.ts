@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { TaskService } from '../../services/task/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
@@ -12,13 +19,13 @@ import { Subscription } from 'rxjs';
   styleUrl: './active.component.scss',
   imports: [TaskHeaderComponent, TaskMenuComponent],
 })
-export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
+export class ActiveComponent implements OnInit, OnDestroy, OnChanges {
   name: string = 'Active';
   @Input() changeMenu: boolean = false;
-  taskServiceSubscription!:Subscription;
+  taskServiceSubscription!: Subscription;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService,
+    private toaster: ToastrService
   ) {}
   ngOnInit() {
     this.checkPageManipulated();
@@ -30,11 +37,9 @@ export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
       this.getActiveTasksData();
     }
   }
-  checkPageManipulated()
-  {
-    this.taskService.pageManiulated$.subscribe((response)=>{
-      if(response=="active")
-      {
+  checkPageManipulated() {
+    this.taskService.pageManiulated$.subscribe((response) => {
+      if (response == 'active') {
         this.sendUpdatedData();
       }
     });
@@ -44,18 +49,20 @@ export class ActiveComponent implements OnInit,OnDestroy,OnChanges {
   }
   getActiveTasksData() {
     this.taskService.isLoading$.next(true);
-    this.taskServiceSubscription=this.taskService
+    this.taskServiceSubscription = this.taskService
       .getActiveTasks<ApiResponse>()
-      .subscribe((response) => {
-        this.taskService.isLoading$.next(false);
-        if (response.statusCode == 200) {
+      .subscribe({
+        next: (response) => {
+          this.taskService.isLoading$.next(false);
           this.taskService.taskData$.next(response.result);
-        } else {
-          this.toaster.error(response.message);
-        }
+        },
+        error: (error) => {
+          this.taskService.isLoading$.next(false);
+          this.toaster.error('Something went wrong. Please try again.');
+        },
       });
   }
   ngOnDestroy(): void {
-      this.taskServiceSubscription.unsubscribe();
+    this.taskServiceSubscription.unsubscribe();
   }
 }

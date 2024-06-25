@@ -21,61 +21,145 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> AddItem(ItemDto item)
         {
             item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.AddItem(item);
+            int result = await _itemManager.AddItem(item);
+            if (result==1)
+            {
+                return new ApiResponse { 
+                            Status=1,
+                            Message="Task Added Successfully"
+                };
+
+            }
+            else
+            {
+                return new ApiResponse
+                {
+                    Status = 3,
+                    Message = "Task already exists"
+                };
+            }
         }
         [HttpGet("all")]
         public async Task<ApiResponse> GetAllItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.GetAll(userId);
+            return new ApiResponse
+            {
+                Status = 1,
+                Message = "Successful",
+                Result = await _itemManager.GetAll(userId)
+        };
         }
         [HttpDelete("delete")]
         public async Task<ApiResponse> DeleteItem(int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.DeleteItem(id,userId);
+            int result =await _itemManager.DeleteItem(id, userId);
+            if(result==1)
+            {
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "Task Deleted from the list successfully"
+                };
+            }
+            else
+            {
+                return new ApiResponse
+                {
+                    Status = 3,
+                    Message = "Task Id doesn't exist"
+                };
+            }
         }
         [HttpPut("update")]
         public async Task<ApiResponse> UpdateItem(ItemDto item)
         {
             item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.UpdateItem(item);
+             await _itemManager.UpdateItem(item);
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "Updated successfully",
+                };   
         }
         [HttpGet("active-items")]
         public async Task<ApiResponse> GetActiveItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.GetActiveItems(userId);
+            return new ApiResponse { Status = 1, Message = "Successfull", Result = await _itemManager.GetActiveItems(userId) };
         }
         [HttpGet("completed-items")]
         public async Task<ApiResponse> GetCompletedItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.GetCompletedItems(userId);
+            return new ApiResponse { Status = 1, Message = "Successfull", Result = await _itemManager.GetCompletedItems(userId) };
         }
         [HttpDelete("delete-all")]
         public async Task<ApiResponse> DeleteAllItems()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.DeleteItems(userId);
+            _itemManager.DeleteItems(userId);
+            return new ApiResponse
+            {
+                Status = 1,
+                Message = "All Tasks Deleted from the your list successfully"
+            };
         }
         [HttpGet("completion-percentage")]
         public async Task<ApiResponse> CompletionPercentage()
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.CompletionPercentage(userId);
+            return new ApiResponse
+            {
+                Status = 1,
+                Message = "Successfull",
+                Result= await _itemManager.CompletionPercentage(userId)
+            };
         }
         [HttpPost("completed")]
         public async Task<ApiResponse> makeItemCompleted([FromBody]int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.makeItemCompleted(id, userId);
+            int result= await _itemManager.makeItemCompleted(id, userId);
+            if (result == 1)
+            {
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "Task Updated as completed"
+                };
+            }
+            else
+            {
+                return new ApiResponse
+                {
+                    Status = 3,
+                    Message = "Task not found"
+                };
+            }
         }
         [HttpPost("active")]
         public async Task<ApiResponse> makeItemActive([FromBody] int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return await _itemManager.makeItemActive(id, userId);
+            int result= await _itemManager.makeItemActive(id, userId);
+            if(result==1)
+            {
+                return new ApiResponse
+                {
+                    Status = 1,
+                    Message = "Task Updated as active"
+                };
+            }
+            else
+            {
+                return new ApiResponse
+                {
+                    Status = 3,
+                    Message = "Task not found"
+                };
+            }
         }
     }
 }

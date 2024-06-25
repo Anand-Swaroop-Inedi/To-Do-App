@@ -18,17 +18,22 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
 import { ApiResponse } from '../../models/ApiResponse';
-import { SpinnerComponent } from "../../shared/components/spinner/spinner.component";
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { TaskService } from '../../services/task/task.service';
 import { UserService } from '../../services/user/user.service';
 import { routePaths } from '../../shared/route-paths/route-paths';
 
 @Component({
-    selector: 'app-authenticate',
-    standalone: true,
-    templateUrl: './authenticate.component.html',
-    styleUrl: './authenticate.component.scss',
-    imports: [CommonModule, ReactiveFormsModule, ErrorComponent, SpinnerComponent]
+  selector: 'app-authenticate',
+  standalone: true,
+  templateUrl: './authenticate.component.html',
+  styleUrl: './authenticate.component.scss',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorComponent,
+    SpinnerComponent,
+  ],
 })
 export class AuthenticateComponent implements OnInit, AfterViewInit {
   @ViewChild('password') passwordRef!: ElementRef<HTMLInputElement>;
@@ -48,11 +53,11 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
     private router: Router,
     private toaster: ToastrService,
     private userService: UserService,
-    private taskService:TaskService
+    private taskService: TaskService
   ) {}
   ngOnInit() {
-    this.checkTokenPresent();
-    this.assignVariablesBasedOnPage();
+    this.isTokenExists();
+    this.assignVariablesBasedOnPageName();
     this.createForm();
   }
   ngAfterViewInit(): void {
@@ -63,8 +68,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       ? 'Username'
       : 'Enter your username';
   }
-  createForm()
-  {
+  createForm() {
     this.userForm = new FormGroup({
       userName: new FormControl('', [
         Validators.required,
@@ -80,8 +84,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       ]),
     });
   }
-  assignVariablesBasedOnPage()
-  {
+  assignVariablesBasedOnPageName() {
     var pageName = this.router.url.split('/').pop();
     if (pageName && pageName == 'signup') {
       this.isSignUp = true;
@@ -93,10 +96,8 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       ? 'Already have an account? sign in'
       : "Don't have an account? Create";
   }
-  checkTokenPresent()
-  {
-    if(sessionStorage.getItem('Token')!=null)
-    {
+  isTokenExists() {
+    if (sessionStorage.getItem('Token') != null) {
       this.router.navigate(routePaths.dashboard);
     }
   }
@@ -111,41 +112,49 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  addNewUser()
-  {
-    this.userService
-    .addUser<ApiResponse>(this.userForm.value)
-    .subscribe((response) => {
-      if (response.statusCode == 200) {
-        setTimeout(() => {
-          this.userForm.reset();
-          this.toaster.warning('Sign in Now to view dashboard');
-          this.taskService.isLoading$.next(false);
-          this.navigate();
-        }, 2000);
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
+  addNewUser() {
+    this.userService.addUser<ApiResponse>(this.userForm.value).subscribe({
+      next: (response) => {
         this.taskService.isLoading$.next(false);
-      }
+        if (response.status == 1) {
+          setTimeout(() => {
+            this.userForm.reset();
+            this.toaster.warning('Sign in Now to view dashboard');
+            this.taskService.isLoading$.next(false);
+            this.navigate();
+          }, 2000);
+          this.toaster.success(response.message);
+        } else {
+          this.toaster.error(response.message);
+        }
+      },
+      error: (error) => {
+        this.taskService.isLoading$.next(false);
+        this.toaster.error('Something went wrong. Please try again.');
+      },
     });
   }
-  authenticateUser()
-  {
+  authenticateUser() {
     this.userService
-    .authenticateUser<ApiResponse>(this.userForm.value)
-    .subscribe((response) => {
-      if (response.statusCode == 200) {
-        sessionStorage.setItem('Token', response.result);
-        setTimeout(() => {
-          this.router.navigate(routePaths.dashboard);
-        }, 3000);
-        this.toaster.success(response.message);
-      } else {
-        this.toaster.error(response.message);
-      }
-      this.taskService.isLoading$.next(false);
-    });
+      .authenticateUser<ApiResponse>(this.userForm.value)
+      .subscribe({
+        next: (response) => {
+          this.taskService.isLoading$.next(false);
+          if (response.status == 1) {
+            sessionStorage.setItem('Token', response.result);
+            setTimeout(() => {
+              this.router.navigate(routePaths.dashboard);
+            }, 3000);
+            this.toaster.success(response.message);
+          } else {
+            this.toaster.error(response.message);
+          }
+        },
+        error: (error) => {
+          this.taskService.isLoading$.next(false);
+          this.toaster.error('Something went wrong. Please try again.');
+        },
+      });
   }
   navigate() {
     this.clear();
@@ -154,7 +163,7 @@ export class AuthenticateComponent implements OnInit, AfterViewInit {
       this.router.navigate(routePaths.signup);
     }
   }
-  clear(){
+  clear() {
     this.userForm.reset();
     Object.keys(this.userForm.controls).forEach((field) => {
       this.userForm.get(field)!.setErrors(null);

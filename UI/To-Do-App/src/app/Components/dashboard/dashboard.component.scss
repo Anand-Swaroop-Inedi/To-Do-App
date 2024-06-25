@@ -36,19 +36,20 @@
 .menu-items-mobile {
   display: none;
 }
-.mobile-header{
+.mobile-header {
   display: none;
 }
 @media only screen and (max-width: 900px) {
-  .mobile-header{
+  .mobile-header {
     display: block;
   }
-  .desktop-header{
+  .desktop-header {
     display: none;
   }
   .menu-items {
     display: flex;
     flex-direction: column-reverse;
+    margin: 0px 0px;
   }
   .task-menu {
     width: 100%;
@@ -64,12 +65,16 @@
     height: 100px;
   }
   .description h1 {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     text-align: left;
   }
+  .description p {
+    font-size: 12px;
+  }
   .hero-section {
     height: 140px;
-    padding: 20px 0px 20px 20px;
+    padding: 20px 0px 20px 10px;
+    margin-left: 0px;
   }
 }

@@ -6,7 +6,7 @@ import { routePaths } from '../../shared/route-paths/route-paths';
   standalone: true,
   imports: [],
   templateUrl: './index.component.html',
-  styleUrl: './index.component.scss'
+  styleUrl: './index.component.scss',
 })
 export class IndexComponent implements OnInit {
   constructor(private router: Router) {}

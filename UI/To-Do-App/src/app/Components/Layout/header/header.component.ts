@@ -3,7 +3,7 @@ import {
   EventEmitter,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import {
   Router,
@@ -21,16 +21,15 @@ import { routePaths } from '../../../shared/route-paths/route-paths';
   styleUrl: './header.component.scss',
   imports: [],
 })
-export class HeaderComponent implements OnInit,OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
   pageName: string = '';
   routerSubscription!: Subscription;
-  constructor(private router: Router,private toaster:ToastrService) {}
+  constructor(private router: Router, private toaster: ToastrService) {}
   ngOnInit() {
     this.setPageName();
   }
-  setPageName()
-  {
+  setPageName() {
     let name = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
     this.routerSubscription = this.router.events.subscribe(
@@ -44,7 +43,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
   onSignOut() {
     sessionStorage.removeItem('Token');
-    this.toaster.success("Signed out successfully");
+    this.toaster.success('Signed out successfully');
     this.router.navigate(routePaths.index);
     debugger;
   }

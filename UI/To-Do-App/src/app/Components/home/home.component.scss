@@ -37,7 +37,7 @@
   border-radius: 5px;
   box-shadow: 4px 4px 8px 0px #00000026;
 }
-.delete-box{
+.delete-box {
   display: none;
   position: absolute;
   background-color: white;
@@ -51,10 +51,11 @@
 }
 @media only screen and (max-width: 900px) {
   .add-task {
-    width: 90%;
-    left: 8%;
+    width: 280px;
+    left: calc(50% - 130px);
+    top: calc(50% - 130px);
   }
-  .delete-box{
+  .delete-box {
     width: 70%;
     left: 18%;
   }

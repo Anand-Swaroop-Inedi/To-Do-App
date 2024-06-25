@@ -8,8 +8,8 @@ namespace Models
 {
     public class ApiResponse
     {
-        public int StatusCode { get; set; }
+        public int Status { get; set; }
         public string Message { get; set; }
-        public object result {  get; set; }
+        public object? Result {  get; set; }
     }
 }

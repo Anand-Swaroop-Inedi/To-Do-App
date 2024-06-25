@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './side-bar-mobile.component.html',
   styleUrl: './side-bar-mobile.component.scss',
 })
-export class SideBarMobileComponent implements AfterViewInit,OnDestroy {
+export class SideBarMobileComponent implements AfterViewInit, OnDestroy {
   @Output() name: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('menu') selectMenu!: ElementRef<HTMLInputElement>;
   routerSubscription!: Subscription;
@@ -30,8 +30,7 @@ export class SideBarMobileComponent implements AfterViewInit,OnDestroy {
   ngAfterViewInit(): void {
     this.assignDefaultSelect();
   }
-  assignDefaultSelect()
-  {
+  assignDefaultSelect() {
     const url: any = this.router.url.split('/').pop();
     if (url) this.selectMenu.nativeElement.value = url;
     this.routerSubscription = this.router.events.subscribe(
@@ -53,8 +52,7 @@ export class SideBarMobileComponent implements AfterViewInit,OnDestroy {
       this.router.navigateByUrl('/home/completed');
     }
   }
-  ngOnDestroy()
-  {
+  ngOnDestroy() {
     this.routerSubscription.unsubscribe();
   }
 }

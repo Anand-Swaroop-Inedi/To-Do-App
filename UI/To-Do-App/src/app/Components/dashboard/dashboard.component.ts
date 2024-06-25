@@ -1,5 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
@@ -21,16 +28,16 @@ import { Subscription } from 'rxjs';
     TaskHeaderComponent,
   ],
 })
-export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
+export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
   name: string = 'dashboard';
   tasks: Task[] = [];
   @Input() changeMenu: boolean = false;
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
-  pageManiulatedSubscribtion!:Subscription;
-  taskServiceSubscription!:Subscription;
+  pageManiulatedSubscribtion!: Subscription;
+  taskServiceSubscription!: Subscription;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService,
+    private toaster: ToastrService
   ) {}
   ngOnInit() {
     this.checkDashboardManipulated();
@@ -41,14 +48,13 @@ export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
       this.getAllTasksData();
     }
   }
-  checkDashboardManipulated()
-  {
-    this.pageManiulatedSubscribtion=this.taskService.pageManiulated$.subscribe((value)=>{
-      if(value=='dashboard')
-      {
-        this.sendUpdatedData();
-      }
-    });
+  checkDashboardManipulated() {
+    this.pageManiulatedSubscribtion =
+      this.taskService.pageManiulated$.subscribe((value) => {
+        if (value == 'dashboard') {
+          this.sendUpdatedData();
+        }
+      });
   }
   sendUpdatedData() {
     this.getAllTasksData();
@@ -56,17 +62,20 @@ export class DashboardComponent implements OnInit, OnChanges,OnDestroy {
   }
   getAllTasksData() {
     this.taskService.isLoading$.next(true);
-    this.taskServiceSubscription=this.taskService.getAllTasks<ApiResponse>().subscribe((response) => {
-      this.taskService.isLoading$.next(false);
-      if (response.statusCode == 200) {
-        this.taskService.taskData$.next(response.result);
-      } else {
-        this.toaster.error(response.message);
-      }
-    });
+    this.taskServiceSubscription = this.taskService
+      .getAllTasks<ApiResponse>()
+      .subscribe({
+        next: (response) => {
+          this.taskService.isLoading$.next(false);
+          this.taskService.taskData$.next(response.result);
+        },
+        error: (error) => {
+          this.taskService.isLoading$.next(false);
+          this.toaster.error('Something went wrong. Please try again.');
+        },
+      });
   }
-  ngOnDestroy()
-  {
+  ngOnDestroy() {
     this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();
   }

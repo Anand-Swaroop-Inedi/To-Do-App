@@ -109,22 +109,5 @@ namespace DataAccessLayer.Repositories
                 };
             }
         }*/
-        public async Task<ApiResponse> GetAllUsers()
-        {
-            try
-            {
-                return new ApiResponse 
-                    { StatusCode=200,Message="Successful",result= _context.Users.ToList()};
-
-            }
-            catch(Exception e)
-            {
-                return new ApiResponse
-                {
-                    StatusCode = 500,
-                    Message = e.Message
-                };
-            }
-        }
     }
 }
