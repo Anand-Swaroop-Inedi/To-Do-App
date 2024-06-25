@@ -15,7 +15,7 @@ namespace DataAccessLayer.Repositories
         public UnitOfWork(ToDoAppContext context)
         {
             _context = context;
-            _transaction = null; 
+            _transaction = null;
         }
 
         public IItemsRepository ItemRepository
@@ -38,7 +38,7 @@ namespace DataAccessLayer.Repositories
         }
         public IErrorLogRepository ErrorLogRepository
         {
-            get { return _errorRepository??=new ErrorLogRepository(_context); }
+            get { return _errorRepository ??= new ErrorLogRepository(_context); }
         }
 
         public void SaveChanges()

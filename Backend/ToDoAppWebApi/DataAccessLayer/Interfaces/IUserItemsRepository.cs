@@ -18,7 +18,7 @@ namespace DataAccessLayer.Interfaces
         public Task<UserItem> GetItemById(int id, int userId);
         public Task DeleteItem(UserItem item, int UserId);
         public Task DeleteAllItems(int UserId);
-        public  Task<List<UserItem>> GetActiveItems(int UserId);
+        public Task<List<UserItem>> GetActiveItems(int UserId);
         public Task<List<UserItem>> GetCompletedItems(int UserId);
         public Task<int> GetCompletedItemsCount(int userId);
         public Task<int> TotalItemsCount(int userId);

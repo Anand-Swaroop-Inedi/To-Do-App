@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services
 {
-    public class ErrorLogManager:IErrorLogManager
+    public class ErrorLogManager : IErrorLogManager
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ErrorLogManager(IUnitOfWork unitOfWork,IMapper mapper) 
+        public ErrorLogManager(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

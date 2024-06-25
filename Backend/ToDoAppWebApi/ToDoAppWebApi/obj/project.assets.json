@@ -4507,11 +4507,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\ToDoAppWebApi.csproj",
+      "projectUniqueName": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\ToDoAppWebApi.csproj",
       "projectName": "ToDoAppWebApi",
-      "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\ToDoAppWebApi.csproj",
+      "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\ToDoAppWebApi.csproj",
       "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\obj\\",
+      "outputPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\ToDoAppWebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4528,8 +4528,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
-              "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
+            "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+              "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
             }
           }
         }

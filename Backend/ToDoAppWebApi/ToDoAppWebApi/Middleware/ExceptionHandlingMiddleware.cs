@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 
-namespace ToDoAppWebApi
+namespace ToDoAppWebApi.Middleware
 {
-    public class ExceptionHandlingMiddleware:IMiddleware
+    public class ExceptionHandlingMiddleware : IMiddleware
     {
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
         private readonly IErrorLogManager _errorLogManager;
-        public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger,IErrorLogManager errorLogManager)
+        public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger, IErrorLogManager errorLogManager)
         {
             _logger = logger;
             _errorLogManager = errorLogManager;
@@ -25,7 +25,7 @@ namespace ToDoAppWebApi
             catch (Exception ex)
             {
                 _logger.LogInformation(ex.Message, ex);
-                ErrorLogDto error=await this.CreateErrorModel(ex);
+                ErrorLogDto error = await CreateErrorModel(ex);
                 _errorLogManager.addError(error);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -61,7 +61,7 @@ namespace ToDoAppWebApi
                         var fileParts = fileAndLine.Split(':');
                         if (fileParts.Length == 3)
                         {
-                            error.Filename = fileParts[0]+':'+ fileParts[1];
+                            error.Filename = fileParts[0] + ':' + fileParts[1];
                             error.Linenumber = int.Parse(fileParts[2].Split(' ')[1]);
                         }
                     }

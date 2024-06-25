@@ -21,7 +21,7 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> AuthenticateUser(UserDto user)
         {
             int result = await _userManager.AuthenticateUser(user);
-            if (result ==(int) ResponseMessages.Messages.Success)
+            if (result == (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
@@ -50,8 +50,8 @@ namespace ToDoAppWebApi.Controllers
         [HttpPost("add")]
         public async Task<ApiResponse> AddUser(UserDto user)
         {
-            int result= await _userManager.AddUser(user);
-            if(result==1)
+            int result = await _userManager.AddUser(user);
+            if (result == 1)
             {
                 return new ApiResponse
                 {
@@ -64,7 +64,7 @@ namespace ToDoAppWebApi.Controllers
                 Status = 3,
                 Message = "UserName Already Exists so choose other",
             };
-             
+
         }
     }
 }

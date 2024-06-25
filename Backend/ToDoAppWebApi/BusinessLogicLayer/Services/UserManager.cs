@@ -18,13 +18,13 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services
 {
-    public class UserManager: IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private IConfiguration _config;
         private IUnitOfWork _unitOfWork;
-        public UserManager(IUserRepository userRepository,IMapper mapper,IConfiguration configuration,IUnitOfWork unitOfWork) 
+        public UserManager(IUserRepository userRepository, IMapper mapper, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -33,40 +33,40 @@ namespace BusinessLogicLayer.Services
         }
         public async Task<int> AddUser(UserDto user)
         {
-                _unitOfWork.BeginTransaction();
-                user.Password = PasswordHashing.HashPassword(user.Password);
-                User result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
-                if (result != null)
-                {
+            _unitOfWork.BeginTransaction();
+            user.Password = PasswordHashing.HashPassword(user.Password);
+            User result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
+            if (result != null)
+            {
                 return 3;
-                }
-                else
-                {
-                    _unitOfWork.UserRepository.AddUser(_mapper.Map<User>(user));
-                    _unitOfWork.SaveChanges();
-                    _unitOfWork.Commit();
+            }
+            else
+            {
+                _unitOfWork.UserRepository.AddUser(_mapper.Map<User>(user));
+                _unitOfWork.SaveChanges();
+                _unitOfWork.Commit();
                 return 1;
-                }
+            }
         }
         public async Task<int> AuthenticateUser(UserDto user)
         {
-                user.Password = PasswordHashing.HashPassword(user.Password);
-                User result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<User>(user));
-                if (result != null)
+            user.Password = PasswordHashing.HashPassword(user.Password);
+            User result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<User>(user));
+            if (result != null)
+            {
+                if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
-                    {
                     return 1;
-                    }
-                    else
-                    {
-                        return 3;
-                    }
-                 }
+                }
                 else
                 {
-                    return 4;
+                    return 3;
                 }
+            }
+            else
+            {
+                return 4;
+            }
         }
         /*public async Task<ApiResponse> AddUser(UserDto user)
         {
@@ -92,11 +92,12 @@ namespace BusinessLogicLayer.Services
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
                 Issuer = _config["Jwt:Issuer"],
                 Audience = _config["Jwt:Audience"]
-                ,Subject = new ClaimsIdentity(new Claim[] {
+                ,
+                Subject = new ClaimsIdentity(new Claim[] {
                     new Claim("Id",id.ToString())
                 })
             };
-            var token= new JwtSecurityTokenHandler().CreateToken(tokenDescdriptor);
+            var token = new JwtSecurityTokenHandler().CreateToken(tokenDescdriptor);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

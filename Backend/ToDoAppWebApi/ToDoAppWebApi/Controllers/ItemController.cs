@@ -1,10 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
-using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using System;
 using ToDoAppWebApi.NewFolder;
 
 namespace ToDoAppWebApi.Controllers
@@ -15,8 +12,8 @@ namespace ToDoAppWebApi.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemManager _itemManager;
-        public ItemController(IItemManager itemManager) 
-        { 
+        public ItemController(IItemManager itemManager)
+        {
             _itemManager = itemManager;
         }
         [HttpPost("create")]
@@ -24,11 +21,12 @@ namespace ToDoAppWebApi.Controllers
         {
             item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
             int result = await _itemManager.AddItem(item);
-            if (result== (int)ResponseMessages.Messages.Success)
+            if (result == (int)ResponseMessages.Messages.Success)
             {
-                return new ApiResponse { 
-                            Status= (int)ResponseMessages.Messages.Success,
-                            Message="Task Added Successfully"
+                return new ApiResponse
+                {
+                    Status = (int)ResponseMessages.Messages.Success,
+                    Message = "Task Added Successfully"
                 };
 
             }
@@ -50,14 +48,14 @@ namespace ToDoAppWebApi.Controllers
                 Status = (int)ResponseMessages.Messages.Success,
                 Message = ResponseMessages.Messages.Success.GetEnumDescription(),
                 Result = await _itemManager.GetAll(userId)
-        };
+            };
         }
         [HttpDelete("delete")]
         public async Task<ApiResponse> DeleteItem(int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result =await _itemManager.DeleteItem(id, userId);
-            if(result== (int)ResponseMessages.Messages.Success)
+            int result = await _itemManager.DeleteItem(id, userId);
+            if (result == (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {
@@ -78,12 +76,12 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> UpdateItem(ItemDto item)
         {
             item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
-             await _itemManager.UpdateItem(item);
-                return new ApiResponse
-                {
-                    Status = (int)ResponseMessages.Messages.Success,
-                    Message = "Updated successfully",
-                };   
+            await _itemManager.UpdateItem(item);
+            return new ApiResponse
+            {
+                Status = (int)ResponseMessages.Messages.Success,
+                Message = "Updated successfully",
+            };
         }
         [HttpGet("active-items")]
         public async Task<ApiResponse> GetActiveItems()
@@ -116,14 +114,14 @@ namespace ToDoAppWebApi.Controllers
             {
                 Status = (int)ResponseMessages.Messages.Success,
                 Message = ResponseMessages.Messages.Success.GetEnumDescription(),
-                Result= await _itemManager.CompletionPercentage(userId)
+                Result = await _itemManager.CompletionPercentage(userId)
             };
         }
         [HttpPost("completed")]
-        public async Task<ApiResponse> makeItemCompleted([FromBody]int id)
+        public async Task<ApiResponse> makeItemCompleted([FromBody] int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result= await _itemManager.makeItemCompleted(id, userId);
+            int result = await _itemManager.makeItemCompleted(id, userId);
             if (result == (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
@@ -145,8 +143,8 @@ namespace ToDoAppWebApi.Controllers
         public async Task<ApiResponse> makeItemActive([FromBody] int id)
         {
             int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result= await _itemManager.makeItemActive(id, userId);
-            if(result== (int)ResponseMessages.Messages.Success)
+            int result = await _itemManager.makeItemActive(id, userId);
+            if (result == (int)ResponseMessages.Messages.Success)
             {
                 return new ApiResponse
                 {

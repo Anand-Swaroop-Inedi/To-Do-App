@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class StatusRepository:IStatusRepository
+    public class StatusRepository : IStatusRepository
     {
         private readonly ToDoAppContext _context;
-        public StatusRepository(ToDoAppContext toDoAppContext) 
+        public StatusRepository(ToDoAppContext toDoAppContext)
         {
             _context = toDoAppContext;
         }

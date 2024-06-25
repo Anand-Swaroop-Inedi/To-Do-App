@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ErrorLogRepository: IErrorLogRepository
+    public class ErrorLogRepository : IErrorLogRepository
     {
         private readonly ToDoAppContext _toDoAppContext;
         public ErrorLogRepository(ToDoAppContext toDoAppContext)

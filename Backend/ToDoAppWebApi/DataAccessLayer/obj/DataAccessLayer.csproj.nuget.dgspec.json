@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {}
+    "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
+    "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectUniqueName": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\obj\\",
+        "outputPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj"
+              "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
+                "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj"
               }
             }
           }
@@ -75,14 +75,14 @@
         }
       }
     },
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
+    "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
+        "projectUniqueName": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
+        "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\obj\\",
+        "outputPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 namespace DataAccessLayer.Repositories
 {
-    public class ItemsRepository: IItemsRepository
+    public class ItemsRepository : IItemsRepository
     {
         private readonly ToDoAppContext _toDoAppContext;
         public ItemsRepository(ToDoAppContext toDoAppContext)
@@ -24,7 +24,7 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<int> recentlyAddedId()
         {
-            if(!_toDoAppContext.Items.Any())
+            if (!_toDoAppContext.Items.Any())
             {
                 return 0;
             }

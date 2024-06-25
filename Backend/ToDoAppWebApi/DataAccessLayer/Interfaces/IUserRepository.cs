@@ -13,7 +13,7 @@ namespace DataAccessLayer.Interfaces
         public Task AddUser(User user);
         public Task<User> GetByUsername(string username);
         public Task<User> AuthenticateUser(User user);
-       /* public Task<ApiResponse> AddUser(User user);
-        public Task<ApiResponse> AuthenticateUser(User user);*/
+        /* public Task<ApiResponse> AddUser(User user);
+         public Task<ApiResponse> AuthenticateUser(User user);*/
     }
 }
