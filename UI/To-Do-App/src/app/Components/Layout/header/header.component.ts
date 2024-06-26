@@ -36,7 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
           let name = event.urlAfterRedirects.split('/').pop();
-          if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
+          if (name) 
+            this.pageName = name[0].toUpperCase() + name.slice(1);
         }
       }
     );

@@ -79,12 +79,10 @@ public partial class ToDoAppContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__UserItem__3214EC07596373B1");
 
-            entity.Property(e => e.CompletedOn)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+            entity.Property(e => e.CompletedOn).HasColumnType("datetime");
             entity.Property(e => e.CreatedOn)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.IsDeleted).HasDefaultValue(0);
 
             entity.HasOne(d => d.Item).WithMany(p => p.UserItems)

@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
 })
 export class TaskMenuComponent {
   pageName: string = '';
-  tasks: Task[] = [];
+  @Input() tasks: Task[] = [];
   constructor(
     private taskService: TaskService,
     private router: Router,
@@ -35,9 +35,6 @@ export class TaskMenuComponent {
   getUpdatedTasks() {
     let name: string | undefined = this.router.url.split('/').pop();
     if (name) this.pageName = name[0].toUpperCase() + name.slice(1);
-    this.taskService.taskData$.subscribe((value) => {
-      this.tasks = value;
-    });
   }
   openTaskInfo(index: number) {
     var taskDetail = document.getElementsByClassName(
@@ -62,7 +59,7 @@ export class TaskMenuComponent {
     this.taskService.deleteConfirm$.next(id);
   }
   ToggleActiveComplete(id: number) {
-    if (this.pageName.toLowerCase() == 'active') {
+    if (this.pageName.toLowerCase() == 'active' ||this.pageName.toLowerCase() =='pending') {
       this.makeTaskAsCompleted(id);
     } else if (this.pageName.toLowerCase() == 'completed') {
       this.makeTaskAsActive(id);

@@ -6,6 +6,7 @@ import { ActiveComponent } from './components/active/active.component';
 import { AuthenticateComponent } from './components/authenticate/authenticate.component';
 import { CompletedComponent } from './components/completed/completed.component';
 import { IndexComponent } from './components/index/index.component';
+import { PendingComponent } from './components/pending/pending.component';
 
 export const routes: Routes = [
   {
@@ -41,6 +42,10 @@ export const routes: Routes = [
       {
         path: 'completed',
         component: CompletedComponent,
+      },
+      {
+        path:'pending',
+        component:PendingComponent,
       },
       {
         path: 'home/**',

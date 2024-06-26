@@ -12,6 +12,7 @@ import { TaskHeaderComponent } from '../../shared/components/task-header/task-he
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
+import { Task } from '../../models/Task';
 @Component({
   selector: 'app-active',
   standalone: true,
@@ -19,10 +20,10 @@ import { Subscription } from 'rxjs';
   styleUrl: './active.component.scss',
   imports: [TaskHeaderComponent, TaskMenuComponent],
 })
-export class ActiveComponent implements OnInit, OnDestroy, OnChanges {
-  name: string = 'Active';
-  @Input() changeMenu: boolean = false;
+export class ActiveComponent implements OnInit, OnDestroy {
+  activeTasks!:Task[];
   taskServiceSubscription!: Subscription;
+  pageManipulatedSubscription!:Subscription;
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService
@@ -32,13 +33,8 @@ export class ActiveComponent implements OnInit, OnDestroy, OnChanges {
     this.getActiveTasksData();
   }
 
-  ngOnChanges(): void {
-    if (this.changeMenu == true) {
-      this.getActiveTasksData();
-    }
-  }
   checkPageManipulated() {
-    this.taskService.pageManiulated$.subscribe((response) => {
+    this.pageManipulatedSubscription=this.taskService.pageManiulated$.subscribe((response) => {
       if (response == 'active') {
         this.sendUpdatedData();
       }
@@ -54,7 +50,7 @@ export class ActiveComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.taskService.taskData$.next(response.result);
+          this.activeTasks=response.result;
         },
         error: (error) => {
           this.taskService.isLoading$.next(false);
@@ -64,5 +60,6 @@ export class ActiveComponent implements OnInit, OnDestroy, OnChanges {
   }
   ngOnDestroy(): void {
     this.taskServiceSubscription.unsubscribe();
+    this.pageManipulatedSubscription.unsubscribe();
   }
 }

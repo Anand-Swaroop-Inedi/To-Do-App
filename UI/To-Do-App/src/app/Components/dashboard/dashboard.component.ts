@@ -28,10 +28,9 @@ import { Subscription } from 'rxjs';
     TaskHeaderComponent,
   ],
 })
-export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
   name: string = 'dashboard';
   tasks: Task[] = [];
-  @Input() changeMenu: boolean = false;
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
   pageManiulatedSubscribtion!: Subscription;
   taskServiceSubscription!: Subscription;
@@ -42,11 +41,6 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.checkDashboardManipulated();
     this.getAllTasksData();
-  }
-  ngOnChanges(): void {
-    if (this.changeMenu == true) {
-      this.getAllTasksData();
-    }
   }
   checkDashboardManipulated() {
     this.pageManiulatedSubscribtion =
@@ -67,7 +61,7 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.taskService.taskData$.next(response.result);
+          this.tasks=response.result;
         },
         error: (error) => {
           this.taskService.isLoading$.next(false);
@@ -75,6 +69,7 @@ export class DashboardComponent implements OnInit, OnChanges, OnDestroy {
         },
       });
   }
+ 
   ngOnDestroy() {
     this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();

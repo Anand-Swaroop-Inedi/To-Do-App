@@ -16,6 +16,7 @@ export const TaskApiUrls = {
   getCompletionPercentage: 'Item/completion-percentage',
   makeCompleted: 'Item/completed',
   makeActive: 'Item/active',
+  pendingTasks:'Item/pending-items'
 };
 
 @Injectable({
@@ -23,14 +24,12 @@ export const TaskApiUrls = {
 })
 export class TaskService extends ApiService {
   private apiUrl: string;
-  taskData$: Subject<Task[]>;
   pageManiulated$: Subject<string>;
   editTask$: Subject<Task>;
   isLoading$: Subject<boolean>;
   deleteConfirm$: Subject<number>;
   constructor(private httpClient: HttpClient) {
     super(httpClient);
-    this.taskData$ = new Subject<Task[]>();
     this.editTask$ = new Subject<Task>();
     this.isLoading$ = new Subject<boolean>();
     this.deleteConfirm$ = new Subject<number>();
@@ -61,6 +60,10 @@ export class TaskService extends ApiService {
   }
   getCompletedTasks<T>(): Observable<T> {
     let url = this.apiUrl + TaskApiUrls.getCompletedTasks;
+    return this.get<T>(url);
+  }
+  getPendingTasks<T>(): Observable<T> {
+    let url = this.apiUrl + TaskApiUrls.pendingTasks;
     return this.get<T>(url);
   }
   deleteAllTasks<T>(): Observable<T> {

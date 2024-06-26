@@ -1,10 +1,4 @@
-﻿using DataAccessLayer.Entities;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Models;
 
 namespace BusinessLogicLayer.Interfaces
 {
@@ -20,6 +14,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task<int[]> CompletionPercentage(int userId);
         public Task<int> makeItemCompleted(int id, int userId);
         public Task<int> makeItemActive(int id, int UserId);
+        public Task<List<ItemDto>> GetPendingTasks(int userId);
 
     }
 }

@@ -9,12 +9,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [RouterLink, RouterLinkActive],
 })
 export class SideBarComponent {
-  @Output() name: EventEmitter<string> = new EventEmitter<string>();
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
   sendAddTaskRequest() {
     this.flag.emit();
-  }
-  select(pageName: string) {
-    this.name.emit(pageName);
   }
 }

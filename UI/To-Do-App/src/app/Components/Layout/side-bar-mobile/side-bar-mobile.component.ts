@@ -14,6 +14,7 @@ import {
   Event as NavigationEvent,
 } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { routePaths } from '../../../shared/route-paths/route-paths';
 
 @Component({
   selector: 'app-side-bar-mobile',
@@ -45,11 +46,14 @@ export class SideBarMobileComponent implements AfterViewInit, OnDestroy {
   select(pageName: string) {
     this.name.emit(pageName);
     if (pageName == 'dashboard') {
-      this.router.navigateByUrl('/home/dashboard');
+      this.router.navigate(routePaths.dashboard);
     } else if (pageName == 'active') {
-      this.router.navigateByUrl('/home/active');
-    } else {
-      this.router.navigateByUrl('/home/completed');
+      this.router.navigate(routePaths.active);
+    } else if(pageName=='completed'){
+      this.router.navigate(routePaths.completed);
+    }
+    else{
+      this.router.navigate(routePaths.pending);
     }
   }
   ngOnDestroy() {

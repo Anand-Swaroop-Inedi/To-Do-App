@@ -7,7 +7,7 @@ namespace ToDoAppWebApi.NewFolder
         public enum Messages
         {
             [Description("Successfully completed")] Success = 1, 
-            [Description("Something Went wrong")] exception = 2
+            [Description("Something Went wrong")] Exception = 2
         }
         public static string GetEnumDescription(this Enum enumValue)
         {

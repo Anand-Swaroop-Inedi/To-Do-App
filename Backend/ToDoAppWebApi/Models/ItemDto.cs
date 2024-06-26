@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Models
 {
     public class ItemDto
     {
@@ -19,12 +12,12 @@ namespace Models
 
         public int Itemid { get; set; }
 
-        public string ?Createdon { get; set; }
+        public DateTime? Createdon { get; set; }
 
-        public string? Completedon { get; set; }
+        public DateTime? Completedon { get; set; }
 
         public int Statusid { get; set; }
-        public String?  StatusName { get; set; }
+        public String? StatusName { get; set; }
         public int? Isdeleted { get; set; }
 
     }

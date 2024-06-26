@@ -4,24 +4,27 @@
 </div>
 <div class="menu-items">
   <p
-    (click)="select('Dashboard')"
     routerLink="/home/dashboard"
     routerLinkActive="selectedPage"
   >
     Dashboard
   </p>
   <p
-    (click)="select('Active')"
     routerLink="/home/active"
     routerLinkActive="selectedPage"
   >
     Active
   </p>
   <p
-    (click)="select('Completed')"
     routerLink="/home/completed"
     routerLinkActive="selectedPage"
   >
     Completed
+  </p>
+  <p
+    routerLink="/home/pending"
+    routerLinkActive="selectedPage"
+  >
+    Pending
   </p>
 </div>

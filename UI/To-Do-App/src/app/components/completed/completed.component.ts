@@ -5,6 +5,7 @@ import { TaskHeaderComponent } from '../../shared/components/task-header/task-he
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Task } from '../../models/Task';
 
 @Component({
   selector: 'app-completed',
@@ -16,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 export class CompletedComponent implements OnInit, OnDestroy {
   pageManiulatedSubscribtion!: Subscription;
   taskServiceSubscription!: Subscription;
+  completedTasks!:Task[];
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService
@@ -35,7 +37,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
   sendUpdatedData() {
     this.getCompletedTasksData();
   }
-
   getCompletedTasksData() {
     this.taskService.isLoading$.next(true);
     this.taskServiceSubscription = this.taskService
@@ -43,7 +44,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.taskService.taskData$.next(response.result);
+          this.completedTasks=response.result;
         },
         error: (error) => {
           this.taskService.isLoading$.next(false);

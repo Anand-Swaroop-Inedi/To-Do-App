@@ -161,5 +161,11 @@ namespace ToDoAppWebApi.Controllers
                 };
             }
         }
+        [HttpGet("pending-items")]
+        public async Task<ApiResponse> GetPendingTasks()
+        {
+            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
+            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId) };
+        }
     }
 }

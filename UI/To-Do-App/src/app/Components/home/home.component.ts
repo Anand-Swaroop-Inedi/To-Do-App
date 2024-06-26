@@ -6,14 +6,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { TaskService } from '../../services/task/task.service';
-import { ToastrService } from 'ngx-toastr';
 import { SideBarComponent } from '../layout/side-bar/side-bar.component';
 import { HeaderComponent } from '../layout/header/header.component';
 import { SideBarMobileComponent } from '../layout/side-bar-mobile/side-bar-mobile.component';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AddTaskComponent } from '../../shared/components/add-task/add-task.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { ApiResponse } from '../../models/ApiResponse';
 import { DeleteConfirmationComponent } from '../../shared/components/delete-confirmation/delete-confirmation.component';
 import { Subscription } from 'rxjs';
 @Component({
@@ -37,14 +35,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('deleteConfirmation')
   deleteConfirmationRef!: ElementRef<HTMLInputElement>;
   @ViewChild('home') homeDivRef!: ElementRef<HTMLInputElement>;
-  isNewTaskAdded: boolean = false;
   deleteItemId!: number;
   editTaskSubscribtion!: Subscription;
   deleteTaskSubscription!: Subscription;
   constructor(
-    private router: Router,
     private taskService: TaskService,
-    private toaster: ToastrService
   ) {}
   ngOnInit() {
     this.checkEditButtonClicked();
@@ -82,45 +77,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.homeDivRef.nativeElement.classList.remove('blur');
     this.homeDivRef.nativeElement.style.pointerEvents = 'auto';
   }
-  closeAddTaskContainer(count: number) {
+  closeAddTaskContainer() {
     this.addTaskRef.nativeElement.style.display = 'none';
     this.homeDivRef.nativeElement.classList.remove('blur');
     this.homeDivRef.nativeElement.style.pointerEvents = 'auto';
-
-    if (count > 0) {
-      let pgName: string | undefined = this.router.url.split('/').pop();
-      this.taskService.isLoading$.next(true);
-      if (pgName == 'dashboard') {
-        this.changeDashboardContent();
-      } else {
-        this.changeActivePageContent();
-      }
-    }
-  }
-  changeDashboardContent() {
-    this.taskService.pageManiulated$.next('dashboard');
-    this.taskService.getAllTasks<ApiResponse>().subscribe({
-      next: (response) => {
-        this.taskService.isLoading$.next(false);
-        this.taskService.taskData$.next(response.result);
-      },
-      error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
-      },
-    });
-  }
-  changeActivePageContent() {
-    this.taskService.getActiveTasks<ApiResponse>().subscribe({
-      next: (response) => {
-        this.taskService.isLoading$.next(false);
-        this.taskService.taskData$.next(response.result);
-      },
-      error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
-      },
-    });
   }
   ngOnDestroy() {
     this.editTaskSubscribtion.unsubscribe();

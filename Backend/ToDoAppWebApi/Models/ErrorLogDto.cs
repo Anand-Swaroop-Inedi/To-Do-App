@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Models
 {
     public class ErrorLogDto
     {
@@ -14,7 +8,7 @@ namespace Models
 
         public string Methodname { get; set; }
 
-        public string Timestamp { get; set; } 
+        public string Timestamp { get; set; }
 
         public int Linenumber { get; set; }
 

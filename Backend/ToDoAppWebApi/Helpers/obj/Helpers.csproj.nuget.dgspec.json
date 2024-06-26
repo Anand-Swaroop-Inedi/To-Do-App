@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {}
+    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {}
   },
   "projects": {
-    "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {
+    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
         "projectName": "Helpers",
-        "projectPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
+        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\obj\\",
+        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",

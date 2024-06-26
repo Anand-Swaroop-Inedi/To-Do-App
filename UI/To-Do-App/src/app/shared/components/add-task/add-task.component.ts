@@ -22,8 +22,7 @@ import { Subscription, tap } from 'rxjs';
   imports: [ReactiveFormsModule, CommonModule, ErrorComponent],
 })
 export class AddTaskComponent {
-  @Output() close: EventEmitter<number> = new EventEmitter<number>();
-  addedTasksCount: number = 0;
+  @Output() close: EventEmitter<null> = new EventEmitter<null>();
   taskForm!: FormGroup;
   isSubmitted: boolean = false;
   isEdit: boolean = false;
@@ -32,7 +31,8 @@ export class AddTaskComponent {
   editTaskSubscribtion!: Subscription;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private router:Router
   ) {}
   ngOnInit() {
     this.getDataIfEdit();
@@ -65,7 +65,7 @@ export class AddTaskComponent {
       control = this.taskForm.controls[name];
       control.setErrors(null);
     });
-    this.close.emit(this.addedTasksCount);
+    this.close.emit();
   }
   onSubmit() {
     this.isSubmitted = true;
@@ -86,10 +86,12 @@ export class AddTaskComponent {
         next: (response) => {
           this.taskService.isLoading$.next(false);
           if (response.status == 1) {
-            this.addedTasksCount += 1;
+            const url = this.router.url.split('/').pop();
+            if (url) {
+              this.taskService.pageManiulated$.next(url);
+              }
             this.toaster.success(response.message);
           } else if (response.status == 3) {
-            this.addedTasksCount += 1;
             this.toaster.warning(response.message);
           }
           this.onCancel();
@@ -109,13 +111,17 @@ export class AddTaskComponent {
     this.taskService.updateTask<ApiResponse>(t).subscribe({
       next: (response) => {
         this.taskService.isLoading$.next(false);
-        this.addedTasksCount += 1;
+        const url = this.router.url.split('/').pop();
+        if (url) {
+          this.taskService.pageManiulated$.next(url);
+        }
         this.toaster.success(response.message);
           this.onCancel();
       },
       error: (error) => {
         this.taskService.isLoading$.next(false);
         this.toaster.error('Something went wrong. Please try again.');
+        this.onCancel();
       },
     });
   }

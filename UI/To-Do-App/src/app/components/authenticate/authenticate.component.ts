@@ -38,7 +38,7 @@ import { routePaths } from '../../shared/route-paths/route-paths';
 export class AuthenticateComponent implements OnInit, AfterViewInit {
   @ViewChild('password') passwordRef!: ElementRef<HTMLInputElement>;
   @ViewChild('userName') userNameRef!: ElementRef<HTMLInputElement>;
-  pageName: string = 'Sign Up';
+  pageName!: string ;
   footerMsg: string = 'Already have an account? sign in';
   isSignUp: boolean = true;
   userForm!: FormGroup;

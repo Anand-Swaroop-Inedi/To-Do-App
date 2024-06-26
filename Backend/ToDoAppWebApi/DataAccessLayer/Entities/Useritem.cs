@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DataAccessLayer.Entities;
+﻿namespace DataAccessLayer.Entities;
 
 public partial class UserItem
 {
@@ -11,9 +8,9 @@ public partial class UserItem
 
     public int ItemId { get; set; }
 
-    public string CreatedOn { get; set; } = null!;
+    public DateTime? CreatedOn { get; set; }
 
-    public string? CompletedOn { get; set; }
+    public DateTime? CompletedOn { get; set; }
 
     public int StatusId { get; set; }
 
