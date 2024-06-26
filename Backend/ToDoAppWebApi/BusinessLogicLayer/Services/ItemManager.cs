@@ -146,9 +146,9 @@ namespace BusinessLogicLayer.Services
             }
 
         }
-        public async Task<List<ItemDto>> GetPendingTasks(int userId)
+        public async Task<List<ItemDto>> GetPendingTasks(int userId, string property, string order)
         {
-            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId,property,order));
         }
     }
 }

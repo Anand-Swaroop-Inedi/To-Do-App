@@ -33,10 +33,7 @@ export class DeleteConfirmationComponent {
     this.taskService.isLoading$.next(true);
     this.taskService.deleteAllTasks<ApiResponse>().subscribe({
       next: (response) => {
-        this.taskService.isLoading$.next(false);
-        this.taskService.pageManiulated$.next('dashboard');
-        this.toaster.success(response.message);
-        this.onCancel();
+        this.operationSucceded(response);
       },
       error: (error) => {
         this.taskService.isLoading$.next(false);
@@ -48,18 +45,27 @@ export class DeleteConfirmationComponent {
     this.taskService.isLoading$.next(true);
     this.taskService.deleteTask<ApiResponse>(this.id).subscribe({
       next: (response) => {
-        this.taskService.isLoading$.next(false);
+        this.operationSucceded(response);
+      },
+      error: (error) => {
+        this.errorOccured();
+      },
+    });
+  }
+  operationSucceded(response:ApiResponse)
+  {
+    this.taskService.isLoading$.next(false);
         const url = this.router.url.split('/').pop();
         if (url) {
           this.taskService.pageManiulated$.next(url);
         }
         this.toaster.success(response.message);
         this.onCancel();
-      },
-      error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
-      },
-    });
+  }
+  errorOccured()
+  {
+    this.taskService.isLoading$.next(false);
+    this.toaster.error('Something went wrong. Please try again.');
+    this.onCancel();
   }
 }

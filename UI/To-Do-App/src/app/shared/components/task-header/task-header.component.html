@@ -1,12 +1,13 @@
 <div class="task-menu">
   <div class="task-menu-heading">
-    <h1>
+    <h1 *ngIf="pageName.toLowerCase() !='pending'">
       Today's
       <span class="task-name" *ngIf="pageName.toLowerCase() != 'dashboard'"
         >{{ pageName }}
       </span>
       Tasks
     </h1>
+    <h1 *ngIf="pageName.toLowerCase() =='pending'">Pending Tasks</h1>
   </div>
   <div class="operations">
     @if(pageName.toLowerCase()=='dashboard') {

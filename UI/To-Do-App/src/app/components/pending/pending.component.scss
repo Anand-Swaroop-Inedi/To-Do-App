@@ -5,6 +5,48 @@
   .task-list {
     margin: 0px 30px 0px 30px;
   }
+  .task-table{
+    margin-left: 4%;
+    width:300px;
+  }
+  .heading{
+    margin: auto;
+    color:#edb046;
+  }
+  .table-header {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  }
+  .table-head{
+    margin: auto;
+  }
+  .ascending{
+    color:black;
+    font-size: 17px;
+    cursor:pointer;
+  }
+  .descending{
+    color:black;
+    font-size: 17px;
+    transform: rotate(180deg);
+    cursor:pointer;
+  }
+//   .angular-brackets {
+//     display: flex;
+//     flex-direction: column;
+//     margin: 5px 0px 0px 5px;
+//   }
+//   .less-than {
+//     transform: rotate(90deg);
+//     margin-left: 0.3vw;
+//     cursor: pointer;
+//   }
+//   .greater-than {
+//     transform: rotate(90deg);
+//     margin: -30px 0vh 0vh 0.3vw;
+//     cursor: pointer;
+//   }
   @media only screen and (max-width: 900px) {
     .task-list {
       margin: 0px;

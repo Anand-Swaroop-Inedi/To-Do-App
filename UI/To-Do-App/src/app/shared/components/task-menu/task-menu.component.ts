@@ -69,35 +69,36 @@ export class TaskMenuComponent {
     this.taskService.isLoading$.next(true);
     this.taskService.makeTaskAsCompleted<ApiResponse>(id).subscribe({
       next: (response) => {
-        this.taskService.isLoading$.next(false);
-        if (response.status == 1) {
-          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-          this.toaster.success(response.message);
-        } else {
-          this.toaster.error(response.message);
-        }
+        this.operationSucceded(response);
       },
       error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
+        this.errorOccured();
       },
     });
+  }
+  operationSucceded(response:ApiResponse)
+  {
+    this.taskService.isLoading$.next(false);
+    if (response.status == 1) {
+      this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
+      this.toaster.success(response.message);
+    } else {
+      this.toaster.error(response.message);
+    }
+  }
+  errorOccured()
+  {
+    this.taskService.isLoading$.next(false);
+    this.toaster.error('Something went wrong. Please try again.');
   }
   makeTaskAsActive(id: number) {
     this.taskService.isLoading$.next(true);
     this.taskService.makeTaskAsActive<ApiResponse>(id).subscribe({
       next: (response) => {
-        this.taskService.isLoading$.next(false);
-        if (response.status == 1) {
-          this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
-          this.toaster.success(response.message);
-        } else {
-          this.toaster.error(response.message);
-        }
+        this.operationSucceded(response);
       },
       error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
+        this.errorOccured();
       },
     });
   }
@@ -124,6 +125,15 @@ export class TaskMenuComponent {
         return Math.floor(timeDifference / 1000) + ' seconds';
       }
       return minDifference + ' minutes';
+    }
+    if(this.pageName.toLowerCase()=='pending')
+    {
+      const days=Math.ceil(Difference/24);
+      if(days==1)
+      {
+        return days+' day'
+      }
+      return  days+' days';
     }
     return Difference + ' hours';
   }

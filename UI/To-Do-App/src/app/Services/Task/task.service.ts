@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Task } from '../../models/Task';
 import { environment } from '../../../environments/environment';
@@ -62,9 +62,12 @@ export class TaskService extends ApiService {
     let url = this.apiUrl + TaskApiUrls.getCompletedTasks;
     return this.get<T>(url);
   }
-  getPendingTasks<T>(): Observable<T> {
+  getPendingTasks<T>(property:string,order:string): Observable<T> {
+    const params = new HttpParams()
+      .set('property', property)
+      .set('order', order)
     let url = this.apiUrl + TaskApiUrls.pendingTasks;
-    return this.get<T>(url);
+    return this.get<T>(url,params);
   }
   deleteAllTasks<T>(): Observable<T> {
     let url = this.apiUrl + TaskApiUrls.deleteAllTasks;

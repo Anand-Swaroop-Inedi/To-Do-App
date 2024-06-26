@@ -1,4 +1,23 @@
 <div class="task-list">
   <app-task-header></app-task-header>
+  <table class="task-table">
+     <thead>
+        <th>
+            <h4 class="heading">Sort:</h4>
+        </th>
+        <th>
+            <div class="table-header">
+                <h6 class="table-head">Task Name</h6>
+                <i [ngClass]="temp%2!=0 || temp==0?'bi bi-arrow-up ascending':'bi bi-arrow-up descending'" (click)="sortTable('name')"></i>
+            </div>
+        </th>
+        <th>
+            <div class="table-header">
+                <h6 class="table-head">Created On</h6>
+                <i [ngClass]="temp%2!=0 || temp==0?'bi bi-arrow-up ascending':'bi bi-arrow-up descending'" (click)="sortTable('createdOn')"></i>
+            </div>
+        </th>
+     </thead>
+  </table>
   <app-task-menu [tasks]="pendingTasks" class="task-menu"></app-task-menu>
 </div>

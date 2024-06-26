@@ -14,7 +14,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task<int[]> CompletionPercentage(int userId);
         public Task<int> makeItemCompleted(int id, int userId);
         public Task<int> makeItemActive(int id, int UserId);
-        public Task<List<ItemDto>> GetPendingTasks(int userId);
+        public Task<List<ItemDto>> GetPendingTasks(int userId, string property, string order);
 
     }
 }

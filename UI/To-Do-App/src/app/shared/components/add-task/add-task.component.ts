@@ -84,7 +84,16 @@ export class AddTaskComponent {
       .createTask<ApiResponse>(new Task(this.taskForm.value))
       .subscribe({
         next: (response) => {
-          this.taskService.isLoading$.next(false);
+          this.operationSucceded(response);
+        },
+        error: (err) => {
+          this.errorOccured();
+        },
+      });
+  }
+  operationSucceded(response:ApiResponse)
+  {
+    this.taskService.isLoading$.next(false);
           if (response.status == 1) {
             const url = this.router.url.split('/').pop();
             if (url) {
@@ -95,13 +104,12 @@ export class AddTaskComponent {
             this.toaster.warning(response.message);
           }
           this.onCancel();
-        },
-        error: (err) => {
-          this.taskService.isLoading$.next(false);
-          this.onCancel();
-          this.toaster.error('Something went wrong. Please try again.');
-        },
-      });
+  }
+  errorOccured()
+  {
+    this.taskService.isLoading$.next(false);
+    this.onCancel();
+    this.toaster.error('Something went wrong. Please try again.');
   }
   editTask() {
     var t: Task = new Task(this.taskForm.value);
@@ -110,18 +118,10 @@ export class AddTaskComponent {
     t.createdon = this.editableTask.createdon;
     this.taskService.updateTask<ApiResponse>(t).subscribe({
       next: (response) => {
-        this.taskService.isLoading$.next(false);
-        const url = this.router.url.split('/').pop();
-        if (url) {
-          this.taskService.pageManiulated$.next(url);
-        }
-        this.toaster.success(response.message);
-          this.onCancel();
+        this.operationSucceded(response);
       },
       error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
-        this.onCancel();
+        this.errorOccured();
       },
     });
   }

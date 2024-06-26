@@ -1,6 +1,8 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DataAccessLayer.Repositories
 {
@@ -64,14 +66,69 @@ namespace DataAccessLayer.Repositories
         {
             return _context.UserItems.Where(u => u.IsDeleted == 0 && u.UserId == userId && u.CreatedOn > DateTime.Today && u.CreatedOn < DateTime.Today.AddDays(1)).Count();
         }
-        public async Task<List<UserItem>> GetPendingTasks(int userId)
+        public async Task<List<UserItem>> GetPendingTasks(int userId,string property,string order)
         {
-
-            return _context.UserItems
-            .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
+            if (!string.IsNullOrEmpty(property))
+            {
+                List<UserItem> userItems = _context.UserItems
+                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
                         u.IsDeleted == 0 &&
                         u.UserId == userId &&
                         u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+                if(property.Equals("createdon", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (order.Equals("asc", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return userItems.OrderBy(e => e.CreatedOn).ToList();
+                    }
+                    else
+                    {
+                        return userItems.OrderByDescending(e => e.CreatedOn).ToList();
+                    }
+                }
+                else
+                {
+                    if (order.Equals("asc", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return userItems.OrderBy(e => e.Item.Name).ToList();
+                    }
+                    else
+                    {
+                        return userItems.OrderByDescending(e=>e.Item.Name).ToList();
+                    }
+                }
+                
+                    var propertyInfo = typeof(UserItem).GetProperty(property, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                if (propertyInfo != null)
+                {
+                    var parameter = Expression.Parameter(typeof(UserItem), "e");
+                    var propertyAccessExpression = Expression.Property(parameter, propertyInfo);
+                    var sortExpression = Expression.Lambda<Func<UserItem, object>>(propertyAccessExpression, parameter);
+                    if (order.Equals("asc", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return _context.UserItems
+                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
+                        u.IsDeleted == 0 &&
+                        u.UserId == userId &&
+                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).OrderBy(e=> propertyAccessExpression).ToList();
+                    }
+                    else if (order.Equals("desc", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return _context.UserItems
+                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
+                        u.IsDeleted == 0 &&
+                        u.UserId == userId &&
+                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).OrderByDescending(e=> propertyAccessExpression).ToList();
+                    }
+                }
+            }
+            return [];
+
+            /*return _context.UserItems
+            .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
+                        u.IsDeleted == 0 &&
+                        u.UserId == userId &&
+                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();*/
 
         }
     }

@@ -16,7 +16,7 @@ namespace DataAccessLayer.Interfaces
         public Task<List<UserItem>> GetCompletedItems(int UserId);
         public Task<int> GetCompletedItemsCount(int userId);
         public Task<int> TotalItemsCount(int userId);
-        public Task<List<UserItem>> GetPendingTasks(int userId);
+        public Task<List<UserItem>> GetPendingTasks(int userId, string property, string order);
 
     }
 }
