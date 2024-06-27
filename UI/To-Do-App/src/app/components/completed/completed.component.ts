@@ -6,6 +6,7 @@ import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Task } from '../../models/Task';
+import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
 
 @Component({
   selector: 'app-completed',
@@ -20,7 +21,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
   completedTasks!:Task[];
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkChangesMade();
@@ -47,8 +49,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
           this.completedTasks=response.result;
         },
         error: (error) => {
-          this.taskService.isLoading$.next(false);
-          this.toaster.error('Something went wrong. Please try again.');
+          this.errorDisplay.errorOcurred(error);
         },
       });
   }

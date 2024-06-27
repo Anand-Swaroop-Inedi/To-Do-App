@@ -3,6 +3,7 @@ import { ApiResponse } from '../../../models/ApiResponse';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../../services/task/task.service';
 import { Router } from '@angular/router';
+import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -17,7 +18,8 @@ export class DeleteConfirmationComponent {
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private router: Router
+    private router: Router,
+    private errorDisplay:ErrorDisplay
   ) {}
   onCancel() {
     this.close.emit();
@@ -36,8 +38,7 @@ export class DeleteConfirmationComponent {
         this.operationSucceded(response);
       },
       error: (error) => {
-        this.taskService.isLoading$.next(false);
-        this.toaster.error('Something went wrong. Please try again.');
+        this.errorDisplay.errorOcurred(error);
       },
     });
   }
@@ -48,24 +49,18 @@ export class DeleteConfirmationComponent {
         this.operationSucceded(response);
       },
       error: (error) => {
-        this.errorOccured();
+        this.errorDisplay.errorOcurred(error);
+        this.onCancel();
       },
     });
   }
-  operationSucceded(response:ApiResponse)
-  {
+  operationSucceded(response: ApiResponse) {
     this.taskService.isLoading$.next(false);
-        const url = this.router.url.split('/').pop();
-        if (url) {
-          this.taskService.pageManiulated$.next(url);
-        }
-        this.toaster.success(response.message);
-        this.onCancel();
-  }
-  errorOccured()
-  {
-    this.taskService.isLoading$.next(false);
-    this.toaster.error('Something went wrong. Please try again.');
+    const url = this.router.url.split('/').pop();
+    if (url) {
+      this.taskService.pageManiulated$.next(url);
+    }
+    this.toaster.success(response.message);
     this.onCancel();
   }
 }

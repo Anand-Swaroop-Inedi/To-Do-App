@@ -6,13 +6,13 @@ import { environment } from '../../../environments/environment';
 import { ApiService } from '../api/api.service';
 
 export const TaskApiUrls = {
-  getAllTasks: 'Item/all',
-  createTask: 'Item/create',
-  deleteTask: 'Item/delete?id=',
-  updateTask: 'Item/update',
+  getAllTasks: 'Item/all-items',
+  createTask: 'Item/add',
+  deleteTask: 'Item?id=',
+  updateTask: 'Item',
   getActiveTasks: 'Item/active-items',
   getCompletedTasks: 'Item/completed-items',
-  deleteAllTasks: 'Item/delete-all',
+  deleteAllTasks: 'Item/all',
   getCompletionPercentage: 'Item/completion-percentage',
   makeCompleted: 'Item/completed',
   makeActive: 'Item/active',

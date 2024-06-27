@@ -36,3 +36,5 @@ C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\obj\D
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.pdb
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.genruntimeconfig.cache
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\obj\Debug\net8.0\ref\DataAccessLayer.dll
+C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\bin\Debug\net8.0\Common.dll
+C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\DataAccessLayer\bin\Debug\net8.0\Common.pdb

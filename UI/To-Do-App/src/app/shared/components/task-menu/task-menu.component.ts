@@ -1,10 +1,7 @@
 import {
   Component,
-  EventEmitter,
   HostListener,
   Input,
-  OnDestroy,
-  Output,
 } from '@angular/core';
 import { Task } from '../../../models/Task';
 import { TaskService } from '../../../services/task/task.service';
@@ -12,7 +9,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiResponse } from '../../../models/ApiResponse';
-import { Subscription } from 'rxjs';
+import { message } from '../../enums/response';
+import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({
   selector: 'app-task-menu',
@@ -27,7 +25,8 @@ export class TaskMenuComponent {
   constructor(
     private taskService: TaskService,
     private router: Router,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.getUpdatedTasks();
@@ -72,24 +71,19 @@ export class TaskMenuComponent {
         this.operationSucceded(response);
       },
       error: (error) => {
-        this.errorOccured();
+        this.errorDisplay.errorOcurred(error);
       },
     });
   }
   operationSucceded(response:ApiResponse)
   {
     this.taskService.isLoading$.next(false);
-    if (response.status == 1) {
+    if (response.status == message.Success) {
       this.taskService.pageManiulated$.next(this.pageName.toLowerCase());
       this.toaster.success(response.message);
     } else {
       this.toaster.error(response.message);
     }
-  }
-  errorOccured()
-  {
-    this.taskService.isLoading$.next(false);
-    this.toaster.error('Something went wrong. Please try again.');
   }
   makeTaskAsActive(id: number) {
     this.taskService.isLoading$.next(true);
@@ -98,7 +92,7 @@ export class TaskMenuComponent {
         this.operationSucceded(response);
       },
       error: (error) => {
-        this.errorOccured();
+        this.errorDisplay.errorOcurred(error);
       },
     });
   }

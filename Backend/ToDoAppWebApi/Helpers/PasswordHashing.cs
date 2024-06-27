@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace DataAccessLayer
+namespace Common
 {
     public class PasswordHashing
     {

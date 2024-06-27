@@ -4,6 +4,6 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IErrorLogManager
     {
-        public Task addError(ErrorLogDto error);
+        public Task addError(ErrorLog error);
     }
 }

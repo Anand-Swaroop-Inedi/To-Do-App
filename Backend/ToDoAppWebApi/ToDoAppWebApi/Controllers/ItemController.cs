@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using ToDoAppWebApi.NewFolder;
+using Common.Enums;
+using messages = Common.Enums.Messages;
+using Response = Models.Response;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -16,156 +18,156 @@ namespace ToDoAppWebApi.Controllers
         {
             _itemManager = itemManager;
         }
-        [HttpPost("create")]
-        public async Task<ApiResponse> AddItem(ItemDto item)
+        [HttpPost("add")]
+        public async Task<Response> AddItem(Item item)
         {
-            item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result = await _itemManager.AddItem(item);
-            if (result == (int)ResponseMessages.Messages.Success)
+            item.Userid = HttpContext.GetIdFromToken();
+            bool result = await _itemManager.AddItem(item);
+            if (result)
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = (int)ResponseMessages.Messages.Success,
+                    Status = (int)messages.Success,
                     Message = "Task Added Successfully"
                 };
 
             }
             else
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = 3,
+                    Status = (int)messages.Failure,
                     Message = "Task already exists"
                 };
             }
         }
-        [HttpGet("all")]
-        public async Task<ApiResponse> GetAllItems()
+        [HttpGet("all-items")]
+        public async Task<Response> GetAllItems()
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse
+            int userId = HttpContext.GetIdFromToken();
+            return new Response
             {
-                Status = (int)ResponseMessages.Messages.Success,
-                Message = ResponseMessages.Messages.Success.GetEnumDescription(),
+                Status = (int)messages.Success,
+                Message = messages.Success.GetEnumDescription(),
                 Result = await _itemManager.GetAll(userId)
             };
         }
-        [HttpDelete("delete")]
-        public async Task<ApiResponse> DeleteItem(int id)
+        [HttpDelete("")]
+        public async Task<Response> DeleteItem(int id)
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result = await _itemManager.DeleteItem(id, userId);
-            if (result == (int)ResponseMessages.Messages.Success)
+            int userId = HttpContext.GetIdFromToken();
+            bool result = await _itemManager.DeleteItem(id, userId);
+            if (result)
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = (int)ResponseMessages.Messages.Success,
+                    Status = (int)messages.Success,
                     Message = "Task Deleted from the list successfully"
                 };
             }
             else
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = 3,
+                    Status = (int)messages.Failure,
                     Message = "Task Id doesn't exist"
                 };
             }
         }
-        [HttpPut("update")]
-        public async Task<ApiResponse> UpdateItem(ItemDto item)
+        [HttpPut("")]
+        public async Task<Response> UpdateItem(Item item)
         {
-            item.Userid = ClaimsIdentifier.getIdFromToken(HttpContext);
+            item.Userid = HttpContext.GetIdFromToken();
             await _itemManager.UpdateItem(item);
-            return new ApiResponse
+            return new Response
             {
-                Status = (int)ResponseMessages.Messages.Success,
+                Status = (int)messages.Success,
                 Message = "Updated successfully",
             };
         }
         [HttpGet("active-items")]
-        public async Task<ApiResponse> GetActiveItems()
+        public async Task<Response> GetActiveItems()
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetActiveItems(userId) };
+            int userId = HttpContext.GetIdFromToken();
+            return new Response { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetActiveItems(userId) };
         }
         [HttpGet("completed-items")]
-        public async Task<ApiResponse> GetCompletedItems()
+        public async Task<Response> GetCompletedItems()
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetCompletedItems(userId) };
+            int userId = HttpContext.GetIdFromToken();
+            return new Response { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetCompletedItems(userId) };
         }
-        [HttpDelete("delete-all")]
-        public async Task<ApiResponse> DeleteAllItems()
+        [HttpDelete("all")]
+        public async Task<Response> DeleteAllItems()
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
+            int userId = HttpContext.GetIdFromToken();
             _itemManager.DeleteItems(userId);
-            return new ApiResponse
+            return new Response
             {
-                Status = (int)ResponseMessages.Messages.Success,
+                Status = (int)messages.Success,
                 Message = "All Tasks Deleted from the your list successfully"
             };
         }
         [HttpGet("completion-percentage")]
-        public async Task<ApiResponse> CompletionPercentage()
+        public async Task<Response> CompletionPercentage()
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse
+            int userId = HttpContext.GetIdFromToken();
+            return new Response
             {
-                Status = (int)ResponseMessages.Messages.Success,
-                Message = ResponseMessages.Messages.Success.GetEnumDescription(),
+                Status = (int)messages.Success,
+                Message = messages.Success.GetEnumDescription(),
                 Result = await _itemManager.CompletionPercentage(userId)
             };
         }
         [HttpPost("completed")]
-        public async Task<ApiResponse> makeItemCompleted([FromBody] int id)
+        public async Task<Response> makeItemCompleted([FromBody] int id)
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result = await _itemManager.makeItemCompleted(id, userId);
-            if (result == (int)ResponseMessages.Messages.Success)
+            int userId = HttpContext.GetIdFromToken();
+            bool result = await _itemManager.makeItemCompleted(id, userId);
+            if (result)
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = (int)ResponseMessages.Messages.Success,
+                    Status = (int)messages.Success,
                     Message = "Task Updated as completed"
                 };
             }
             else
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = 3,
+                    Status = (int)messages.Failure,
                     Message = "Task not found"
                 };
             }
         }
         [HttpPost("active")]
-        public async Task<ApiResponse> makeItemActive([FromBody] int id)
+        public async Task<Response> makeItemActive([FromBody] int id)
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            int result = await _itemManager.makeItemActive(id, userId);
-            if (result == (int)ResponseMessages.Messages.Success)
+            int userId = HttpContext.GetIdFromToken();
+            bool result = await _itemManager.makeItemActive(id, userId);
+            if (result)
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = (int)ResponseMessages.Messages.Success,
+                    Status = (int)messages.Success,
                     Message = "Task Updated as active"
                 };
             }
             else
             {
-                return new ApiResponse
+                return new Response
                 {
-                    Status = 3,
+                    Status = (int)messages.Failure,
                     Message = "Task not found"
                 };
             }
         }
         [HttpGet("pending-items")]
-        public async Task<ApiResponse> GetPendingTasks(string property, string order)
+        public async Task<Response> GetPendingTasks(string property, string order)
         {
-            int userId = ClaimsIdentifier.getIdFromToken(HttpContext);
-            return new ApiResponse { Status = (int)ResponseMessages.Messages.Success, Message = ResponseMessages.Messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId, property, order) };
+            int userId = HttpContext.GetIdFromToken();
+            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId, property, order) };
         }
     }
 }

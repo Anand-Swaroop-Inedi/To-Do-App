@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { ApiService } from '../api/api.service';
 
 export const userApiUrls = {
-  authenticateUser: 'User/authenticate',
+  authenticateUser: 'Authentication',
   addUser: 'User/add',
 };
 

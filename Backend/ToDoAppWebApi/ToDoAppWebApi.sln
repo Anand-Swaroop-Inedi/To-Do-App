@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{A0C522FE-94C8-4F3A-B752-4071C25F30F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{1D8185D2-AD05-466E-8131-3C2211D9A118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Helpers\Common.csproj", "{1D8185D2-AD05-466E-8131-3C2211D9A118}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

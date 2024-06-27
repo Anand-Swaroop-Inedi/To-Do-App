@@ -1,81 +1,55 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.Interfaces;
-using DataAccessLayer;
-using DataAccessLayer.Entities;
+using Common;
 using DataAccessLayer.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EntitiesUser = DataAccessLayer.Entities.User;
+using ModelsUser = Models.User;
 
 namespace BusinessLogicLayer.Services
 {
     public class UserManager : IUserManager
     {
         private readonly IMapper _mapper;
-        private IConfiguration _config;
-        private IUnitOfWork _unitOfWork;
-        public UserManager(IMapper mapper, IConfiguration configuration, IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public UserManager(IMapper mapper, IUnitOfWork unitOfWork,TokenGenerator tokenGenerator)
         {
             _mapper = mapper;
-            _config = configuration;
             _unitOfWork = unitOfWork;
         }
-        public async Task<int> AddUser(UserDto user)
+        public async Task<bool> AddUser(ModelsUser user)
         {
             _unitOfWork.BeginTransaction();
             user.Password = PasswordHashing.HashPassword(user.Password);
-            User result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
+            EntitiesUser result = await _unitOfWork.UserRepository.GetByUsername(user.UserName);
             if (result != null)
             {
-                return 3;
+                return false;
             }
             else
             {
-                _unitOfWork.UserRepository.AddUser(_mapper.Map<User>(user));
+                _unitOfWork.UserRepository.AddUser(_mapper.Map<EntitiesUser>(user));
                 _unitOfWork.SaveChanges();
                 _unitOfWork.Commit();
-                return 1;
+                return true;
             }
         }
-        public async Task<int> AuthenticateUser(UserDto user)
+        public async Task<int> AuthenticateUser(ModelsUser user)
         {
             user.Password = PasswordHashing.HashPassword(user.Password);
-            User result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<User>(user));
+            EntitiesUser result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<EntitiesUser>(user));
             if (result != null)
             {
                 if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))
                 {
-                    return 1;
-                }
-                else
-                {
-                    return 3;
+                    return result.Id;
                 }
             }
-            else
-            {
-                return 4;
-            }
-        }
-        public async Task<string> GenerateToken(int id)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var tokenDescdriptor = new SecurityTokenDescriptor
-            {
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
-                Issuer = _config["Jwt:Issuer"],
-                Audience = _config["Jwt:Audience"]
-                ,
-                Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim("Id",id.ToString())
-                })
-            };
-            var token = new JwtSecurityTokenHandler().CreateToken(tokenDescdriptor);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return 0;
         }
     }
 }

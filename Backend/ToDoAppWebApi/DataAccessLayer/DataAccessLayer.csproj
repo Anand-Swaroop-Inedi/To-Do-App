@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ToDoAppWebApi\Models\Models.csproj" />
+    <ProjectReference Include="..\Helpers\Common.csproj" />
   </ItemGroup>
 
 </Project>

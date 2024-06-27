@@ -13,6 +13,7 @@ import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.c
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
 import { Task } from '../../models/Task';
+import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
 @Component({
   selector: 'app-active',
   standalone: true,
@@ -26,7 +27,7 @@ export class ActiveComponent implements OnInit, OnDestroy {
   pageManipulatedSubscription!:Subscription;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService
+    private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkPageManipulated();
@@ -53,8 +54,7 @@ export class ActiveComponent implements OnInit, OnDestroy {
           this.activeTasks=response.result;
         },
         error: (error) => {
-          this.taskService.isLoading$.next(false);
-          this.toaster.error('Something went wrong. Please try again.');
+          this.errorDisplay.errorOcurred(error);
         },
       });
   }

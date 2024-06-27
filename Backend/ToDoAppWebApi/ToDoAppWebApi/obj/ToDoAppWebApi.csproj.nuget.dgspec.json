@@ -31,8 +31,8 @@
               "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
                 "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj"
               },
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj"
+              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
               }
             }
           }
@@ -109,6 +109,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
+              },
               "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
                 "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj"
               }
@@ -156,12 +159,12 @@
         }
       }
     },
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj": {
+    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
-        "projectName": "Helpers",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Helpers.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
+        "projectName": "Common",
+        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\obj\\",
         "projectStyle": "PackageReference",
@@ -191,6 +194,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Binder": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[7.6.2, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[7.6.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -292,6 +313,9 @@
             "projectReferences": {
               "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
                 "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
+              },
+              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
               }
             }
           }

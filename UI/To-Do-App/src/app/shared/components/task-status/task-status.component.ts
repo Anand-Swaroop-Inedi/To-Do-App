@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({
   selector: 'app-task-status',
@@ -16,8 +16,7 @@ export class TaskStatusComponent implements OnInit, OnDestroy {
   activePercentage: number = 0;
   taskServiceSubscription!: Subscription;
   constructor(
-    private taskService: TaskService,
-    private toaster: ToastrService
+    private taskService: TaskService,private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.getDataChanges();
@@ -41,8 +40,7 @@ export class TaskStatusComponent implements OnInit, OnDestroy {
           this.activePercentage = response.result[1];
         },
         error: (error) => {
-          this.taskService.isLoading$.next(false);
-          this.toaster.error('Something went wrong. Please try again.');
+          this.errorDisplay.errorOcurred(error);
         },
       });
   }

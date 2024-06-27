@@ -24,12 +24,12 @@ namespace ToDoAppWebApi.Middleware
             catch (Exception ex)
             {
                 _logger.LogInformation(ex.Message, ex);
-                ErrorLogDto error = await CreateErrorModel(ex);
+                ErrorLog error = await CreateErrorModel(ex);
                 _errorLogManager.addError(error);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                var apiResponse = new ApiResponse
+                var apiResponse = new Response
                 {
                     Status = 2,
                     Message = "Something Went Wrong"
@@ -39,9 +39,9 @@ namespace ToDoAppWebApi.Middleware
                 await context.Response.WriteAsync(json);
             }
         }
-        public async Task<ErrorLogDto> CreateErrorModel(Exception ex)
+        public async Task<ErrorLog> CreateErrorModel(Exception ex)
         {
-            ErrorLogDto error = new ErrorLogDto();
+            ErrorLog error = new ErrorLog();
             error.Errormessage = ex.Message;
             error.Filename = ex.TargetSite.DeclaringType.FullName;
             error.Stacktrace = ex.StackTrace;

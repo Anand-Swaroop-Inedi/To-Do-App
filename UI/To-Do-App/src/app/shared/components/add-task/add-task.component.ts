@@ -14,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorComponent } from 'c:/Users/anand.i/Downloads/To-Do App/UI/To-Do-App/src/app/shared/components/error/error.component';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription, tap } from 'rxjs';
+import { message } from '../../enums/response';
+import { ErrorDisplay } from '../../exception-handling/exception-handle';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -32,7 +34,8 @@ export class AddTaskComponent {
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private router:Router
+    private router:Router,
+    private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.getDataIfEdit();
@@ -86,30 +89,25 @@ export class AddTaskComponent {
         next: (response) => {
           this.operationSucceded(response);
         },
-        error: (err) => {
-          this.errorOccured();
+        error: (error) => {
+          this.errorDisplay.errorOcurred(error);
+          this.onCancel();
         },
       });
   }
   operationSucceded(response:ApiResponse)
   {
     this.taskService.isLoading$.next(false);
-          if (response.status == 1) {
+          if (response.status == message.Success) {
             const url = this.router.url.split('/').pop();
             if (url) {
               this.taskService.pageManiulated$.next(url);
               }
             this.toaster.success(response.message);
-          } else if (response.status == 3) {
+          } else if (response.status == message.Failure) {
             this.toaster.warning(response.message);
           }
           this.onCancel();
-  }
-  errorOccured()
-  {
-    this.taskService.isLoading$.next(false);
-    this.onCancel();
-    this.toaster.error('Something went wrong. Please try again.');
   }
   editTask() {
     var t: Task = new Task(this.taskForm.value);
@@ -121,7 +119,8 @@ export class AddTaskComponent {
         this.operationSucceded(response);
       },
       error: (error) => {
-        this.errorOccured();
+        this.errorDisplay.errorOcurred(error);
+        this.onCancel();
       },
     });
   }

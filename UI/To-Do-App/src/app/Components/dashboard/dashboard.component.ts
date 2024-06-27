@@ -1,13 +1,10 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   Component,
-  Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
@@ -15,6 +12,7 @@ import { TaskService } from '../../services/task/task.service';
 import { Task } from '../../models/Task';
 import { ApiResponse } from '../../models/ApiResponse';
 import { Subscription } from 'rxjs';
+import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   taskServiceSubscription!: Subscription;
   constructor(
     private taskService: TaskService,
-    private toaster: ToastrService
+    private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkDashboardManipulated();
@@ -64,8 +62,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.tasks=response.result;
         },
         error: (error) => {
-          this.taskService.isLoading$.next(false);
-          this.toaster.error('Something went wrong. Please try again.');
+          debugger;
+          this.errorDisplay.errorOcurred(error);
         },
       });
   }
