@@ -5,19 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Enums
+namespace Common
 {
-    public  enum Status
-    {
-        active,
-        completed
-    }
-    public enum Messages
-    {
-        [Description("Successfully completed")] Success = 1,
-        [Description("Something Went wrong")] Exception = 2,
-        [Description("Operation Failed")] Failure = 3,
-    }
     public static class Description
     {
         public static string GetEnumDescription(this Enum enumValue)
@@ -29,5 +18,4 @@ namespace Common.Enums
             return descriptionAttributes.Length > 0 ? descriptionAttributes[0].Description : enumValue.ToString();
         }
     }
-
 }

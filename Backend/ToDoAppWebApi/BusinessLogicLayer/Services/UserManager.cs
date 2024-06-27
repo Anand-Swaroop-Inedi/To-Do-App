@@ -16,7 +16,7 @@ namespace BusinessLogicLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public UserManager(IMapper mapper, IUnitOfWork unitOfWork,TokenGenerator tokenGenerator)
+        public UserManager(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

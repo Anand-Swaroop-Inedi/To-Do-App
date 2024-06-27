@@ -18,11 +18,10 @@ namespace Common
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("Jwt:Key")));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Expires = DateTime.Now.AddMinutes(4),
+                Expires = DateTime.Now.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
                 Issuer = _config.GetValue<string>("Jwt:Issuer"),
-                Audience = _config.GetValue<string>("Jwt:Audience")
-                ,
+                Audience = _config.GetValue<string>("Jwt:Audience"),
                 Subject = new ClaimsIdentity(new Claim[] {
                     new Claim("Id",id.ToString()),
                     new Claim("CreatedOn",dateTime.ToString()),

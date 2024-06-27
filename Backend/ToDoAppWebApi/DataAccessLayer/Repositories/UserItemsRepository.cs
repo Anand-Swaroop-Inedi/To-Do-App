@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Entities;
+﻿using statusEnum=Common.Enums.Status;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -16,11 +17,11 @@ namespace DataAccessLayer.Repositories
 
         public async Task<int> checkItemLinkingExists(UserItem item)
         {
-            return _context.UserItems.Where(r => r.UserId == item.UserId && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == "ACTIVE").Select(r => r.Id).FirstOrDefault();
+            return _context.UserItems.Where(r => r.UserId == item.UserId && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == statusEnum.active.ToString()).Select(r => r.Id).FirstOrDefault();
         }
         public async Task<UserItem> checkItemCompleted(UserItem item)
         {
-            return _context.UserItems.Where(r => r.UserId == item.Id && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == "COMPLETED" && r.UserId == item.UserId).FirstOrDefault();
+            return _context.UserItems.Where(r => r.UserId == item.Id && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == statusEnum.completed.ToString() && r.UserId == item.UserId).FirstOrDefault();
         }
         public async Task AddItem(UserItem item)
         {
@@ -51,16 +52,16 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<List<UserItem>> GetActiveItems(int UserId)
         {
-            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == "ACTIVE" && x.IsDeleted == 0 && x.UserId == UserId && x.CreatedOn > DateTime.Today && x.CreatedOn < DateTime.Today.AddDays(1)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == statusEnum.active.ToString() && x.IsDeleted == 0 && x.UserId == UserId && x.CreatedOn > DateTime.Today && x.CreatedOn < DateTime.Today.AddDays(1)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
         public async Task<List<UserItem>> GetCompletedItems(int UserId)
         {
-            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == "COMPLETED" && x.IsDeleted == 0 && x.UserId == UserId && x.CreatedOn > DateTime.Today && x.CreatedOn < DateTime.Today.AddDays(1)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+            return _context.UserItems.Where(x => x.Status.Name.ToUpper() == statusEnum.completed.ToString() && x.IsDeleted == 0 && x.UserId == UserId && x.CreatedOn > DateTime.Today && x.CreatedOn < DateTime.Today.AddDays(1)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
 
         }
         public async Task<int> GetCompletedItemsCount(int userId)
         {
-            return _context.UserItems.Where(u => u.Status.Name.ToUpper() == "COMPLETED" && u.IsDeleted == 0 && u.UserId == userId && u.CreatedOn > DateTime.Today && u.CreatedOn < DateTime.Today.AddDays(1)).Count();
+            return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.completed.ToString() && u.IsDeleted == 0 && u.UserId == userId && u.CreatedOn > DateTime.Today && u.CreatedOn < DateTime.Today.AddDays(1)).Count();
         }
         public async Task<int> TotalItemsCount(int userId)
         {
@@ -71,19 +72,19 @@ namespace DataAccessLayer.Repositories
             if (!string.IsNullOrEmpty(property))
             {
                 List<UserItem> userItems = _context.UserItems
-                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
+                        .Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
                         u.UserId == userId &&
                         u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
-                if(property.Equals("createdon", StringComparison.OrdinalIgnoreCase))
+                if (property.Equals("createdon", StringComparison.OrdinalIgnoreCase))
                 {
                     if (order.Equals("asc", StringComparison.OrdinalIgnoreCase))
                     {
-                        return userItems.OrderBy(e => e.CreatedOn).ToList();
+                        return userItems.OrderByDescending(e => e.CreatedOn).ToList();
                     }
                     else
                     {
-                        return userItems.OrderByDescending(e => e.CreatedOn).ToList();
+                        return userItems.OrderBy(e => e.CreatedOn).ToList();
                     }
                 }
                 else
@@ -94,41 +95,12 @@ namespace DataAccessLayer.Repositories
                     }
                     else
                     {
-                        return userItems.OrderByDescending(e=>e.Item.Name).ToList();
+                        return userItems.OrderByDescending(e => e.Item.Name).ToList();
                     }
                 }
-                
-                    var propertyInfo = typeof(UserItem).GetProperty(property, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (propertyInfo != null)
-                {
-                    var parameter = Expression.Parameter(typeof(UserItem), "e");
-                    var propertyAccessExpression = Expression.Property(parameter, propertyInfo);
-                    var sortExpression = Expression.Lambda<Func<UserItem, object>>(propertyAccessExpression, parameter);
-                    if (order.Equals("asc", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return _context.UserItems
-                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
-                        u.IsDeleted == 0 &&
-                        u.UserId == userId &&
-                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).OrderBy(e=> propertyAccessExpression).ToList();
-                    }
-                    else if (order.Equals("desc", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return _context.UserItems
-                        .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
-                        u.IsDeleted == 0 &&
-                        u.UserId == userId &&
-                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).OrderByDescending(e=> propertyAccessExpression).ToList();
-                    }
-                }
+
             }
             return [];
-
-            /*return _context.UserItems
-            .Where(u => u.Status.Name.ToUpper() == "ACTIVE" &&
-                        u.IsDeleted == 0 &&
-                        u.UserId == userId &&
-                        u.CreatedOn < DateTime.Today).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();*/
 
         }
     }

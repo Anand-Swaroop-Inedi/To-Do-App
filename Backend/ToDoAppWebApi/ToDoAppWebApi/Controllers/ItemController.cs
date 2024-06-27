@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Common.Enums;
+using Common;
 using messages = Common.Enums.Messages;
 using Response = Models.Response;
 

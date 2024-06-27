@@ -5,48 +5,28 @@
   .task-list {
     margin: 0px 30px 0px 30px;
   }
-  .task-table{
-    margin-left: 4%;
-    width:300px;
-  }
+  
   .heading{
     margin: auto;
-    color:#edb046;
+    color: #ba5112;
+    margin-right: 20px;
   }
-  .table-header {
-    display: flex;
+  .filter{
+    display:flex;
     flex-direction: row;
-    text-align: center;
+    justify-content: flex-start;
   }
-  .table-head{
-    margin: auto;
+  select{
+    background-color:  #edb046;
+    border: none;
+    border-radius: 4px;
   }
-  .ascending{
-    color:black;
-    font-size: 17px;
-    cursor:pointer;
+  select:focus{
+    border: none;
   }
-  .descending{
-    color:black;
-    font-size: 17px;
-    transform: rotate(180deg);
-    cursor:pointer;
+  option{
+    background-color: white;
   }
-//   .angular-brackets {
-//     display: flex;
-//     flex-direction: column;
-//     margin: 5px 0px 0px 5px;
-//   }
-//   .less-than {
-//     transform: rotate(90deg);
-//     margin-left: 0.3vw;
-//     cursor: pointer;
-//   }
-//   .greater-than {
-//     transform: rotate(90deg);
-//     margin: -30px 0vh 0vh 0.3vw;
-//     cursor: pointer;
-//   }
   @media only screen and (max-width: 900px) {
     .task-list {
       margin: 0px;

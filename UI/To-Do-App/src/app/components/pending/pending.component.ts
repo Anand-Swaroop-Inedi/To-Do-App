@@ -16,7 +16,6 @@ import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
   imports: [TaskHeaderComponent, TaskMenuComponent, CommonModule],
 })
 export class PendingComponent {
-  temp: number = 0;
   pendingTasks!: Task[];
   pageManiulatedSubscribtion!: Subscription;
   constructor(
@@ -47,12 +46,12 @@ export class PendingComponent {
       },
     });
   }
-  sortTable(property: string) {
-    this.temp += 1;
-    if (this.temp % 2 == 1) {
-      this.sendUpdatedData(property, 'asc');
-    } else {
-      this.sendUpdatedData(property, 'desc');
+  sortTable(event: Event) {
+    const value = (event.target as HTMLSelectElement).value; 
+    if (value)
+    {
+      const [property, order] = value.split(' ');
+      this.sendUpdatedData(property,order);
     }
   }
 }
