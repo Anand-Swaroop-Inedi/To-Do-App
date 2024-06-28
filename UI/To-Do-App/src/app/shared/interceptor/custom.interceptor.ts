@@ -16,6 +16,7 @@ export const customInterceptor: HttpInterceptorFn = (req, next) => {
   });
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      debugger
       if(error.status==401)
       {
         toaster.error("please login")

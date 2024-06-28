@@ -11,9 +11,15 @@ export class ErrorDisplay {
     private taskService: TaskService,
     private toaster: ToastrService
   ) {}
-  errorOcurred(error: HttpErrorResponse) {
-    this.taskService.isLoading$.next(false);
-    this.toaster.error(error.error.Message);
-    debugger
+  errorOcurred(response: HttpErrorResponse) {
+    if(response.error.errors)
+    {
+        this.toaster.error(response.error.title)
+    }
+    else
+    {
+    this.toaster.error(response.error.Message);
+    }
+    this.taskService.isLoading$.next(false)
   }
 }

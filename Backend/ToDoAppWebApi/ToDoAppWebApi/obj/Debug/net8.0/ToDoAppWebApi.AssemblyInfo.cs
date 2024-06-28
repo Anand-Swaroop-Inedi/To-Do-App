@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ToDoAppWebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ae0e5004f43d8f91bc889fc84381140fa3cb915")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f90caed7faca27fa97db6f2525b163f336f08783")]
 [assembly: System.Reflection.AssemblyProductAttribute("ToDoAppWebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ToDoAppWebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

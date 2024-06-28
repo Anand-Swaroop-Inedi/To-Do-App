@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BusinessLogicLayer.AutoMapper;
-using Microsoft.Extensions.Configuration;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 namespace ToDoAppWebApi.Extensions
 {
@@ -81,7 +82,7 @@ namespace ToDoAppWebApi.Extensions
 
         public static WebApplicationBuilder AddSwaggerDocumentation(this WebApplicationBuilder builder )
         {
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly())); 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(Mapper));

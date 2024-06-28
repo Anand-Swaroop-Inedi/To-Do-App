@@ -149,3 +149,6 @@ C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Deb
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\Common.dll
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\Common.pdb
 C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\anand.i\Downloads\To-Do App\Backend\ToDoAppWebApi\ToDoAppWebApi\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
