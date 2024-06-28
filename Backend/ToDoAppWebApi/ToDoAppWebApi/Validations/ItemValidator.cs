@@ -14,7 +14,8 @@ namespace ToDoAppWebApi.Validations
            .Must(name => name.Length >= 3).WithMessage("Name should be minimum 3 characters");
 
             RuleFor(item => item.Description)
-                .NotNull().WithMessage("Description should not be null.");
+            .NotNull().WithMessage("Description should not be null.")
+            .Must(t => t.Length >= 3).WithMessage("Description should be minimum 3 characters");
         }
     }
 }

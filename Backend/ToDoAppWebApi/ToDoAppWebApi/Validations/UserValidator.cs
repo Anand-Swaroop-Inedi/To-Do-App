@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using Models;
-using System.Text.Json;
 
 namespace ToDoAppWebApi.Validations
 {
-    public class UserValidator:AbstractValidator<User>
+    public class UserValidator : AbstractValidator<User>
     {
-        public UserValidator() 
+        public UserValidator()
         {
             RuleFor(user => user.UserName)
             .NotNull().WithMessage("Username cannot be null.")

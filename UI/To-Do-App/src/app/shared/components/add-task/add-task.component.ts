@@ -91,7 +91,6 @@ export class AddTaskComponent {
         },
         error: (error) => {
           this.errorDisplay.errorOcurred(error);
-          this.onCancel();
         },
       });
   }
@@ -120,7 +119,6 @@ export class AddTaskComponent {
       },
       error: (error) => {
         this.errorDisplay.errorOcurred(error);
-        this.onCancel();
       },
     });
   }

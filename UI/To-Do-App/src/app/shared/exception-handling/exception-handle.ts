@@ -14,7 +14,13 @@ export class ErrorDisplay {
   errorOcurred(response: HttpErrorResponse) {
     if(response.error.errors)
     {
-        this.toaster.error(response.error.title)
+        const validationErrors = response.error.errors;
+            Object.keys(validationErrors).forEach(prop => {
+              const messages = validationErrors[prop];
+              messages.forEach((message: any) => {
+                this.toaster.error(`${message}`);
+              });
+            });
     }
     else
     {
