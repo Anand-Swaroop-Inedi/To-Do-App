@@ -1,9 +1,10 @@
-﻿using statusEnum=Common.Enums.Status;
+﻿using statusEnum = Common.Enums.Status;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Reflection;
+using Models;
 
 namespace DataAccessLayer.Repositories
 {
@@ -23,9 +24,10 @@ namespace DataAccessLayer.Repositories
         {
             return _context.UserItems.Where(r => r.UserId == item.Id && r.ItemId == item.ItemId && r.Status.Name.ToUpper() == statusEnum.completed.ToString() && r.UserId == item.UserId).FirstOrDefault();
         }
-        public async Task AddItem(UserItem item)
+        public async Task<int> AddItem(UserItem item)
         {
             _context.UserItems.Add(item);
+            return _context.UserItems.Select(r => r.Id).Max();
         }
         public async Task Update(UserItem item)
         {
@@ -102,6 +104,20 @@ namespace DataAccessLayer.Repositories
             }
             return [];
 
+        }
+        public async Task<List<UserItem>> GetNotifyTasks(int userId)
+        {
+            Console.WriteLine(DateTime.Now);
+            return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
+                        u.IsDeleted == 0 &&
+                        u.UserId == userId && (u.NotifyOn <= DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+        }
+        public async Task<List<UserItem>> GetFurtherNotifyTasks(int userId)
+        {
+            Console.WriteLine(DateTime.Now);
+            return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
+                        u.IsDeleted == 0 &&
+                        u.UserId == userId && (u.NotifyOn > DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
     }
 }

@@ -29,6 +29,7 @@ public partial class ToDoAppContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("data source=.\\SQLEXPRESS; database=ToDoApp;TrustServerCertificate=True;User=sa;Password=P@ssw0rd", x => x.UseNetTopologySuite());
+    /*optionsBuilder.UseSqlServer("Server=tcp:to-do-app-server.database.windows.net,1433;Initial Catalog=ToDoApp;Persist Security Info=False;User ID=Anand;Password=Jagadeesh@8899;", x => x.UseNetTopologySuite());*/
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,28 +78,29 @@ public partial class ToDoAppContext : DbContext
 
         modelBuilder.Entity<UserItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserItem__3214EC07596373B1");
+            entity.HasKey(e => e.Id).HasName("PK__UserItem__3214EC07DF1AA8BE");
 
             entity.Property(e => e.CompletedOn).HasColumnType("datetime");
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.IsDeleted).HasDefaultValue(0);
+            entity.Property(e => e.NotifyOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Item).WithMany(p => p.UserItems)
                 .HasForeignKey(d => d.ItemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserItems__ItemI__123EB7A3");
+                .HasConstraintName("FK__UserItems__ItemI__1CBC4616");
 
             entity.HasOne(d => d.Status).WithMany(p => p.UserItems)
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserItems__Statu__14270015");
+                .HasConstraintName("FK__UserItems__Statu__1EA48E88");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserItems)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserItems__UserI__160F4887");
+                .HasConstraintName("FK__UserItems__UserI__208CD6FA");
         });
 
         OnModelCreatingPartial(modelBuilder);

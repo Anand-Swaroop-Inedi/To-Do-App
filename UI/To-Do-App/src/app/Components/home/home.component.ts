@@ -14,6 +14,8 @@ import { AddTaskComponent } from '../../shared/components/add-task/add-task.comp
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { DeleteConfirmationComponent } from '../../shared/components/delete-confirmation/delete-confirmation.component';
 import { Subscription } from 'rxjs';
+import { storeNotifyTimes } from '../../shared/notifications/store-notifyTimes';
+import { ApiResponse } from '../../models/ApiResponse';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -44,6 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkEditButtonClicked();
     this.checkDeleteButtonClicked();
+    this.getFurtherNotifyTasks();
   }
   checkEditButtonClicked() {
     this.editTaskSubscribtion = this.taskService.editTask$.subscribe(
@@ -60,6 +63,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.openDeleteConfirmContainer(value);
       }
     );
+  }
+  getFurtherNotifyTasks()
+  {
+    this.taskService.getFurtherNotifyTasks<ApiResponse>().subscribe((value:ApiResponse)=>{
+      storeNotifyTimes(value.result);
+    })
   }
   openDeleteConfirmContainer(id: number) {
     this.deleteItemId = id;

@@ -1,21 +1,40 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routePaths } from '../route-paths/route-paths';
 import { JwtHelperService } from '@auth0/angular-jwt';
-export const authGuard: CanActivateFn = (route, state) => {
-  const toaster: ToastrService = inject(ToastrService);
-  const router: Router = inject(Router);
+import { ApiResponse } from '../../models/ApiResponse';
+import { UserService } from '../../services/user/user.service';
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> => {
+  const userService = inject(UserService); 
+  const toaster = inject(ToastrService); // Instantiate your service if not injected
+  const router = new Router(); // Instantiate your service if not injected
   const helper = new JwtHelperService();
-  const token = sessionStorage.getItem('Token');
-  const isExpired = helper.isTokenExpired(token);
-  debugger
-  if (token != null && !isExpired) {
+  const accessToken = sessionStorage.getItem('AccessToken');
+  const isAccessTokenExpired = accessToken ? helper.isTokenExpired(accessToken) : true;
+  const refreshToken = sessionStorage.getItem('RefreshToken');
+  const isRefreshTokenExpired = refreshToken ? helper.isTokenExpired(refreshToken) : true;
+
+  if (accessToken && !isAccessTokenExpired) {
     return true;
+  } else if (!isRefreshTokenExpired) {
+    return new Promise<boolean>((resolve) => {
+      userService.getTokens<ApiResponse>().subscribe({next:(value) => {
+        debugger;
+        console.log("1");
+        sessionStorage.setItem("AccessToken", value.result[0]);
+        sessionStorage.setItem("RefreshToken", value.result[1]);
+        resolve(true); 
+      }, error:(error) => {
+        console.error('Error fetching tokens:', error);
+        resolve(false); 
+      }});
+    });
   } else {
-    sessionStorage.removeItem('Token')
-    toaster.error('please login to continue');
-    router.navigate(routePaths.index);
+    sessionStorage.removeItem('AccessToken');
+    sessionStorage.removeItem('RefreshToken');
+    toaster.error('Please login to continue');
+    router.navigate(['/login']); // Navigate to login page
     return false;
   }
 };

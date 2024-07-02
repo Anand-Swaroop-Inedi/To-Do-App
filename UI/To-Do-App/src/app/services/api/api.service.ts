@@ -9,7 +9,6 @@ export class ApiService {
   constructor(private http: HttpClient) {}
   get<T>(url: string,params?:HttpParams): Observable<T> 
   {
-    debugger
     if(params)
       {
         return this.http.get<T>(url,{params:params});

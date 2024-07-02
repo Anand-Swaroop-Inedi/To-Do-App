@@ -13,13 +13,14 @@ import {
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { routePaths } from '../../../shared/route-paths/route-paths';
+import { NotificationsComponent } from "../../../shared/components/notifications/notifications.component";
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
-  imports: [],
+    selector: 'app-header',
+    standalone: true,
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
+    imports: [NotificationsComponent]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
@@ -43,9 +44,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
   onSignOut() {
-    sessionStorage.removeItem('Token');
+    sessionStorage.removeItem('AccessToken');
+    sessionStorage.removeItem('RefreshToken');
     this.toaster.success('Signed out successfully');
     this.router.navigate(routePaths.index);
+    localStorage.clear();
     debugger;
   }
   sendAddTaskRequest() {

@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       : "Don't have an account? Create";
   }
   isTokenExists() {
-    if (sessionStorage.getItem('Token') != null) {
+    if (sessionStorage.getItem('AccessToken') != null) {
       this.router.navigate(routePaths.dashboard);
     }
   }
@@ -139,10 +139,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
         next: (response) => {
           this.taskService.isLoading$.next(false);
           if (response.status == message.Success) {
-            sessionStorage.setItem('Token', response.result);
-            var d=new Date();
-            sessionStorage.setItem('Time',d.toString())
-              this.router.navigate(routePaths.dashboard);
+            sessionStorage.setItem("AccessToken",response.result[0]);
+            sessionStorage.setItem("RefreshToken",response.result[1]);            var d=new Date();
+            this.router.navigate(routePaths.dashboard);
             this.toaster.success(response.message);
           } else {
             this.toaster.error(response.message);

@@ -10,6 +10,11 @@
   width: 100%;
   margin: 20px 40px 10px 0px;
 }
+.header-right-menu{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 .logo-text {
   font-family: "Lexend";
   font-size: 2vw;
@@ -49,6 +54,9 @@
 }
 .button-image {
   width: 20px;
+}
+.notification{
+  margin: auto 20px;
 }
 .sign-out-button {
   display: flex;
@@ -96,7 +104,7 @@
   .sign-out-button {
     margin: 13px 0px;
     padding: 0px 2px;
-    width: 110px;
+    width: 90px;
     height: 40px;
   }
   .button-image {
@@ -116,5 +124,8 @@
   }
   .header-name {
     display: none;
+  }
+  .notification{
+    margin: auto 15px auto 5px;
   }
 }

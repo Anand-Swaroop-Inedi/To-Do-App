@@ -6,6 +6,7 @@ export class Task {
   statusid: number;
   createdon: Date;
   completedon: Date;
+  notifyOn:Date;
   statusName: string;
   constructor(response: any) {
     this.id = response.id;
@@ -14,6 +15,7 @@ export class Task {
     this.userid = response.userid;
     this.completedon = response.completedon;
     this.createdon = response.createdon;
+    this.notifyOn=response.notifyOn;
     this.statusid = response.statusid;
     this.statusName = response.statusName;
   }

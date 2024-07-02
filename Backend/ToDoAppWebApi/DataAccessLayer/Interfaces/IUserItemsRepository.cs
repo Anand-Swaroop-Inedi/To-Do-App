@@ -7,7 +7,7 @@ namespace DataAccessLayer.Interfaces
         public Task<UserItem> checkItemCompleted(UserItem item);
         public Task<int> checkItemLinkingExists(UserItem item);
         public Task Update(UserItem item);
-        public Task AddItem(UserItem item);
+        public Task<int> AddItem(UserItem item);
         public Task<List<UserItem>> GetAll(int userId);
         public Task<UserItem> GetItemById(int id, int userId);
         public Task DeleteItem(UserItem item, int UserId);
@@ -17,6 +17,7 @@ namespace DataAccessLayer.Interfaces
         public Task<int> GetCompletedItemsCount(int userId);
         public Task<int> TotalItemsCount(int userId);
         public Task<List<UserItem>> GetPendingTasks(int userId, string property, string order);
-
+        public Task<List<UserItem>> GetNotifyTasks(int userId);
+        public Task<List<UserItem>> GetFurtherNotifyTasks(int userId);
     }
 }

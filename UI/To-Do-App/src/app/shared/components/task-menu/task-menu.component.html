@@ -48,7 +48,7 @@
               : 'assets/unchecked-box.png'
           "
           alt="complete"
-          (click)="ToggleActiveComplete(task.id)"
+          (click)="ToggleActiveComplete(task)"
         />
         <div class="edit-delete-icons">
           <img
@@ -64,7 +64,7 @@
                 : 'assets/delete.png'
             "
             alt="delete"
-            (click)="delete(task.id)"
+            (click)="delete(task)"
           />
         </div>
       </div>

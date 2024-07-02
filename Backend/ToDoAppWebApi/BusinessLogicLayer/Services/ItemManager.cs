@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.Interfaces;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using EntityItem = DataAccessLayer.Entities.Item;
 using EntityUserItem = DataAccessLayer.Entities.UserItem;
@@ -16,11 +17,12 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> AddItem(ModelsItem item)
+        public async Task<int> AddItem(ModelsItem item)
         {
             _unitOfWork.BeginTransaction();
             int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
             int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(item));
+            int id = 0;
             if (result > 0)
             {
 
@@ -28,7 +30,7 @@ namespace BusinessLogicLayer.Services
                 result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<EntityUserItem>(item));
                 if (result > 0)
                 {
-                    return false;
+                    return 0;
                 }
                 EntityUserItem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<EntityUserItem>(item));
                 if (u != null)
@@ -39,20 +41,20 @@ namespace BusinessLogicLayer.Services
                 else
                 {
                     item.Statusid = statusId;
-                    await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
+                    id = await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
                 }
 
             }
             else
             {
                 await _unitOfWork.ItemRepository.Add(_mapper.Map<EntityItem>(item));
-                int id = await _unitOfWork.ItemRepository.recentlyAddedId();
-                item.Itemid = id + 1;
+                int itemId = await _unitOfWork.ItemRepository.recentlyAddedId();
+                item.Itemid = itemId + 1;
                 item.Statusid = statusId;
-                await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
+                id=await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
             }
             _unitOfWork.Commit();
-            return true;
+            return id;
         }
         public async Task<List<ModelsItem>> GetAll(int userId)
         {
@@ -150,6 +152,14 @@ namespace BusinessLogicLayer.Services
         public async Task<List<ModelsItem>> GetPendingTasks(int userId, string property, string order)
         {
             return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId, property, order));
+        }
+        public async Task<List<ModelsItem>> GetNotifyTasks(int userId)
+        {
+            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetNotifyTasks(userId));
+        }
+        public async Task<List<ModelsItem>> GetFurtherNotifyTasks(int userId)
+        {
+            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId));
         }
     }
 }

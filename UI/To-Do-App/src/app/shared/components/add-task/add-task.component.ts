@@ -16,6 +16,8 @@ import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription, tap } from 'rxjs';
 import { message } from '../../enums/response';
 import { ErrorDisplay } from '../../exception-handling/exception-handle';
+import { TimeValidator } from '../../custom-validations/time-validator';
+import { storeNotifyTimes } from '../../notifications/store-notifyTimes';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -30,6 +32,7 @@ export class AddTaskComponent {
   isEdit: boolean = false;
   editableTask!: Task;
   requiredMessage: string = 'This Field is Required';
+  timeInvalid:string='Time should not be less than current time'
   editTaskSubscribtion!: Subscription;
   constructor(
     private taskService: TaskService,
@@ -45,6 +48,7 @@ export class AddTaskComponent {
     this.taskForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
+      notifyOn:new FormControl('',[TimeValidator])
     });
   }
   getDataIfEdit() {
@@ -53,6 +57,7 @@ export class AddTaskComponent {
         this.taskForm.patchValue({
           name: value.name,
           description: value.description,
+          notifyOn:value.notifyOn
         });
         this.editableTask = value;
         this.isEdit = true;
@@ -73,6 +78,7 @@ export class AddTaskComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
+      debugger
       this.taskService.isLoading$.next(true);
       debugger;
       if (!this.isEdit) {
@@ -83,10 +89,14 @@ export class AddTaskComponent {
     }
   }
   createTask() {
+    var t: Task = new Task(this.taskForm.value);
     this.taskService
-      .createTask<ApiResponse>(new Task(this.taskForm.value))
+      .createTask<ApiResponse>(new Task(t))
       .subscribe({
         next: (response) => {
+          t.id=response.result;
+          t.statusName="active";
+          storeNotifyTimes(t)
           this.operationSucceded(response);
         },
         error: (error) => {
@@ -115,6 +125,8 @@ export class AddTaskComponent {
     t.createdon = this.editableTask.createdon;
     this.taskService.updateTask<ApiResponse>(t).subscribe({
       next: (response) => {
+        t.statusName="active";
+        storeNotifyTimes(t);
         this.operationSucceded(response);
       },
       error: (error) => {

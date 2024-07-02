@@ -1,5 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Common;
+using DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using messages = Common.Enums.Messages;
@@ -12,13 +14,13 @@ namespace ToDoAppWebApi.Controllers
     {
         private readonly IUserManager _userManager;
         private readonly TokenGenerator _tokenGenerator;
-        public AuthenticationController(IUserManager userManager,TokenGenerator tokenGenerator)
+        public AuthenticationController(IUserManager userManager, TokenGenerator tokenGenerator)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
         }
         [HttpPost()]
-        public async Task<Response> AuthenticateUser(User user)
+        public async Task<Response> AuthenticateUser(Models.User user)
         {
 
             int result = await _userManager.AuthenticateUser(user);
@@ -39,6 +41,18 @@ namespace ToDoAppWebApi.Controllers
                     Message = "Enter Correct Details",
                 };
             }
+        }
+        [Authorize]
+        [HttpGet("regenerate")]
+        public async Task<Response> RegenerateToken()
+        {
+            int userId = HttpContext.GetIdFromToken();
+            return new Response
+            {
+                Status = (int)messages.Success,
+                Message = "successful",
+                Result = await _tokenGenerator.GenerateToken(userId)
+            };
         }
     }
 }

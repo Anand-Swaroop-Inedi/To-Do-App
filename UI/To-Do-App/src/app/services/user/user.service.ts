@@ -8,6 +8,7 @@ import { ApiService } from '../api/api.service';
 export const userApiUrls = {
   authenticateUser: 'Authentication',
   addUser: 'User/add',
+  regenerateToken:'Authentication/regenerate'
 };
 
 @Injectable({
@@ -26,5 +27,9 @@ export class UserService extends ApiService {
   authenticateUser<T>(user: User): Observable<T> {
     let url = this.apiUrl + userApiUrls.authenticateUser;
     return this.post<T>(url, user);
+  }
+  getTokens<T>():Observable<T>{
+    let url=this.apiUrl+userApiUrls.regenerateToken;
+    return this.get<T>(url);
   }
 }

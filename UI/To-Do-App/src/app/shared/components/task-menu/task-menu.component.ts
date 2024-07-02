@@ -54,14 +54,16 @@ export class TaskMenuComponent {
       if (i != index) taskDetail[i].style.display = 'none';
     }
   }
-  delete(id: number) {
-    this.taskService.deleteConfirm$.next(id);
+  delete(task:Task) {
+    this.taskService.deleteConfirm$.next(task.id);
+    this.taskService.notificationMessage$.next([task.name,"del"])
   }
-  ToggleActiveComplete(id: number) {
+  ToggleActiveComplete(task:Task) {
     if (this.pageName.toLowerCase() == 'active' ||this.pageName.toLowerCase() =='pending') {
-      this.makeTaskAsCompleted(id);
+      this.makeTaskAsCompleted(task.id);
+      this.taskService.notificationMessage$.next([task.name,"del"]);
     } else if (this.pageName.toLowerCase() == 'completed') {
-      this.makeTaskAsActive(id);
+      this.makeTaskAsActive(task.id);
     }
   }
   makeTaskAsCompleted(id: number) {

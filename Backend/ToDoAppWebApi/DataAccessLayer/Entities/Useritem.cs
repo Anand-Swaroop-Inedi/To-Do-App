@@ -1,4 +1,7 @@
-﻿namespace DataAccessLayer.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace DataAccessLayer.Entities;
 
 public partial class UserItem
 {
@@ -11,6 +14,8 @@ public partial class UserItem
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? CompletedOn { get; set; }
+
+    public DateTime? NotifyOn { get; set; }
 
     public int StatusId { get; set; }
 

@@ -3,30 +3,11 @@
   <div class="filter">
     <h4 class="heading">Sort:</h4>
     <select class="sort-menu" (change)="sortTable($event)">
-        <option selected value="name asc">Name Asc</option>
+        <option  value="name asc">Name Asc</option>
         <option value="name desc">Name Desc</option>
-        <option value="createdOn asc">CreatedOn Asc</option>
-        <option value="createdOn desc">CreatedOn Desc</option>
+        <option  value="createdOn asc">CreatedOn Asc</option>
+        <option selected value="createdOn desc">CreatedOn Desc</option>
     </select>
   </div>
-  <!-- <table class="task-table">
-     <thead>
-        <th>
-            <h4 class="heading">Sort:</h4>
-        </th>
-        <th>
-            <div class="table-header">
-                <h6 class="table-head">Task Name</h6>
-                <i [ngClass]="temp%2!=0 || temp==0?'bi bi-arrow-up ascending':'bi bi-arrow-up descending'" (click)="sortTable('name')"></i>
-            </div>
-        </th>
-        <th>
-            <div class="table-header">
-                <h6 class="table-head">Created On</h6>
-                <i [ngClass]="temp%2!=0 || temp==0?'bi bi-arrow-up ascending':'bi bi-arrow-up descending'" (click)="sortTable('createdOn')"></i>
-            </div>
-        </th>
-     </thead>
-  </table> -->
   <app-task-menu [tasks]="pendingTasks" class="task-menu"></app-task-menu>
 </div>

@@ -15,6 +15,7 @@
         public DateTime? Createdon { get; set; }
 
         public DateTime? Completedon { get; set; }
+        public DateTime? NotifyOn { get; set; }
 
         public int Statusid { get; set; }
         public String? StatusName { get; set; }

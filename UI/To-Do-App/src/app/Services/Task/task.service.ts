@@ -16,7 +16,9 @@ export const TaskApiUrls = {
   getCompletionPercentage: 'Item/completion-percentage',
   makeCompleted: 'Item/completed',
   makeActive: 'Item/active',
-  pendingTasks:'Item/pending-items'
+  pendingTasks:'Item/pending-items',
+  notifyTasks:'Item/notify-items',
+  notifyFurtherTasks:'Item/notify-further-items'
 };
 
 @Injectable({
@@ -28,12 +30,16 @@ export class TaskService extends ApiService {
   editTask$: Subject<Task>;
   isLoading$: Subject<boolean>;
   deleteConfirm$: Subject<number>;
+  notificationMessage$:Subject<string[]>;
+  notifications$:Subject<Task[]>;
   constructor(private httpClient: HttpClient) {
     super(httpClient);
     this.editTask$ = new Subject<Task>();
     this.isLoading$ = new Subject<boolean>();
     this.deleteConfirm$ = new Subject<number>();
     this.pageManiulated$ = new Subject<string>();
+    this.notificationMessage$=new Subject<string[]>();
+    this.notifications$=new Subject<Task[]>();
     this.apiUrl = environment.apiUrl;
   }
   getAllTasks<T>(): Observable<T> {
@@ -41,7 +47,7 @@ export class TaskService extends ApiService {
     return this.get<T>(url);
   }
   createTask<T>(t: Task): Observable<T> {
-    debugger;
+    debugger
     let url = this.apiUrl + TaskApiUrls.createTask;
     return this.post<T>(url, t);
   }
@@ -84,5 +90,13 @@ export class TaskService extends ApiService {
   makeTaskAsActive<T>(id: number): Observable<T> {
     let url = this.apiUrl + TaskApiUrls.makeActive;
     return this.post<T>(url, id);
+  }
+  getNotifyTasks<T>():Observable<T>{
+    let url = this.apiUrl + TaskApiUrls.notifyTasks;
+    return this.get<T>(url);
+  }
+  getFurtherNotifyTasks<T>():Observable<T>{
+    let url = this.apiUrl + TaskApiUrls.notifyFurtherTasks;
+    return this.get<T>(url);
   }
 }

@@ -1,4 +1,7 @@
-﻿namespace DataAccessLayer.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace DataAccessLayer.Entities;
 
 public partial class Status
 {

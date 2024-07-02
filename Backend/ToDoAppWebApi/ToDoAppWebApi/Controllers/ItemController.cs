@@ -22,13 +22,14 @@ namespace ToDoAppWebApi.Controllers
         public async Task<Response> AddItem(Item item)
         {
             item.Userid = HttpContext.GetIdFromToken();
-            bool result = await _itemManager.AddItem(item);
-            if (result)
+            int result = await _itemManager.AddItem(item);
+            if (result>0)
             {
                 return new Response
                 {
                     Status = (int)messages.Success,
-                    Message = "Task Added Successfully"
+                    Message = "Task Added Successfully",
+                    Result= result
                 };
 
             }
@@ -168,6 +169,18 @@ namespace ToDoAppWebApi.Controllers
         {
             int userId = HttpContext.GetIdFromToken();
             return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId, property, order) };
+        }
+        [HttpGet("notify-items")]
+        public async Task<Response> GetNotifyTasks()
+        {
+            int userId = HttpContext.GetIdFromToken();
+            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetNotifyTasks(userId) };
+        }
+        [HttpGet("notify-further-items")]
+        public async Task<Response> GetFurtherNotifyTasks()
+        {
+            int userId = HttpContext.GetIdFromToken();
+            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetFurtherNotifyTasks(userId) };
         }
     }
 }

@@ -20,6 +20,14 @@
     <app-error [errorMessage]="requiredMessage"></app-error>
   </div>
   }
+  <input type="datetime-local" formControlName="notifyOn" class="notify-time">
+  @if(taskForm.controls['notifyOn'].invalid &&
+  (isSubmitted||taskForm.controls['notifyOn'].touched ||
+  taskForm.controls['notifyOn'].dirty)) {
+  <div *ngIf="taskForm.controls['notifyOn'].errors?.['invalidTime']">
+    <app-error [errorMessage]="timeInvalid"></app-error>
+  </div>
+  }
   <div class="form-buttons">
     <div></div>
     <div class="operations">
