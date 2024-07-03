@@ -18,11 +18,11 @@ import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
 export class CompletedComponent implements OnInit, OnDestroy {
   pageManiulatedSubscribtion!: Subscription;
   taskServiceSubscription!: Subscription;
-  completedTasks!:Task[];
+  completedTasks!: Task[];
   constructor(
     private taskService: TaskService,
     private toaster: ToastrService,
-    private errorDisplay:ErrorDisplay
+    private errorDisplay: ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkChangesMade();
@@ -46,7 +46,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.completedTasks=response.result;
+          this.completedTasks = response.result;
         },
         error: (error) => {
           this.errorDisplay.errorOcurred(error);

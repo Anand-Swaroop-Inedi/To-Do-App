@@ -107,14 +107,12 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<List<UserItem>> GetNotifyTasks(int userId)
         {
-            Console.WriteLine(DateTime.Now);
             return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
                         u.UserId == userId && (u.NotifyOn <= DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
         public async Task<List<UserItem>> GetFurtherNotifyTasks(int userId)
         {
-            Console.WriteLine(DateTime.Now);
             return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
                         u.UserId == userId && (u.NotifyOn > DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();

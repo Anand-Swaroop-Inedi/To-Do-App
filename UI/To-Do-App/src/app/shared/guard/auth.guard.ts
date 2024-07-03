@@ -20,8 +20,6 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   } else if (!isRefreshTokenExpired) {
     return new Promise<boolean>((resolve) => {
       userService.getTokens<ApiResponse>().subscribe({next:(value) => {
-        debugger;
-        console.log("1");
         sessionStorage.setItem("AccessToken", value.result[0]);
         sessionStorage.setItem("RefreshToken", value.result[1]);
         resolve(true); 

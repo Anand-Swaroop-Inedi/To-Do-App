@@ -27,7 +27,6 @@ export class NotificationsComponent {
     this.taskService.getNotifyTasks<ApiResponse>().subscribe((value:ApiResponse)=>{
       for(let i=0;i<value.result.length;i++)
       this.notifications.push(value.result[i].name);
-      debugger;
     })
   }
   displayNotifications()

@@ -49,7 +49,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.toaster.success('Signed out successfully');
     this.router.navigate(routePaths.index);
     localStorage.clear();
-    debugger;
   }
   sendAddTaskRequest() {
     this.flag.emit();

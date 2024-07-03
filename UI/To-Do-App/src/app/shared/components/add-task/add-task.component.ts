@@ -48,7 +48,7 @@ export class AddTaskComponent {
     this.taskForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
-      notifyOn:new FormControl('',[TimeValidator])
+      notifyOn:new FormControl(null,[TimeValidator])
     });
   }
   getDataIfEdit() {
@@ -78,9 +78,7 @@ export class AddTaskComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.taskForm.valid) {
-      debugger
       this.taskService.isLoading$.next(true);
-      debugger;
       if (!this.isEdit) {
         this.createTask();
       } else {

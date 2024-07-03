@@ -40,12 +40,10 @@ export class AppComponent implements OnInit {
       this.sub = interval(60000).subscribe((t) => {
         var  keys = Object.keys(localStorage);
         var  i = keys.length;
-        console.log(keys);
         while (i--) {
           var arr: string[] = localStorage.getItem(keys[i])!.split(',');
           const parsedDateTime = new Date(arr[1]);
           const currentDateTime = new Date();
-          debugger;
           if (parsedDateTime <= currentDateTime) {
             setTimeout(() => {
               this.isNotify = false;
@@ -53,11 +51,9 @@ export class AppComponent implements OnInit {
             this.message = arr[0];
             this.isNotify = true;
             var  k = Object.keys(localStorage);
-            console.log(keys[i],k)
             localStorage.removeItem(keys[i]);
             k
             k= Object.keys(localStorage);
-            console.log(k);
             this.taskService.notificationMessage$.next([arr[0],'add']);
           }
         }

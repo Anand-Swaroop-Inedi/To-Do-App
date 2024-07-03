@@ -20,10 +20,14 @@
     <app-error [errorMessage]="requiredMessage"></app-error>
   </div>
   }
-  <input type="datetime-local" formControlName="notifyOn" class="notify-time">
+  <span class="time-header">Choose Notify Time:</span>
+  <input type="datetime-local" formControlName="notifyOn" class="notify-time" placeholder="notify-time">
   @if(taskForm.controls['notifyOn'].invalid &&
   (isSubmitted||taskForm.controls['notifyOn'].touched ||
   taskForm.controls['notifyOn'].dirty)) {
+    <div *ngIf="taskForm.controls['notifyOn'].errors?.['required']">
+      <app-error [errorMessage]="requiredMessage"></app-error>
+    </div>
   <div *ngIf="taskForm.controls['notifyOn'].errors?.['invalidTime']">
     <app-error [errorMessage]="timeInvalid"></app-error>
   </div>

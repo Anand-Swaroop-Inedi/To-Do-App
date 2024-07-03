@@ -23,12 +23,12 @@ import { storeNotifyTimes } from '../../shared/notifications/store-notifyTimes';
   imports: [TaskHeaderComponent, TaskMenuComponent],
 })
 export class ActiveComponent implements OnInit, OnDestroy {
-  activeTasks!:Task[];
+  activeTasks!: Task[];
   taskServiceSubscription!: Subscription;
-  pageManipulatedSubscription!:Subscription;
+  pageManipulatedSubscription!: Subscription;
   constructor(
     private taskService: TaskService,
-    private errorDisplay:ErrorDisplay
+    private errorDisplay: ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkPageManipulated();
@@ -36,11 +36,12 @@ export class ActiveComponent implements OnInit, OnDestroy {
   }
 
   checkPageManipulated() {
-    this.pageManipulatedSubscription=this.taskService.pageManiulated$.subscribe((response) => {
-      if (response == 'active') {
-        this.sendUpdatedData();
-      }
-    });
+    this.pageManipulatedSubscription =
+      this.taskService.pageManiulated$.subscribe((response) => {
+        if (response == 'active') {
+          this.sendUpdatedData();
+        }
+      });
   }
   sendUpdatedData() {
     this.getActiveTasksData();
@@ -52,7 +53,7 @@ export class ActiveComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.activeTasks=response.result;
+          this.activeTasks = response.result;
         },
         error: (error) => {
           this.errorDisplay.errorOcurred(error);

@@ -19,7 +19,6 @@ export const customInterceptor: HttpInterceptorFn = (req, next) => {
   let refreshToken = sessionStorage.getItem('RefreshToken');
   const isAccessTokenExpired = helper.isTokenExpired(accessToken);
   const isRefreshTokenExpired = helper.isTokenExpired(refreshToken);
-  debugger;
   if(accessToken && isAccessTokenExpired && !isRefreshTokenExpired)
     {
         req = req.clone({
@@ -35,7 +34,6 @@ export const customInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       if(error.status==401)
       {
-        debugger
         toaster.error("please login")
         router.navigate(routePaths.index);
         taskService.isLoading$.next(false);

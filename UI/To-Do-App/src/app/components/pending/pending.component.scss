@@ -29,10 +29,18 @@
   }
   @media only screen and (max-width: 900px) {
     .task-list {
-      margin: 0px;
+      margin: 0px 10px 0px 0px;
     }
     .task-menu {
-      margin: 0px;
+      margin: 5px 0px;
+    }
+    .filter{
+      margin-right: 5px;
+      justify-content: flex-end;
+      margin-right: 15px;
+    }
+    .heading{
+      margin: 0px 10px ;
     }
   }
   

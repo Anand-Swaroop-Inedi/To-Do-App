@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
@@ -35,7 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   taskServiceSubscription!: Subscription;
   constructor(
     private taskService: TaskService,
-    private errorDisplay:ErrorDisplay
+    private errorDisplay: ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkDashboardManipulated();
@@ -60,15 +55,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taskService.isLoading$.next(false);
-          this.tasks=response.result;
+          this.tasks = response.result;
         },
         error: (error) => {
-          debugger;
           this.errorDisplay.errorOcurred(error);
         },
       });
   }
- 
   ngOnDestroy() {
     this.taskServiceSubscription.unsubscribe();
     this.pageManiulatedSubscribtion.unsubscribe();
