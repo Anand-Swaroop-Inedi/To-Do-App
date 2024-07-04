@@ -20,6 +20,6 @@
         public int Statusid { get; set; }
         public String? StatusName { get; set; }
         public int? Isdeleted { get; set; }
-
+        public int? IsNotifyCancelled { get; set; }
     }
 }

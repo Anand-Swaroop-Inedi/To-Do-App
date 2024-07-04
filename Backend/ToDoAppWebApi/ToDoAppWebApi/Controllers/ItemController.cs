@@ -182,5 +182,20 @@ namespace ToDoAppWebApi.Controllers
             int userId = HttpContext.GetIdFromToken();
             return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetFurtherNotifyTasks(userId) };
         }
+        [HttpPut("modify-notification-status")]
+        public  async Task<Response> updateNotificationStatus()
+        {
+            int userId = HttpContext.GetIdFromToken();
+            await _itemManager.updateNotificationStatus(userId);
+            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription()};
+        }
+        [HttpPost("cancel-notifications")]
+        public async Task<Response> CancelNotifications(int[] ids)
+        {
+            int userId = HttpContext.GetIdFromToken();
+            await _itemManager.CancelNotifications(userId,ids);
+            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription() };
+        }
+
     }
 }

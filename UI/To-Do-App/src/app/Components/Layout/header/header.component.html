@@ -7,7 +7,9 @@
         <p>Add Task</p>
         <img src="assets/Add button.png" class="button-image" />
       </div>
-      <app-notifications class="notification"></app-notifications>
+      <div class="notification">
+        <app-notifications #notifications></app-notifications>
+      </div>
       <div class="sign-out-button" (click)="onSignOut()">
         <h3 class="sign-out-text">Sign out</h3>
         <img class="sign-out-image" src="assets/sign-out.png" alt="sign-out" />

@@ -17,6 +17,8 @@ namespace BusinessLogicLayer.Interfaces
         public Task<List<Item>> GetPendingTasks(int userId, string property, string order);
         public Task<List<Item>> GetNotifyTasks(int userId);
         public Task<List<Item>> GetFurtherNotifyTasks(int userId);
+        public Task updateNotificationStatus(int userId);
+        public Task CancelNotifications(int userId, int[] ids);
 
     }
 }

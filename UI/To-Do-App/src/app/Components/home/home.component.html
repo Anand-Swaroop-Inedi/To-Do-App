@@ -1,5 +1,6 @@
+<app-notify-message *ngIf="isNotify" [message]="message"></app-notify-message>
 <div class="home" #home>
-  <app-header (flag)="openAddTaskContainer()" class="header"></app-header>
+  <app-header [isNotificationsRefreshed]="isNotificationsRefreshed" (flag)="openAddTaskContainer()" class="header"></app-header>
   <div class="body">
     <app-side-bar
       (flag)="openAddTaskContainer()"

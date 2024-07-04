@@ -56,12 +56,12 @@ export class TaskMenuComponent {
   }
   delete(task:Task) {
     this.taskService.deleteConfirm$.next(task.id);
-    this.taskService.notificationMessage$.next([task.name,"del"])
+    this.taskService.notificationMessage$.next([task.name,task.id.toString(),"del"])
   }
   ToggleActiveComplete(task:Task) {
     if (this.pageName.toLowerCase() == 'active' ||this.pageName.toLowerCase() =='pending') {
       this.makeTaskAsCompleted(task.id);
-      this.taskService.notificationMessage$.next([task.name,"del"]);
+      this.taskService.notificationMessage$.next([task.name,task.id.toString(),"del"]);
     } else if (this.pageName.toLowerCase() == 'completed') {
       this.makeTaskAsActive(task.id);
     }

@@ -1,9 +1,11 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {
   Router,
@@ -25,10 +27,20 @@ import { NotificationsComponent } from "../../../shared/components/notifications
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() flag: EventEmitter<null> = new EventEmitter<null>();
   pageName: string = '';
+  @Input()isNotificationsRefreshed:boolean=false;
   routerSubscription!: Subscription;
+  @ViewChild('notifications') notificationsRef!:NotificationsComponent;
   constructor(private router: Router, private toaster: ToastrService) {}
   ngOnInit() {
     this.setPageName();
+  }
+  ngOnChanges()
+  {
+    debugger
+    if(this.isNotificationsRefreshed)
+      {
+        this.notificationsRef.getTodaysPendingTask();
+      }
   }
   setPageName() {
     let name = this.router.url.split('/').pop();

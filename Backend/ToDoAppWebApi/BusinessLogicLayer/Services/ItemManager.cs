@@ -54,7 +54,7 @@ namespace BusinessLogicLayer.Services
                 id=await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
             }
             _unitOfWork.Commit();
-            return id;
+            return id+1;
         }
         public async Task<List<ModelsItem>> GetAll(int userId)
         {
@@ -160,6 +160,18 @@ namespace BusinessLogicLayer.Services
         public async Task<List<ModelsItem>> GetFurtherNotifyTasks(int userId)
         {
             return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId));
+        }
+        public async Task updateNotificationStatus(int userId)
+        {
+            _unitOfWork.BeginTransaction();
+           await _unitOfWork.UserItemRepository.updateNotificationStatus(userId);
+            _unitOfWork.Commit();
+        }
+        public async Task CancelNotifications(int userId, int[] ids)
+        {
+            _unitOfWork.BeginTransaction();
+            await _unitOfWork.UserItemRepository.CancelNotifications(userId, ids);
+            _unitOfWork.Commit();
         }
     }
 }

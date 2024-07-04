@@ -1,12 +1,11 @@
 .notification-menu{
     position: absolute;
-    display: none;
     left: 68%;
     flex-direction: column;
     z-index: 1000;
     background-color: white;
     width:230px;
-    height:240px;
+    max-height:240px;
     padding: 0px;
     overflow-y: scroll;
     border-radius: 5px;
@@ -19,14 +18,15 @@
 .count{
     color: white;
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     font-size: 10px;
     top:-5px;
     left:80%;
     text-align: center;
-    background-color: red;
+    background-color: #ba5112;
     border-radius: 50%;
+    padding: 1px;
 }
 .notification-image{
     width: 40px;

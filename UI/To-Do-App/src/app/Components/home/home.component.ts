@@ -13,23 +13,28 @@ import { RouterModule } from '@angular/router';
 import { AddTaskComponent } from '../../shared/components/add-task/add-task.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { DeleteConfirmationComponent } from '../../shared/components/delete-confirmation/delete-confirmation.component';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { storeNotifyTimes } from '../../shared/notifications/store-notifyTimes';
 import { ApiResponse } from '../../models/ApiResponse';
+import { NotifyMessageComponent } from "../../shared/components/notify-message/notify-message.component";
+import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
+import { CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  imports: [
-    SideBarComponent,
-    HeaderComponent,
-    DashboardComponent,
-    SideBarMobileComponent,
-    RouterModule,
-    AddTaskComponent,
-    DeleteConfirmationComponent,
-  ],
+    selector: 'app-home',
+    standalone: true,
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    imports: [
+        SideBarComponent,
+        HeaderComponent,
+        DashboardComponent,
+        SideBarMobileComponent,
+        RouterModule,
+        AddTaskComponent,
+        DeleteConfirmationComponent,
+        NotifyMessageComponent,
+        CommonModule
+    ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   pageName: string = '';
@@ -40,8 +45,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   deleteItemId!: number;
   editTaskSubscribtion!: Subscription;
   deleteTaskSubscription!: Subscription;
+  isNotify: boolean = false;
+  message: string = '';
+  sub!: Subscription;
+  isNotificationsRefreshed:boolean=false;
   constructor(
-    private taskService: TaskService,
+    private taskService: TaskService
+    ,private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkEditButtonClicked();
@@ -90,6 +100,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.addTaskRef.nativeElement.style.display = 'none';
     this.homeDivRef.nativeElement.classList.remove('blur');
     this.homeDivRef.nativeElement.style.pointerEvents = 'auto';
+  }
+  ngAfterViewInit()
+  {
+    this.notifyMessages();
+  }
+  notifyMessages() {
+      this.sub = interval(60000).subscribe((t) => {
+        debugger
+        var d=new Date();
+        console.log(d.getHours(),d.getMinutes())
+        if(d.getHours()==14 && d.getMinutes()==4)
+          {
+            this.taskService.modifyNotificationStatus().subscribe({
+              next:()=>{
+                this.isNotificationsRefreshed=true
+                this.isNotificationsRefreshed=false
+              },
+          error:(err)=>{
+            this.errorDisplay.errorOcurred(err);
+          }
+        });
+          }
+        var  keys = Object.keys(localStorage);
+        var  i = keys.length;
+        while (i--) {
+          var arr: string[] = localStorage.getItem(keys[i])!.split(',');
+          const parsedDateTime = new Date(arr[1]);
+          const currentDateTime = new Date();
+          if (parsedDateTime <= currentDateTime) {
+            setTimeout(() => {
+              this.isNotify = false;
+            }, 3000);
+            this.message = arr[0];
+            this.isNotify = true;
+            localStorage.removeItem(keys[i]);
+            this.taskService.notificationMessage$.next([arr[0],keys[i],'add']);
+          }
+        }
+      });    
   }
   ngOnDestroy() {
     this.editTaskSubscribtion.unsubscribe();

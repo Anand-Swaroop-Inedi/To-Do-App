@@ -1,10 +1,7 @@
-﻿using statusEnum = Common.Enums.Status;
-using DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Reflection;
-using Models;
+using statusEnum = Common.Enums.Status;
 
 namespace DataAccessLayer.Repositories
 {
@@ -27,6 +24,10 @@ namespace DataAccessLayer.Repositories
         public async Task<int> AddItem(UserItem item)
         {
             _context.UserItems.Add(item);
+            if (!_context.UserItems.Any())
+            {
+                return 0;
+            }
             return _context.UserItems.Select(r => r.Id).Max();
         }
         public async Task Update(UserItem item)
@@ -69,7 +70,7 @@ namespace DataAccessLayer.Repositories
         {
             return _context.UserItems.Where(u => u.IsDeleted == 0 && u.UserId == userId && u.CreatedOn > DateTime.Today && u.CreatedOn < DateTime.Today.AddDays(1)).Count();
         }
-        public async Task<List<UserItem>> GetPendingTasks(int userId,string property,string order)
+        public async Task<List<UserItem>> GetPendingTasks(int userId, string property, string order)
         {
             if (!string.IsNullOrEmpty(property))
             {
@@ -109,13 +110,32 @@ namespace DataAccessLayer.Repositories
         {
             return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
-                        u.UserId == userId && (u.NotifyOn <= DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+                        u.UserId == userId && (u.NotifyOn <= DateTime.Now) && (u.NotifyOn >= DateTime.Today.AddDays(-1)) && u.IsNotifyCancelled == 0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
         public async Task<List<UserItem>> GetFurtherNotifyTasks(int userId)
         {
             return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
-                        u.UserId == userId && (u.NotifyOn > DateTime.Now)).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+                        u.UserId == userId && (u.NotifyOn >= DateTime.Now) && (u.NotifyOn <= DateTime.Now.AddDays(1)) && u.IsNotifyCancelled == 0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+
+        }
+        public async Task CancelNotifications(int userId,int[] ids)
+        {
+            for (int i = 0; i < ids.Length; i++)
+            {
+                UserItem u = _context.UserItems.Where(u =>u.UserId==userId && u.Id == ids[i]).FirstOrDefault();
+                u.IsNotifyCancelled = 1;
+                _context.UserItems.Update(u);
+            }
+        }
+        public async Task updateNotificationStatus(int userId)
+        {
+            List<UserItem> items = _context.UserItems.Where(u => u.IsNotifyCancelled == 1 && u.Status.Name.ToUpper() == statusEnum.active.ToString()).ToList();
+            for (int i = 0; i < items.Count; i++)
+            {
+                items[i].IsNotifyCancelled = 0;
+                _context.Update(items[i]);
+            }
         }
     }
 }

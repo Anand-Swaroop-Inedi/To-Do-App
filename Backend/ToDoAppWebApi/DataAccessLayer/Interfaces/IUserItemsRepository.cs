@@ -19,5 +19,7 @@ namespace DataAccessLayer.Interfaces
         public Task<List<UserItem>> GetPendingTasks(int userId, string property, string order);
         public Task<List<UserItem>> GetNotifyTasks(int userId);
         public Task<List<UserItem>> GetFurtherNotifyTasks(int userId);
+        public Task updateNotificationStatus(int userId);
+        public Task CancelNotifications(int userId, int[] ids);
     }
 }

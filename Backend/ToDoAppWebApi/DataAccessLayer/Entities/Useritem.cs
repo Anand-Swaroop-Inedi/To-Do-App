@@ -21,6 +21,8 @@ public partial class UserItem
 
     public int? IsDeleted { get; set; }
 
+    public int? IsNotifyCancelled { get; set; }
+
     public virtual Item Item { get; set; } = null!;
 
     public virtual Status Status { get; set; } = null!;

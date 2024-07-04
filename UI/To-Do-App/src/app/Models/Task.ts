@@ -8,6 +8,8 @@ export class Task {
   completedon: Date;
   notifyOn:Date;
   statusName: string;
+  IsNotifyCancelled:number;
+
   constructor(response: any) {
     this.id = response.id;
     this.name = response.name;
@@ -18,5 +20,6 @@ export class Task {
     this.notifyOn=response.notifyOn;
     this.statusid = response.statusid;
     this.statusName = response.statusName;
+    this.IsNotifyCancelled=response.IsNotifyCancelled;
   }
 }

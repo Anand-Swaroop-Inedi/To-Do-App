@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
-import { Task } from '../../../models/Task';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { ApiResponse } from '../../../models/ApiResponse';
+import { Subscription, interval } from 'rxjs';
+import { Router,Event as NavigationEvent, NavigationStart } from '@angular/router';
+import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({
   selector: 'app-notifications',
@@ -11,50 +13,90 @@ import { ApiResponse } from '../../../models/ApiResponse';
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
 })
-export class NotificationsComponent {
-  notifications:string[]=[];
+export class NotificationsComponent implements OnInit {
+  deletedNotificationIds:number[]=[];
   displayMenu:boolean=false;
-  constructor(private taskService:TaskService)
+  routerSubscription!:Subscription;
+  notificationIds:number[]=[];
+  notificationMessages:string[]=[];
+
+  constructor(private taskService:TaskService,private router:Router,private errorDisplay:ErrorDisplay)
   {
   }
-  ngOnInit()
-  {
-    this.addNewNotifications()
-    this.getTodaysPendingTask();
+  ngOnInit() {
+    this.routerSubscription = this.router.events.subscribe(
+      (event: NavigationEvent) => {
+        if (event instanceof NavigationStart) {
+          if(this.deletedNotificationIds.length)
+            {
+              this.taskService.isLoading$.next(true);
+              this.taskService.cancelNotifications(this.deletedNotificationIds).subscribe(
+                () => {
+                  this.deletedNotificationIds = [];
+                  this.taskService.isLoading$.next(false);
+                },
+                (error) => {
+                  this.errorDisplay.errorOcurred(error);
+                  this.taskService.isLoading$.next(false);
+                }
+              );
+            }
+        }
+      }
+    );
   }
-  getTodaysPendingTask()
-  {
-    this.taskService.getNotifyTasks<ApiResponse>().subscribe((value:ApiResponse)=>{
-      for(let i=0;i<value.result.length;i++)
-      this.notifications.push(value.result[i].name);
-    })
-  }
+ngAfterContentInit()
+{
+  this.getTodaysPendingTask();
+  this.addNewNotifications();
+}
+getTodaysPendingTask()
+{
+  this.taskService.getNotifyTasks<ApiResponse>().subscribe((value:ApiResponse)=>{
+    for(var i=0;i<value.result.length;i++)
+      {
+        this.notificationIds.push(value.result[i].id)
+        this.notificationMessages.push(value.result[i].name);
+      }
+      console.log(this.notificationIds);
+      console.log(this.notificationMessages);
+  });
+}
   displayNotifications()
   {
-    if(this.notifications.length!=0)
+    if(this.notificationIds.length!=0)
     this.displayMenu=this.displayMenu?false:true;
   }
   addNewNotifications()
   {
-    this.taskService.notificationMessage$.subscribe((value)=>{
-      if(value[1]=='add' && this.notifications.indexOf(value[0])==-1)
-      this.notifications.push(value[0]);
-    else if(value[1]=='del' && this.notifications.indexOf(value[0])!=-1){
-      this.notifications=this.notifications.filter((item)=>item!=value[0]);
+    this.taskService.notificationMessage$.subscribe((value:string[])=>{
+      debugger
+      if(value[2]=='add' && !this.notificationIds.includes(Number(value[1])))
+        {
+          this.notificationIds.push(Number(value[1]))
+          this.notificationMessages.push(value[0]);
+        }
+    else if(value[2]=='del' && this.notificationIds.includes(Number(value[1]))){
+      this.notificationIds=this.notificationIds.filter(k=>k!=Number(value[1]))
+      this.notificationMessages=this.notificationMessages.filter(k=>k!=value[0]);
     }
     })
   }
   onCancelMenu()
   {
     this.displayMenu=false
+    this.deletedNotificationIds.push(...this.notificationIds);
+    this.notificationIds=[]
   }
-  onCancelTask(input:string)
+  onCancelTask(index:number)
   {
-    this.notifications=this.notifications.filter((item)=>item!=input);
-    if(this.notifications.length==0)
-      {
-        this.displayMenu=false;
-      }
+    this.deletedNotificationIds.push(this.notificationIds[index]);
+    this.notificationIds=this.notificationIds.filter(k=>k!=this.notificationIds[index])
+    this.notificationMessages=this.notificationMessages.filter(k=>k!=this.notificationMessages[index]);
+    if(this.notificationIds.length==0)
+    {
+      this.displayMenu=false;
+    }
   }
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -64,5 +106,10 @@ export class NotificationsComponent {
     if (!clickedInside) {
       this.displayMenu=false;
     }
+  }
+  
+  ngOnDestroy()
+  {
+    this.routerSubscription.unsubscribe();
   }
 }

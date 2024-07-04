@@ -18,7 +18,9 @@ export const TaskApiUrls = {
   makeActive: 'Item/active',
   pendingTasks:'Item/pending-items',
   notifyTasks:'Item/notify-items',
-  notifyFurtherTasks:'Item/notify-further-items'
+  notifyFurtherTasks:'Item/notify-further-items',
+  cancelNotifications:'Item/cancel-notifications',
+  modifyNotificationStatus:'Item/modify-notification-status'
 };
 
 @Injectable({
@@ -97,5 +99,13 @@ export class TaskService extends ApiService {
   getFurtherNotifyTasks<T>():Observable<T>{
     let url = this.apiUrl + TaskApiUrls.notifyFurtherTasks;
     return this.get<T>(url);
+  }
+  cancelNotifications<T>(ids:number[]):Observable<T>{
+    let url=this.apiUrl+TaskApiUrls.cancelNotifications;
+    return this.post<T>(url,ids);
+  }
+  modifyNotificationStatus<T>():Observable<T>{
+    let url=this.apiUrl+TaskApiUrls.modifyNotificationStatus;
+    return this.put<T>(url);
   }
 }

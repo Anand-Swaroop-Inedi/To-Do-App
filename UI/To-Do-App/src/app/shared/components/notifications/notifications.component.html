@@ -1,8 +1,8 @@
 <div class="notifation-container">
   <div (click)="displayNotifications()" class="bell-icon">
     <i class="bi bi-bell notification-image"></i>
-    <p class="count" *ngIf="notifications.length > 0">
-      {{ notifications.length }}
+    <p class="count" *ngIf="notificationIds.length > 0">
+      {{ notificationIds.length }}
     </p>
   </div>
 
@@ -13,9 +13,9 @@
     <span aria-hidden="true" class="close menu-close" (click)="onCancelMenu()"
       >&times;</span
     >
-    <div class="header" *ngFor="let item of notifications">
+    <div class="header" *ngFor="let item of notificationMessages,index as idx">
       <h6>Task {{ item }} is pending </h6>
-      <span aria-hidden="true" class="close" (click)="onCancelTask(item)"
+      <span aria-hidden="true" class="close" (click)="onCancelTask(idx)"
         >&times;</span>
     </div>
   </div>
