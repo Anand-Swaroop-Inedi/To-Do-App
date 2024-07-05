@@ -1,0 +1,5 @@
+{
+    "dotnet.defaultSolution": "Backend/ToDoAppWebApi/ToDoAppWebApi.sln",
+    "appService.defaultWebAppToDeploy": "/subscriptions/b7484e7a-66ba-48eb-9b05-4518dadf7aae/resourceGroups/To-Do-App/providers/Microsoft.Web/sites/To-Do-App-Client",
+    "appService.deploySubpath": "UI\\To-Do-App\\dist"
+}
