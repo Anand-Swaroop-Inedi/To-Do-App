@@ -58,8 +58,6 @@ getTodaysPendingTask()
         this.notificationIds.push(value.result[i].id)
         this.notificationMessages.push(value.result[i].name);
       }
-      console.log(this.notificationIds);
-      console.log(this.notificationMessages);
   });
 }
   displayNotifications()
@@ -70,7 +68,6 @@ getTodaysPendingTask()
   addNewNotifications()
   {
     this.taskService.notificationMessage$.subscribe((value:string[])=>{
-      debugger
       if(value[2]=='add' && !this.notificationIds.includes(Number(value[1])))
         {
           this.notificationIds.push(Number(value[1]))

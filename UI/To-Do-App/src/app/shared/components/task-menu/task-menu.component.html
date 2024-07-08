@@ -5,7 +5,7 @@
     class="task-item"
     (click)="openTaskInfo($index)"
     [ngStyle]="
-      task.statusName == 'COMPLETED'
+      task.statusName.toUpperCase() == 'COMPLETED'
         ? { 'background-color': '#EDB046' }
         : { 'background-color': 'white' }
     "
@@ -13,7 +13,7 @@
     <img
       class="check-box"
       [src]="
-        task.statusName == 'COMPLETED'
+        task.statusName.toUpperCase() == 'COMPLETED'
           ? '../../../assets/checked-box.png'
           : '../../../assets/unchecked-box.png'
       "
@@ -24,7 +24,7 @@
       class="task-item-info"
       *ngIf="pageName.toLowerCase() != 'dashboard'"
       [ngStyle]="
-        task.statusName == 'COMPLETED'
+        task.statusName.toUpperCase() == 'COMPLETED'
           ? { 'background-color': '#EDB046' }
           : { 'background-color': 'white' }
       "
@@ -33,7 +33,7 @@
       <p
         class="duration"
         [ngStyle]="
-          pageName.toLowerCase() == 'completed' ? { color: '#BA5112' } : { color: '#B5B5B5' }
+          task.statusName.toUpperCase() == 'COMPLETED' ? { color: '#BA5112' } : { color: '#B5B5B5' }
         "
       >
         Added {{ calculateTime(task.createdon) }} ago
@@ -43,7 +43,7 @@
       <div class="operation-icons">
         <img
           [src]="
-            task.statusName == 'COMPLETED'
+            task.statusName.toUpperCase() == 'COMPLETED'
               ? 'assets/checked-box.png'
               : 'assets/unchecked-box.png'
           "
@@ -59,7 +59,7 @@
           />
           <img
             [src]="
-              task.statusName == 'COMPLETED'
+              task.statusName.toUpperCase() == 'COMPLETED'
                 ? 'assets/delete-outlined.png'
                 : 'assets/delete.png'
             "

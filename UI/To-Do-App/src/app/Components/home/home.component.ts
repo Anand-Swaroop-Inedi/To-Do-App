@@ -107,10 +107,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   notifyMessages() {
       this.sub = interval(60000).subscribe((t) => {
-        debugger
         var d=new Date();
-        console.log(d.getHours(),d.getMinutes())
-        if(d.getHours()==14 && d.getMinutes()==4)
+        if(d.getHours()==0 && d.getMinutes()==1)
           {
             this.taskService.modifyNotificationStatus().subscribe({
               next:()=>{

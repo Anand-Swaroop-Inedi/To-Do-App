@@ -42,7 +42,7 @@ namespace ToDoAppWebApi.Extensions
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://to-do-app-client.azurewebsites.net")
+                    builder => builder.WithOrigins("http://localhost:4200", "http://localhost:56546", "https://to-do-app-client.azurewebsites.net")
                                       .AllowAnyHeader()
                                       .AllowAnyMethod()
                                       .AllowCredentials());

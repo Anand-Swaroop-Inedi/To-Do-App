@@ -51,6 +51,7 @@
                 ? 'bi bi-eye eye-icon'
                 : 'bi bi-eye-slash eye-icon'
             "
+            [ngStyle]="isSignUp?{'color':'red'}:{'color':'#EDB046'}"
             (click)="makePasswordVisible()"
           ></i>
         </div>
@@ -66,7 +67,7 @@
           ></app-error>
         </div>
         }
-        <button type="submit" class="submit" (click)="onSubmit()">
+        <button type="submit" [ngStyle]="isSignUp?{'background-color':'#ba5112','color':'white'}:{'background-color':'#EDB046','color':'black'}" class="submit" (click)="onSubmit()">
           {{ pageName }}
         </button>
       </form>

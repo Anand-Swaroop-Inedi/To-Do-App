@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   ngOnChanges()
   {
-    debugger
     if(this.isNotificationsRefreshed)
       {
         this.notificationsRef.getTodaysPendingTask();
