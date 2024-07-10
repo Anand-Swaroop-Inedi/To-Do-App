@@ -1,6 +1,6 @@
-﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer.Interfaces;
 using System.Data;
+using DataAccessLayer.Entities;
 namespace DataAccessLayer.Repositories
 {
     public class ItemsRepository : IItemsRepository
@@ -16,6 +16,7 @@ namespace DataAccessLayer.Repositories
         }
         public async Task Add(Item item)
         {
+
             item.Id = 0;
             _toDoAppContext.Add(item);
         }

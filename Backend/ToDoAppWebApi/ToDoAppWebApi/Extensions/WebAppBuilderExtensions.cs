@@ -42,7 +42,7 @@ namespace ToDoAppWebApi.Extensions
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200", "http://localhost:56546", "https://to-do-app-client.azurewebsites.net")
+                    builder => builder.WithOrigins("http://localhost:4200")
                                       .AllowAnyHeader()
                                       .AllowAnyMethod()
                                       .AllowCredentials());
@@ -86,7 +86,6 @@ namespace ToDoAppWebApi.Extensions
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(Mapper));
-
             return builder;
         }
         public static WebApplication UseCustomSwagger(this WebApplication app)

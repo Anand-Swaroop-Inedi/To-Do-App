@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Models;
+using Models.DtoModels;
 
 namespace ToDoAppWebApi.Validations
 {
-    public class UserValidator : AbstractValidator<User>
+    public class UserValidator : AbstractValidator<UserDto>
     {
         public UserValidator()
         {

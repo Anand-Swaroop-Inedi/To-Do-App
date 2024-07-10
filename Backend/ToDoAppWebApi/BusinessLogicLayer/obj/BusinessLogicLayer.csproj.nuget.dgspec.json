@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {}
+    "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+    "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "projectName": "BusinessLogicLayer",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\obj\\",
+        "outputPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\BusinessLogicLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,11 +28,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj"
+              "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj"
               },
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
+              "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
               }
             }
           }
@@ -85,14 +85,14 @@
         }
       }
     },
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
+    "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\DataAccessLayer.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\DataAccessLayer\\obj\\",
+        "outputPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\DataAccessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -109,11 +109,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
-              },
-              "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj"
+              "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj"
               }
             }
           }
@@ -159,14 +156,14 @@
         }
       }
     },
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
+    "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
         "projectName": "Common",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
+        "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\Common.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Helpers\\obj\\",
+        "outputPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Helpers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -182,7 +179,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\Models.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -195,6 +196,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -232,14 +237,14 @@
         }
       }
     },
-    "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
+    "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
+        "projectPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\anand.i\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anand.i\\Downloads\\To-Do App\\Backend\\ToDoAppWebApi\\Models\\obj\\",
+        "outputPath": "C:\\Users\\anand.i\\Source\\Repos\\Technovert-Product-Engineering\\full-web-app-anandswaroopinedi\\Backend\\ToDoAppWebApi\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anand.i\\AppData\\Roaming\\NuGet\\NuGet.Config",

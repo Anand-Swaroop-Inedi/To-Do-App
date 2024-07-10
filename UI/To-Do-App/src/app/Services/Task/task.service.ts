@@ -7,7 +7,7 @@ import { ApiService } from '../api/api.service';
 
 export const TaskApiUrls = {
   getAllTasks: 'Item/all-items',
-  createTask: 'Item/add',
+  createTask: 'Item',
   deleteTask: 'Item?id=',
   updateTask: 'Item',
   getActiveTasks: 'Item/active-items',

@@ -3,10 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { TaskService } from './services/task/task.service';
 import { CommonModule } from '@angular/common';
-import { NotifyMessageComponent } from './shared/components/notify-message/notify-message.component';
-import { Subscription, interval } from 'rxjs';
-import { ErrorDisplay } from './shared/exception-handling/exception-handle';
-import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +13,6 @@ import { NotificationsComponent } from './shared/components/notifications/notifi
     RouterOutlet,
     SpinnerComponent,
     CommonModule,
-    NotifyMessageComponent,
   ],
 })
 export class AppComponent implements OnInit {

@@ -2,13 +2,9 @@
 using BusinessLogicLayer.Interfaces;
 using Common;
 using DataAccessLayer.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Models.DtoModels;
 using EntitiesUser = DataAccessLayer.Entities.User;
-using ModelsUser = Models.User;
+using ViewUserModel = Models.ViewModels.User;
 
 namespace BusinessLogicLayer.Services
 {
@@ -21,7 +17,7 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> AddUser(ModelsUser user)
+        public async Task<bool> AddUser(ViewUserModel user)
         {
             _unitOfWork.BeginTransaction();
             user.Password = PasswordHashing.HashPassword(user.Password);
@@ -32,16 +28,16 @@ namespace BusinessLogicLayer.Services
             }
             else
             {
-                _unitOfWork.UserRepository.AddUser(_mapper.Map<EntitiesUser>(user));
+                _unitOfWork.UserRepository.AddUser(_mapper.Map<EntitiesUser>(_mapper.Map<UserDto>(user)));
                 _unitOfWork.SaveChanges();
                 _unitOfWork.Commit();
                 return true;
             }
         }
-        public async Task<int> AuthenticateUser(ModelsUser user)
+        public async Task<int> AuthenticateUser(ViewUserModel user)
         {
             user.Password = PasswordHashing.HashPassword(user.Password);
-            EntitiesUser result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<EntitiesUser>(user));
+            EntitiesUser result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<EntitiesUser>(_mapper.Map<UserDto>(user)));
             if (result != null)
             {
                 if (user.Password.Equals(result.Password, StringComparison.OrdinalIgnoreCase))

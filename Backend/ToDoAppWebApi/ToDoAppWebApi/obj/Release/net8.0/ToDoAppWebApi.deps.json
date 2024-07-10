@@ -764,9 +764,11 @@
       },
       "Common/1.0.0": {
         "dependencies": {
+          "AutoMapper": "13.0.1",
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
           "Microsoft.IdentityModel.Tokens": "7.6.2",
+          "Models": "1.0.0",
           "System.IdentityModel.Tokens.Jwt": "7.6.2"
         },
         "runtime": {
@@ -776,8 +778,7 @@
       "DataAccessLayer/1.0.0": {
         "dependencies": {
           "Common": "1.0.0",
-          "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": "8.0.6",
-          "Models": "1.0.0"
+          "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": "8.0.6"
         },
         "runtime": {
           "DataAccessLayer.dll": {}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TaskMenuComponent } from '../../shared/components/task-menu/task-menu.component';
 import { TaskStatusComponent } from '../../shared/components/task-status/task-status.component';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
@@ -28,9 +28,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('taskStatus') taskStatus!: TaskStatusComponent;
   pageManiulatedSubscribtion!: Subscription;
   taskServiceSubscription!: Subscription;
+  isButtonDisplay:boolean=true;
   constructor(
     private taskService: TaskService,
-    private errorDisplay: ErrorDisplay
+    private errorDisplay: ErrorDisplay,
   ) {}
   ngOnInit() {
     this.checkDashboardManipulated();
@@ -56,6 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.taskService.isLoading$.next(false);
           this.tasks = response.result;
+          this.isButtonDisplay=this.tasks.length>0
         },
         error: (error) => {
           this.errorDisplay.errorOcurred(error);

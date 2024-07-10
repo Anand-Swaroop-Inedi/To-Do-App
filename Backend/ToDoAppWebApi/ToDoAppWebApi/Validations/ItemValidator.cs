@@ -1,11 +1,11 @@
 ﻿using Common;
 using FluentValidation;
-using Models;
+using Models.DtoModels;
 using System.Text.Json;
 
 namespace ToDoAppWebApi.Validations
 {
-    public class ItemValidator:AbstractValidator<Item>
+    public class ItemValidator:AbstractValidator<ItemDto>
     {
         public ItemValidator() 
         {

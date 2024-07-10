@@ -1,7 +1,8 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Models.ViewModels;
 using messages = Common.Enums.Messages;
-using Response = Models.Response;
+using Response = Models.ViewModels.Response;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace ToDoAppWebApi.Controllers
             _userManager = userManager;
         }
         [HttpPost("add")]
-        public async Task<Response> AddUser(Models.User user)
+        public async Task<Response> AddUser(User user)
         {
             Boolean result = await _userManager.AddUser(user);
             if (result)

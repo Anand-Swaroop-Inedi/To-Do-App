@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { TaskHeaderComponent } from '../../shared/components/task-header/task-header.component';
 import { Task } from '../../models/Task';
 import { TaskService } from '../../services/task/task.service';
@@ -18,19 +18,25 @@ import { ErrorDisplay } from '../../shared/exception-handling/exception-handle';
 export class PendingComponent {
   pendingTasks!: Task[];
   pageManiulatedSubscribtion!: Subscription;
+  @ViewChild('selectMenu') selectMenuRef!:ElementRef<HTMLInputElement>;
   constructor(
     private taskService: TaskService,
     private errorDisplay:ErrorDisplay
   ) {}
   ngOnInit() {
     this.checkPendingDataManipulated();
-    this.sendUpdatedData('createdOn', 'desc');
+  }
+  ngAfterViewInit()
+  {
+    var a=this.selectMenuRef.nativeElement.value.split(' ')
+    this.sendUpdatedData(a[0], a[1]);
   }
   checkPendingDataManipulated() {
     this.pageManiulatedSubscribtion =
       this.taskService.pageManiulated$.subscribe((value) => {
         if (value.toLowerCase() == 'pending') {
-          this.sendUpdatedData('createdOn', 'desc');
+          var a=this.selectMenuRef.nativeElement.value.split(' ')
+          this.sendUpdatedData(a[0], a[1]);
         }
       });
   }

@@ -2,9 +2,10 @@
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
+using Models.DtoModels;
 using EntityItem = DataAccessLayer.Entities.Item;
 using EntityUserItem = DataAccessLayer.Entities.UserItem;
-using ModelsItem = Models.Item;
+using ViewItem = Models.ViewModels.Item;
 
 namespace BusinessLogicLayer.Services
 {
@@ -17,22 +18,26 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<int> AddItem(ModelsItem item)
+        public async Task<int> AddItem(ViewItem item)
         {
             _unitOfWork.BeginTransaction();
             int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
-            int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(item));
+            int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(_mapper.Map<ItemDto>(item)));
             int id = 0;
+            if(item.NotifyOn==null)
+            {
+                item.NotifyOn = DateTime.Today.AddDays(1);
+            }
             if (result > 0)
             {
 
                 item.Itemid = result;
-                result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<EntityUserItem>(item));
+                result = await _unitOfWork.UserItemRepository.checkItemLinkingExists(_mapper.Map<EntityUserItem>(_mapper.Map<ItemDto>(item)));
                 if (result > 0)
                 {
                     return 0;
                 }
-                EntityUserItem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<EntityUserItem>(item));
+                EntityUserItem u = await _unitOfWork.UserItemRepository.checkItemCompleted(_mapper.Map<EntityUserItem>(_mapper.Map<ItemDto>(item)));
                 if (u != null)
                 {
                     u.StatusId = statusId;
@@ -41,33 +46,33 @@ namespace BusinessLogicLayer.Services
                 else
                 {
                     item.Statusid = statusId;
-                    id = await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
+                    id = await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(_mapper.Map<ItemDto>(item)));
                 }
 
             }
             else
             {
-                await _unitOfWork.ItemRepository.Add(_mapper.Map<EntityItem>(item));
+                await _unitOfWork.ItemRepository.Add(_mapper.Map<EntityItem>(_mapper.Map<ItemDto>(item)));
                 int itemId = await _unitOfWork.ItemRepository.recentlyAddedId();
                 item.Itemid = itemId + 1;
                 item.Statusid = statusId;
-                id=await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(item));
+                id=await _unitOfWork.UserItemRepository.AddItem(_mapper.Map<EntityUserItem>(_mapper.Map<ItemDto>(item)));
             }
             _unitOfWork.Commit();
             return id+1;
         }
-        public async Task<List<ModelsItem>> GetAll(int userId)
+        public async Task<List<ViewItem>> GetAll(int userId)
         {
 
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetAll(userId));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetAll(userId)));
         }
-        public async Task UpdateItem(ModelsItem item)
+        public async Task UpdateItem(ViewItem item)
         {
             _unitOfWork.BeginTransaction();
-            int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(item));
+            int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(_mapper.Map<ItemDto>(item)));
             if (result == 0)
             {
-                await _unitOfWork.ItemRepository.Add(_mapper.Map<EntityItem>(item));
+                await _unitOfWork.ItemRepository.Add(_mapper.Map<EntityItem>(_mapper.Map<ItemDto>(item)));
                 item.Itemid = await _unitOfWork.ItemRepository.recentlyAddedId() + 1;
             }
             else
@@ -75,7 +80,7 @@ namespace BusinessLogicLayer.Services
                 item.Itemid = result;
             }
             item.Isdeleted = 0;
-            await _unitOfWork.UserItemRepository.Update(_mapper.Map<EntityUserItem>(item));
+            await _unitOfWork.UserItemRepository.Update(_mapper.Map<EntityUserItem>(_mapper.Map<ItemDto>(item)));
             _unitOfWork.Commit();
         }
         public async Task<bool> DeleteItem(int id, int userId)
@@ -94,13 +99,13 @@ namespace BusinessLogicLayer.Services
             await _unitOfWork.UserItemRepository.DeleteAllItems(userId);
             _unitOfWork.Commit();
         }
-        public async Task<List<ModelsItem>> GetActiveItems(int userId)
+        public async Task<List<ViewItem>> GetActiveItems(int userId)
         {
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId)));
         }
-        public async Task<List<ModelsItem>> GetCompletedItems(int userId)
+        public async Task<List<ViewItem>> GetCompletedItems(int userId)
         {
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId)));
         }
         public async Task<int[]> CompletionPercentage(int userId)
         {
@@ -149,17 +154,17 @@ namespace BusinessLogicLayer.Services
             }
 
         }
-        public async Task<List<ModelsItem>> GetPendingTasks(int userId, string property, string order)
+        public async Task<List<ViewItem>> GetPendingTasks(int userId, string property, string order)
         {
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId, property, order));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId, property, order)));
         }
-        public async Task<List<ModelsItem>> GetNotifyTasks(int userId)
+        public async Task<List<ViewItem>> GetNotifyTasks(int userId)
         {
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetNotifyTasks(userId));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetNotifyTasks(userId)));
         }
-        public async Task<List<ModelsItem>> GetFurtherNotifyTasks(int userId)
+        public async Task<List<ViewItem>> GetFurtherNotifyTasks(int userId)
         {
-            return _mapper.Map<List<ModelsItem>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId));
+            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId)));
         }
         public async Task updateNotificationStatus(int userId)
         {

@@ -11,7 +11,9 @@
   </div>
   <div class="operations">
     @if(pageName.toLowerCase()=='dashboard') {
-    <button class="delete-button" (click)="deleteAll()">Delete All</button>
+      <div *ngIf="isDeleteButtonDisplay">
+        <button  class="delete-button" (click)="deleteAll()">Delete All</button>
+    </div>
     <h4 class="date">{{ today | date : "EEEE, dd MMMM yyyy" }}</h4>
     } @else {
     <div></div>

@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Backend",
+    "\\Backend\\ToDoAppWebApi",
+    "\\Backend\\ToDoAppWebApi\\DataAccessLayer"
   ],
+  "SelectedNode": "\\Backend\\ToDoAppWebApi\\DataAccessLayer\\ToDoAppContext.cs",
   "PreviewInSolutionExplorer": false
 }

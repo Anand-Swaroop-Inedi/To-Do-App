@@ -1,9 +1,8 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Common;
-using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using Models.ViewModels;
 using messages = Common.Enums.Messages;
 
 namespace ToDoAppWebApi.Controllers
@@ -20,7 +19,7 @@ namespace ToDoAppWebApi.Controllers
             _tokenGenerator = tokenGenerator;
         }
         [HttpPost()]
-        public async Task<Response> AuthenticateUser(Models.User user)
+        public async Task<Response> AuthenticateUser(User user)
         {
 
             int result = await _userManager.AuthenticateUser(user);

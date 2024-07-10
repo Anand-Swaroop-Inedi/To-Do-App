@@ -3,7 +3,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription, interval } from 'rxjs';
-import { Router,Event as NavigationEvent, NavigationStart } from '@angular/router';
+import { Router,Event as NavigationEvent, NavigationStart, NavigationEnd } from '@angular/router';
 import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({

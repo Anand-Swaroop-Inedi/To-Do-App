@@ -51,7 +51,7 @@ namespace DataAccessLayer.Repositories
         public async Task DeleteAllItems(int UserId)
         {
 
-            _context.UserItems.Where(x => x.UserId == UserId).ToList().ForEach(x => { x.IsDeleted = 1; });
+            _context.UserItems.Where(x => x.UserId == UserId && x.CreatedOn > DateTime.Today && x.CreatedOn < DateTime.Today.AddDays(1)).ToList().ForEach(x => { x.IsDeleted = 1; });
         }
         public async Task<List<UserItem>> GetActiveItems(int UserId)
         {
@@ -110,7 +110,7 @@ namespace DataAccessLayer.Repositories
         {
             return _context.UserItems.Where(u => u.Status.Name.ToUpper() == statusEnum.active.ToString() &&
                         u.IsDeleted == 0 &&
-                        u.UserId == userId && (u.NotifyOn <= DateTime.Now) && (u.NotifyOn >= DateTime.Today.AddDays(-1)) && u.IsNotifyCancelled == 0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
+                        u.UserId == userId && (u.NotifyOn <= DateTime.Today) && (u.NotifyOn >= DateTime.Today.AddDays(-1)) && u.IsNotifyCancelled == 0).Include(u => u.Item).Include(u => u.User).Include(u => u.Status).ToList();
         }
         public async Task<List<UserItem>> GetFurtherNotifyTasks(int userId)
         {

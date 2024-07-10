@@ -1,10 +1,10 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Common;
 using messages = Common.Enums.Messages;
-using Response = Models.Response;
+using Response = Models.ViewModels.Response;
+using Models.ViewModels;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -18,7 +18,7 @@ namespace ToDoAppWebApi.Controllers
         {
             _itemManager = itemManager;
         }
-        [HttpPost("add")]
+        [HttpPost()]
         public async Task<Response> AddItem(Item item)
         {
             item.Userid = HttpContext.GetIdFromToken();
@@ -106,7 +106,7 @@ namespace ToDoAppWebApi.Controllers
             return new Response
             {
                 Status = (int)messages.Success,
-                Message = "All Tasks Deleted from the your list successfully"
+                Message = "All Tasks Deleted Successfully"
             };
         }
         [HttpGet("completion-percentage")]

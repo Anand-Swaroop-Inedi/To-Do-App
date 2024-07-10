@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import {
   Router,
@@ -15,15 +15,21 @@ import { Subscription } from 'rxjs';
   templateUrl: './task-header.component.html',
   styleUrl: './task-header.component.scss',
 })
-export class TaskHeaderComponent {
+export class TaskHeaderComponent implements OnChanges {
   pageName: string = '';
   today: Date;
+  @Input() isDeleteButtonDisplay!:boolean;
   routerSubscription!:Subscription;
-  constructor(private taskService: TaskService, private router: Router) {
+  constructor(private taskService: TaskService, private router: Router,private cdr:ChangeDetectorRef) {
     this.today = new Date();
   }
   ngOnInit(): void {
     this.setPageName();
+  }
+  ngOnChanges()
+  {
+    console.log(this.isDeleteButtonDisplay)
+    console.log(this.isDeleteButtonDisplay);
   }
   setPageName() {
     let name = this.router.url.split('/').pop();
