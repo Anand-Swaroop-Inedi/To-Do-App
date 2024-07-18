@@ -1,7 +1,7 @@
 ﻿
 using BusinessLogicLayer.Interfaces;
-using Models;
-using Models.ViewModels;
+using Models.DtoModels;
+using Models.InputModels;
 using System.Net;
 using System.Text.Json;
 
@@ -30,7 +30,7 @@ namespace ToDoAppWebApi.Middleware
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                var apiResponse = new Response
+                var apiResponse = new ResponseDto
                 {
                     Status = 2,
                     Message = "Something Went Wrong"

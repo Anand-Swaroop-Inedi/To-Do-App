@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Common;
 using messages = Common.Enums.Messages;
-using Response = Models.ViewModels.Response;
-using Models.ViewModels;
+using Models.InputModels;
+using Models.DtoModels;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -18,14 +18,14 @@ namespace ToDoAppWebApi.Controllers
         {
             _itemManager = itemManager;
         }
-        [HttpPost()]
-        public async Task<Response> AddItem(Item item)
+        [HttpPost]
+        public async Task<ResponseDto> AddItem(Item addItemRequest)
         {
-            item.Userid = HttpContext.GetIdFromToken();
-            int result = await _itemManager.AddItem(item);
+            addItemRequest.Userid = HttpContext.GetIdFromToken();
+            int result = await _itemManager.AddItem(addItemRequest);
             if (result>0)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "Task Added Successfully",
@@ -35,32 +35,32 @@ namespace ToDoAppWebApi.Controllers
             }
             else
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Failure,
                     Message = "Task already exists"
                 };
             }
         }
-        [HttpGet("all-items")]
-        public async Task<Response> GetAllItems()
+        [HttpGet]
+        public async Task<ResponseDto> GetAllItems()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response
+            return new ResponseDto
             {
                 Status = (int)messages.Success,
                 Message = messages.Success.GetEnumDescription(),
                 Result = await _itemManager.GetAll(userId)
             };
         }
-        [HttpDelete("")]
-        public async Task<Response> DeleteItem(int id)
+        [HttpDelete]
+        public async Task<ResponseDto> DeleteItem([FromQuery]int idRequest)
         {
             int userId = HttpContext.GetIdFromToken();
-            bool result = await _itemManager.DeleteItem(id, userId);
+            bool result = await _itemManager.DeleteItem(idRequest, userId);
             if (result)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "Task Deleted from the list successfully"
@@ -68,52 +68,52 @@ namespace ToDoAppWebApi.Controllers
             }
             else
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Failure,
                     Message = "Task Id doesn't exist"
                 };
             }
         }
-        [HttpPut("")]
-        public async Task<Response> UpdateItem(Item item)
+        [HttpPut]
+        public async Task<ResponseDto> UpdateItem(Item updateItemRequest)
         {
-            item.Userid = HttpContext.GetIdFromToken();
-            await _itemManager.UpdateItem(item);
-            return new Response
+            updateItemRequest.Userid = HttpContext.GetIdFromToken();
+            await _itemManager.UpdateItem(updateItemRequest);
+            return new ResponseDto
             {
                 Status = (int)messages.Success,
                 Message = "Updated successfully",
             };
         }
         [HttpGet("active-items")]
-        public async Task<Response> GetActiveItems()
+        public async Task<ResponseDto> GetActiveItems()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetActiveItems(userId) };
+            return new ResponseDto { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetActiveItems(userId) };
         }
         [HttpGet("completed-items")]
-        public async Task<Response> GetCompletedItems()
+        public async Task<ResponseDto> GetCompletedItems()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetCompletedItems(userId) };
+            return new ResponseDto { Status = (int)messages.Success, Message =messages.Success.GetEnumDescription(), Result = await _itemManager.GetCompletedItems(userId) };
         }
         [HttpDelete("all")]
-        public async Task<Response> DeleteAllItems()
+        public async Task<ResponseDto> DeleteAllItems()
         {
             int userId = HttpContext.GetIdFromToken();
             _itemManager.DeleteItems(userId);
-            return new Response
+            return new ResponseDto
             {
                 Status = (int)messages.Success,
                 Message = "All Tasks Deleted Successfully"
             };
         }
         [HttpGet("completion-percentage")]
-        public async Task<Response> CompletionPercentage()
+        public async Task<ResponseDto> CompletionPercentage()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response
+            return new ResponseDto
             {
                 Status = (int)messages.Success,
                 Message = messages.Success.GetEnumDescription(),
@@ -121,13 +121,13 @@ namespace ToDoAppWebApi.Controllers
             };
         }
         [HttpPost("completed")]
-        public async Task<Response> makeItemCompleted([FromBody] int id)
+        public async Task<ResponseDto> makeItemCompleted([FromBody] int idRequest)
         {
             int userId = HttpContext.GetIdFromToken();
-            bool result = await _itemManager.makeItemCompleted(id, userId);
+            bool result = await _itemManager.makeItemCompleted(idRequest, userId);
             if (result)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "Task Updated as completed"
@@ -135,7 +135,7 @@ namespace ToDoAppWebApi.Controllers
             }
             else
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Failure,
                     Message = "Task not found"
@@ -143,13 +143,13 @@ namespace ToDoAppWebApi.Controllers
             }
         }
         [HttpPost("active")]
-        public async Task<Response> makeItemActive([FromBody] int id)
+        public async Task<ResponseDto> makeItemActive([FromBody] int id)
         {
             int userId = HttpContext.GetIdFromToken();
             bool result = await _itemManager.makeItemActive(id, userId);
             if (result)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "Task Updated as active"
@@ -157,7 +157,7 @@ namespace ToDoAppWebApi.Controllers
             }
             else
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Failure,
                     Message = "Task not found"
@@ -165,36 +165,36 @@ namespace ToDoAppWebApi.Controllers
             }
         }
         [HttpGet("pending-items")]
-        public async Task<Response> GetPendingTasks(string property, string order)
+        public async Task<ResponseDto> GetPendingTasks(string property, string order)
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId, property, order) };
+            return new ResponseDto { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetPendingTasks(userId, property, order) };
         }
         [HttpGet("notify-items")]
-        public async Task<Response> GetNotifyTasks()
+        public async Task<ResponseDto> GetNotifyTasks()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetNotifyTasks(userId) };
+            return new ResponseDto { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetNotifyTasks(userId) };
         }
         [HttpGet("notify-further-items")]
-        public async Task<Response> GetFurtherNotifyTasks()
+        public async Task<ResponseDto> GetFurtherNotifyTasks()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetFurtherNotifyTasks(userId) };
+            return new ResponseDto { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription(), Result = await _itemManager.GetFurtherNotifyTasks(userId) };
         }
         [HttpPut("modify-notification-status")]
-        public  async Task<Response> updateNotificationStatus()
+        public  async Task<ResponseDto> updateNotificationStatus()
         {
             int userId = HttpContext.GetIdFromToken();
             await _itemManager.updateNotificationStatus(userId);
-            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription()};
+            return new ResponseDto { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription()};
         }
         [HttpPost("cancel-notifications")]
-        public async Task<Response> CancelNotifications(int[] ids)
+        public async Task<ResponseDto> CancelNotifications(int[] ids)
         {
             int userId = HttpContext.GetIdFromToken();
             await _itemManager.CancelNotifications(userId,ids);
-            return new Response { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription() };
+            return new ResponseDto { Status = (int)messages.Success, Message = messages.Success.GetEnumDescription() };
         }
 
     }

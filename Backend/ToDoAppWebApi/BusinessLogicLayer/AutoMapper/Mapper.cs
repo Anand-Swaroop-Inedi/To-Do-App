@@ -15,10 +15,9 @@ namespace BusinessLogicLayer.AutoMapper
                 .ForMember<string>(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name));
             CreateMap<Models.DtoModels.UserDto, DataAccessLayer.Entities.User>().ReverseMap();
             CreateMap<Models.DtoModels.ErrorLogDto, DataAccessLayer.Entities.ErrorLog>();
-            CreateMap<Models.ViewModels.Item,Models.DtoModels.ItemDto>().ReverseMap();
-            CreateMap<Models.ViewModels.ErrorLog,Models.DtoModels.ErrorLogDto>().ReverseMap();
-            CreateMap<Models.ViewModels.User,Models.DtoModels.UserDto>().ReverseMap();
-            CreateMap<Models.ViewModels.Response, Models.DtoModels.ResponseDto>().ReverseMap();
+            CreateMap<Models.InputModels.Item,Models.DtoModels.ItemDto>().ReverseMap();
+            CreateMap<Models.InputModels.ErrorLog,Models.DtoModels.ErrorLogDto>().ReverseMap();
+            CreateMap<Models.InputModels.User,Models.DtoModels.UserDto>().ReverseMap();
         }
     }
 }

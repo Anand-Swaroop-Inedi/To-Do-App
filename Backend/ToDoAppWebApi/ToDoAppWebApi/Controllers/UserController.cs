@@ -1,8 +1,8 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Models.ViewModels;
+using Models.DtoModels;
+using Models.InputModels;
 using messages = Common.Enums.Messages;
-using Response = Models.ViewModels.Response;
 
 namespace ToDoAppWebApi.Controllers
 {
@@ -16,18 +16,18 @@ namespace ToDoAppWebApi.Controllers
             _userManager = userManager;
         }
         [HttpPost("add")]
-        public async Task<Response> AddUser(User user)
+        public async Task<ResponseDto> AddUser(User user)
         {
             Boolean result = await _userManager.AddUser(user);
             if (result)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "Successfully registered",
                 };
             }
-            return new Response
+            return new ResponseDto
             {
                 Status = (int)messages.Failure,
                 Message = "UserName Already Exists so choose other",

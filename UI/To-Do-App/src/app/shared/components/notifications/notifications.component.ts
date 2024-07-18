@@ -3,13 +3,13 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task/task.service';
 import { ApiResponse } from '../../../models/ApiResponse';
 import { Subscription, interval } from 'rxjs';
-import { Router,Event as NavigationEvent, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router,Event as NavigationEvent, NavigationStart, NavigationEnd, RouterLink } from '@angular/router';
 import { ErrorDisplay } from '../../exception-handling/exception-handle';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
 })
@@ -30,15 +30,16 @@ export class NotificationsComponent implements OnInit {
           if(this.deletedNotificationIds.length)
             {
               this.taskService.isLoading$.next(true);
-              this.taskService.cancelNotifications(this.deletedNotificationIds).subscribe(
-                () => {
+              this.taskService.cancelNotifications(this.deletedNotificationIds).subscribe({
+                next:(response) => {
                   this.deletedNotificationIds = [];
                   this.taskService.isLoading$.next(false);
                 },
-                (error) => {
+                error:(error) => {
                   this.errorDisplay.errorOcurred(error);
                   this.taskService.isLoading$.next(false);
                 }
+              }
               );
             }
         }

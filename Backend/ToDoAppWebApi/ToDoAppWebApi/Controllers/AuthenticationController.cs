@@ -2,14 +2,14 @@
 using Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.ViewModels;
+using Models.InputModels;
 using messages = Common.Enums.Messages;
-
+using Models.DtoModels;
 namespace ToDoAppWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : Controller
+    public class AuthenticationController : ControllerBase
     {
         private readonly IUserManager _userManager;
         private readonly TokenGenerator _tokenGenerator;
@@ -19,13 +19,13 @@ namespace ToDoAppWebApi.Controllers
             _tokenGenerator = tokenGenerator;
         }
         [HttpPost()]
-        public async Task<Response> AuthenticateUser(User user)
+        public async Task<ResponseDto> AuthenticateUser(User user)
         {
 
             int result = await _userManager.AuthenticateUser(user);
             if (result != 0)
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Success,
                     Message = "successfully logged in",
@@ -34,7 +34,7 @@ namespace ToDoAppWebApi.Controllers
             }
             else
             {
-                return new Response
+                return new ResponseDto
                 {
                     Status = (int)messages.Failure,
                     Message = "Enter Correct Details",
@@ -43,10 +43,10 @@ namespace ToDoAppWebApi.Controllers
         }
         [Authorize]
         [HttpGet("regenerate")]
-        public async Task<Response> RegenerateToken()
+        public async Task<ResponseDto> RegenerateToken()
         {
             int userId = HttpContext.GetIdFromToken();
-            return new Response
+            return new ResponseDto
             {
                 Status = (int)messages.Success,
                 Message = "successful",

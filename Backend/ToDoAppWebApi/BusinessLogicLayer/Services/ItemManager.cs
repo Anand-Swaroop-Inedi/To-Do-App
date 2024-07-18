@@ -5,7 +5,7 @@ using DataAccessLayer.Interfaces;
 using Models.DtoModels;
 using EntityItem = DataAccessLayer.Entities.Item;
 using EntityUserItem = DataAccessLayer.Entities.UserItem;
-using ViewItem = Models.ViewModels.Item;
+using InputItem = Models.InputModels.Item;
 
 namespace BusinessLogicLayer.Services
 {
@@ -18,7 +18,7 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<int> AddItem(ViewItem item)
+        public async Task<int> AddItem(InputItem item)
         {
             _unitOfWork.BeginTransaction();
             int statusId = await _unitOfWork.StatusRepository.getIdByName("ACTIVE");
@@ -61,12 +61,12 @@ namespace BusinessLogicLayer.Services
             _unitOfWork.Commit();
             return id+1;
         }
-        public async Task<List<ViewItem>> GetAll(int userId)
+        public async Task<List<ItemDto>> GetAll(int userId)
         {
 
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetAll(userId)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetAll(userId));
         }
-        public async Task UpdateItem(ViewItem item)
+        public async Task UpdateItem(InputItem item)
         {
             _unitOfWork.BeginTransaction();
             int result = await _unitOfWork.ItemRepository.checkItemExists(_mapper.Map<EntityItem>(_mapper.Map<ItemDto>(item)));
@@ -99,13 +99,13 @@ namespace BusinessLogicLayer.Services
             await _unitOfWork.UserItemRepository.DeleteAllItems(userId);
             _unitOfWork.Commit();
         }
-        public async Task<List<ViewItem>> GetActiveItems(int userId)
+        public async Task<List<ItemDto>> GetActiveItems(int userId)
         {
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetActiveItems(userId));
         }
-        public async Task<List<ViewItem>> GetCompletedItems(int userId)
+        public async Task<List<ItemDto>> GetCompletedItems(int userId)
         {
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetCompletedItems(userId));
         }
         public async Task<int[]> CompletionPercentage(int userId)
         {
@@ -154,17 +154,17 @@ namespace BusinessLogicLayer.Services
             }
 
         }
-        public async Task<List<ViewItem>> GetPendingTasks(int userId, string property, string order)
+        public async Task<List<ItemDto>> GetPendingTasks(int userId, string property, string order)
         {
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId, property, order)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetPendingTasks(userId, property, order));
         }
-        public async Task<List<ViewItem>> GetNotifyTasks(int userId)
+        public async Task<List<ItemDto>> GetNotifyTasks(int userId)
         {
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetNotifyTasks(userId)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetNotifyTasks(userId));
         }
-        public async Task<List<ViewItem>> GetFurtherNotifyTasks(int userId)
+        public async Task<List<ItemDto>> GetFurtherNotifyTasks(int userId)
         {
-            return _mapper.Map<List<ViewItem>>(_mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId)));
+            return _mapper.Map<List<ItemDto>>(await _unitOfWork.UserItemRepository.GetFurtherNotifyTasks(userId));
         }
         public async Task updateNotificationStatus(int userId)
         {

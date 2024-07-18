@@ -6,9 +6,9 @@ import { environment } from '../../../environments/environment';
 import { ApiService } from '../api/api.service';
 
 export const TaskApiUrls = {
-  getAllTasks: 'Item/all-items',
+  getAllTasks: 'Item',
   createTask: 'Item',
-  deleteTask: 'Item?id=',
+  deleteTask: 'Item?idRequest=',
   updateTask: 'Item',
   getActiveTasks: 'Item/active-items',
   getCompletedTasks: 'Item/completed-items',

@@ -1,4 +1,4 @@
-﻿using Models.ViewModels;
+﻿using Models.InputModels;
 
 namespace BusinessLogicLayer.Interfaces
 {

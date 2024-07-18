@@ -2,7 +2,7 @@
 using BusinessLogicLayer.Interfaces;
 using EntitiesErrorLog = DataAccessLayer.Entities.ErrorLog;
 using DataAccessLayer.Interfaces;
-using ViewErrorLog = Models.ViewModels.ErrorLog;
+using ErrorLog = Models.InputModels.ErrorLog;
 using Models.DtoModels;
 
 namespace BusinessLogicLayer.Services
@@ -16,7 +16,7 @@ namespace BusinessLogicLayer.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task addError(ViewErrorLog error)
+        public async Task addError(ErrorLog error)
         {
             _unitOfWork.ErrorLogRepository.AddError(_mapper.Map<EntitiesErrorLog>(_mapper.Map<ErrorLogDto>(error)));
             _unitOfWork.Commit();
