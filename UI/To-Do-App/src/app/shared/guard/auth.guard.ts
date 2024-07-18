@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   const refreshToken = sessionStorage.getItem('RefreshToken');
   const isRefreshTokenExpired = refreshToken ? helper.isTokenExpired(refreshToken) : true;
 
-  if (accessToken && !isAccessTokenExpired) {
+  if (accessToken && !isAccessTokenExpired ) {
     return true;
   } else if (!isRefreshTokenExpired) {
     return new Promise<boolean>((resolve) => {
@@ -27,12 +27,12 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
         console.error('Error fetching tokens:', error);
         resolve(false); 
       }});
-    });
+    }); 
   } else {
     sessionStorage.removeItem('AccessToken');
     sessionStorage.removeItem('RefreshToken');
     toaster.error('Please login to continue');
-    router.navigate(['/login']); // Navigate to login page
+    router.navigate(['/login']);
     return false;
   }
 };

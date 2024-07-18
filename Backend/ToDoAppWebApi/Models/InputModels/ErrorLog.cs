@@ -1,4 +1,4 @@
-﻿namespace Models.ViewModels
+﻿namespace Models.InputModels
 {
     public class ErrorLog
     {

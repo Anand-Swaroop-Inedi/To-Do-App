@@ -4,7 +4,7 @@ using Common;
 using DataAccessLayer.Interfaces;
 using Models.DtoModels;
 using EntitiesUser = DataAccessLayer.Entities.User;
-using ViewUserModel = Models.ViewModels.User;
+using UserModel = Models.InputModels.User;
 
 namespace BusinessLogicLayer.Services
 {
@@ -17,7 +17,7 @@ namespace BusinessLogicLayer.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> AddUser(ViewUserModel user)
+        public async Task<bool> AddUser(UserModel user)
         {
             _unitOfWork.BeginTransaction();
             user.Password = PasswordHashing.HashPassword(user.Password);
@@ -34,7 +34,7 @@ namespace BusinessLogicLayer.Services
                 return true;
             }
         }
-        public async Task<int> AuthenticateUser(ViewUserModel user)
+        public async Task<int> AuthenticateUser(UserModel user)
         {
             user.Password = PasswordHashing.HashPassword(user.Password);
             EntitiesUser result = await _unitOfWork.UserRepository.AuthenticateUser(_mapper.Map<EntitiesUser>(_mapper.Map<UserDto>(user)));

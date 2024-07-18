@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './task-header.component.html',
   styleUrl: './task-header.component.scss',
 })
-export class TaskHeaderComponent implements OnChanges {
+export class TaskHeaderComponent {
   pageName: string = '';
   today: Date;
   @Input() isDeleteButtonDisplay!:boolean;
@@ -25,11 +25,6 @@ export class TaskHeaderComponent implements OnChanges {
   }
   ngOnInit(): void {
     this.setPageName();
-  }
-  ngOnChanges()
-  {
-    console.log(this.isDeleteButtonDisplay)
-    console.log(this.isDeleteButtonDisplay);
   }
   setPageName() {
     let name = this.router.url.split('/').pop();
